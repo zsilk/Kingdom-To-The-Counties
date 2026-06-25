@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Netlify local dev (netlify dev)
+.netlify/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor swap/backup files
+*~
+*.swp
+*.swo

@@ -1340,44 +1340,49 @@ function renderClock(){
 }
 /* ===== Tech I/O List (Input / Mic / IEM Pack assignments) ===== */
 var IO_DEFAULT=[
-  {id:"p1",name:"Karielle",inst:"",pack:"Pack 1",color:"#ED8B0B",qmix:"1 / 2",rows:[
-    {id:"k-vox",role:"Lead Vox",gear:"Wireless Mic B",loc:"N/A (Wireless)"}
+  {id:"Pack1 (Orange)",name:"Karielle",inst:"",pack:"Pack 1",color:"#ED8B0B",qmix:"1 / 2",rows:[
+    {id:"karielle-lead-vox-wireless-mic-b-tuned",role:"Lead Vox",gear:"Wireless Mic B (Tuned)",loc:"N/A (Wireless)"}
   ]},
-  {id:"p2",name:"Zach",inst:"",pack:"Pack 2",color:"#E23B2E",qmix:"3 / 4",rows:[
-    {id:"z-vox",role:"Lead Vox",gear:"Wireless Mic A",loc:"N/A (Wireless)"},
-    {id:"z-tb",role:"Stage Talkback",gear:"Wireless Mic I (Switch)",loc:"N/A (Wireless)"},
-    {id:"z-ag",role:"Acoustic Guitar 1",gear:"1× Active DI",loc:"ARK – 18"}
+  {id:"Pack2 (Red)",name:"Zach",inst:"Acoustic Guitar 1",pack:"Pack 2",color:"#E23B2E",qmix:"3 / 4",rows:[
+    {id:"zach-lead-vox-wireless-mic-a-tuned",role:"Lead Vox",gear:"Wireless Mic A (Tuned)",loc:"N/A (Wireless)"},
+    {id:"zach-stage-talkback-wireless-mic-i",role:"Stage Talkback",gear:"Wireless Mic I",loc:"N/A (Wireless)"},
+    {id:"zach-acoustic-guitar-1-1x-active-di",role:"Acoustic Guitar 1",gear:"1x Active DI",loc:"ARK – 21"}
   ]},
-  {id:"p3",name:"Annie",inst:"",pack:"Pack 3",color:"#79C24A",qmix:"5 / 6",rows:[
-    {id:"a-vox",role:"Add'l Vox",gear:"Wireless Mic C",loc:"N/A (Wireless)"}
+  {id:"Pack3 (Green)",name:"Annie",inst:"",pack:"Pack 3",color:"#79C24A",qmix:"5",rows:[
+    {id:"annie-add-l-vox-wireless-mic-c-tuned",role:"Add'l Vox",gear:"Wireless Mic C (Tuned)",loc:"N/A (Wireless)"}
   ]},
-  {id:"p4",name:"Mike",inst:"Playback",pack:"Pack 4",color:"#9E6B33",qmix:"7 / 8",rows:[
-    {id:"m-vox",role:"Add'l Vox",gear:"Wireless Mic D",loc:"N/A (Wireless)"},
-    {id:"m-tb",role:"Stage Talkback",gear:"Wireless Mic K (Switch)",loc:"N/A (Wireless)"}
+  {id:"Spare Pack2",name:"Bill",inst:"Bass Guitar",pack:"Spare Pack 2",color:"#c7c2b8",qmix:"6",rows:[
+    {id:"bill-bass-guitar-1x-active-di-modeler",role:"Bass Guitar",gear:"1x Active DI / Modeler",loc:"ARK – 18"}
   ]},
-  {id:"p5",name:"Sean",inst:"Bass Guitar",pack:"Pack 5",color:"#F2CB05",qmix:"9 / 10",rows:[
-    {id:"s-bass",role:"Bass Guitar",gear:"1× Active DI / Modeler",loc:"ARK – 17"}
+  {id:"Pack4 (Brown)",name:"Mike",inst:"",pack:"Pack 4",color:"#9E6B33",qmix:"7",rows:[
+    {id:"mike-add-l-vox-wireless-mic-d-tuned",role:"Add'l Vox",gear:"Wireless Mic D (Tuned)",loc:"N/A (Wireless)"},
+    {id:"mike-stage-talkback-wireless-mic-k",role:"Stage Talkback",gear:"Wireless Mic K",loc:"N/A (Wireless)"}
   ]},
-  {id:"p6",name:"Ron",inst:"Electric Guitar",pack:"Pack 6",color:"#9AA0A6",qmix:"11 / 12",rows:[
-    {id:"r-elec",role:"Electric Guitar",gear:"2× Stereo DI / Modeler",loc:"ARK – 13 & 14"}
+  {id:"Spare Pack3",name:"Jeff",inst:"Acoustic Guitar 2",pack:"Spare Pack 3",color:"#c7c2b8",qmix:"8",rows:[
+    {id:"jeff-acoustic-guitar-2-1x-active-di",role:"Acoustic Guitar 2",gear:"1x Active DI",loc:"ARK – 22"}
   ]},
-  {id:"pna",name:"N/A",inst:"Acoustic Guitar 2",pack:"",color:"#c7c2b8",qmix:"",off:true,rows:[
-    {id:"na-ag2",role:"Acoustic Guitar 2",gear:"1× Active DI",loc:"ARK – 19"}
+  {id:"Pack5 (Yellow)",name:"Alissa",inst:"",pack:"Pack 5",color:"#F2CB05",qmix:"9",rows:[
+    {id:"alissa-add-l-vox-wireless-mic-f",role:"Add'l Vox",gear:"Wireless Mic F",loc:"N/A (Wireless)"}
   ]},
-  {id:"p7",name:"John",inst:"Keys",pack:"Pack 7",color:"#7B3FF2",qmix:"13 / 14",rows:[
-    {id:"j-tb",role:"Stage Talkback",gear:"Wireless Mic J (Switch)",loc:"N/A (Wireless)"},
-    {id:"j-keys",role:"Keys",gear:"2× Stereo DI",loc:"ARK – 15 & 16"}
+  {id:"Spare Pack1",name:"Hollee",inst:"",pack:"Spare Pack 1",color:"#c7c2b8",qmix:"10",rows:[
+    {id:"hollee-add-l-vox-wireless-mic-e-tuned",role:"Add'l Vox",gear:"Wireless Mic E (Tuned)",loc:"N/A (Wireless)"}
   ]},
-  {id:"p8",name:"Kyle",inst:"Drums",pack:"Pack 8",color:"#2E7CD6",qmix:"15 / 16",rows:[
-    {id:"d1",role:"",gear:"Kick Mic",loc:"ARK – 20"},
-    {id:"d2",role:"",gear:"Snare Top Mic",loc:"ARK – 21"},
-    {id:"d3",role:"",gear:"Snare Bottom Mic",loc:"ARK – 22"},
-    {id:"d4",role:"",gear:"Tom 1 Mic",loc:"NSB.32 – 1"},
-    {id:"d5",role:"",gear:"Tom 2 Mic",loc:"NSB.32 – 2"},
-    {id:"d6",role:"",gear:"Tom 3 Mic",loc:"NSB.32 – 3"},
-    {id:"d7",role:"",gear:"Overhead (L) Condenser",loc:"NSB.32 – 4"},
-    {id:"d8",role:"",gear:"Overhead (R) Condenser",loc:"NSB.32 – 5"}
-  ]}
+  {id:"Pack6 (Gray)",name:"Brett",inst:"Electric Guitar",pack:"Pack 6",color:"#9AA0A6",qmix:"11 / 12",rows:[
+    {id:"brett-electric-guitar-l-stereo-di-modeler-left",role:"Electric Guitar (L)",gear:"Stereo DI / Modeler (Left)",loc:"ARK – 19"},
+    {id:"brett-electric-guitar-r-stereo-di-modeler-right",role:"Electric Guitar (R)",gear:"Stereo DI / Modeler (Right)",loc:"ARK – 20"}
+  ]},
+  {id:"Pack7 (Purple)",name:"John",inst:"Keys",pack:"Pack 7",color:"#7B3FF2",qmix:"13 / 14",rows:[
+    {id:"john-stage-talkback-wireless-mic-j",role:"Stage Talkback",gear:"Wireless Mic J",loc:"N/A (Wireless)"},
+    {id:"john-keys-l-2x-stereo-di-left",role:"Keys (L)",gear:"2x Stereo DI (Left)",loc:"ARK – 23"},
+    {id:"john-keys-r-2x-stereo-di-right",role:"Keys (R)",gear:"2x Stereo DI (Right)",loc:"ARK – 24"}
+  ]},
+  {id:"Pack8 (Blue)",name:"Kyle",inst:"Drums",pack:"Pack 8",color:"#2E7CD6",qmix:"15 / 16",rows:[
+    {id:"kyle-kick-drum-1-kick-mic",role:"Kick Drum",gear:"1. Kick Mic",loc:"ARK – 25"},
+    {id:"kyle-snare-top-2-snare-top-mic",role:"Snare Top",gear:"2. Snare Top Mic",loc:"ARK – 26"},
+    {id:"kyle-snare-bottom-3-snare-bottom-mic",role:"Snare Bottom",gear:"3. Snare Bottom Mic",loc:"ARK – 27"},
+    {id:"kyle-toms-mixdown-4-6-tom-mics",role:"Toms - Mixdown",gear:"4-6. Tom Mics",loc:"NSB.32 - 1-3"},
+    {id:"kyle-overheads-mixdown-7-8-overhead-lr-condenser",role:"Overheads - Mixdown",gear:"7-8. Overhead (LR) Condensers",loc:"NSB.32 - 4-5"}
+  ]},
 ];
 var ioEditing=false, ioBuf=null;
 function ioClone(o){return JSON.parse(JSON.stringify(o));}
