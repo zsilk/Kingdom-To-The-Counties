@@ -2,7 +2,16 @@ import { getStore } from "@netlify/blobs";
 
 const STORE = "k2c-ambassador";
 const KEY = "state";
-const EMPTY = { checklist:{}, announcements:[], checkins:[], feedback:[], praises:[], count:0, event:{name:"",date:""}, ioList:[] };
+const DEFAULT_DAY_PIN = "0627";
+const EMPTY = { checklist:{}, announcements:[], checkins:[], feedback:[], praises:[], count:0, event:{name:"",date:""}, ioList:[], dayPin:DEFAULT_DAY_PIN };
+
+function ioListClearProgress(list){
+  if(!Array.isArray(list) || !list.length) return list;
+  return list.map(p => ({
+    ...p,
+    rows: (p.rows || []).map(r => ({ ...r, done: false, by: "", t: "" }))
+  }));
+}
 
 function normalize(s){
   s = s || {};
@@ -14,7 +23,8 @@ function normalize(s){
     praises:       s.praises       || [],
     count:         s.count         || 0,
     event:         s.event         || { name:"", date:"" },
-    ioList:        Array.isArray(s.ioList) ? s.ioList : []
+    ioList:        Array.isArray(s.ioList) ? s.ioList : [],
+    dayPin:        typeof s.dayPin === "string" ? s.dayPin : DEFAULT_DAY_PIN
   };
 }
 
@@ -36,7 +46,19 @@ function apply(state, action, payload){
     case "bump":            state.count = Math.max(0, (state.count||0) + (payload.delta||0)); break;
     case "setEvent":        state.event = { name: payload.name || "", date: payload.date || "" }; break;
     case "setIOList":       if(Array.isArray(payload.list)) state.ioList = payload.list; break;
-    case "reset":           state = { ...EMPTY, event: state.event }; break;
+    case "setDayPin":       state.dayPin = (payload.pin || "").toString().trim(); break;
+    case "ackCard": {
+      const arr = payload.kind === "praise" ? state.praises : state.feedback;
+      const it = arr.find(x => x.id === payload.id);
+      if(it){
+        const hide = !it.hidden;
+        it.hidden = hide;
+        it.ackBy  = hide ? (payload.by || "") : "";
+        it.ackT   = hide ? (payload.t  || "") : "";
+      }
+      break;
+    }
+    case "reset":           state = { ...EMPTY, event: state.event, dayPin: state.dayPin, ioList: ioListClearProgress(state.ioList) }; break;
   }
   return state;
 }

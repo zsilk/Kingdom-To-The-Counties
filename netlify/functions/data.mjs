@@ -5,6 +5,14 @@ const KEY = "state";
 const DEFAULT_DAY_PIN = "0627";
 const EMPTY = { checklist:{}, announcements:[], checkins:[], feedback:[], praises:[], count:0, event:{name:"",date:""}, ioList:[], dayPin:DEFAULT_DAY_PIN };
 
+function ioListClearProgress(list){
+  if(!Array.isArray(list) || !list.length) return list;
+  return list.map(p => ({
+    ...p,
+    rows: (p.rows || []).map(r => ({ ...r, done: false, by: "", t: "" }))
+  }));
+}
+
 function normalize(s){
   s = s || {};
   return {
@@ -50,7 +58,7 @@ function apply(state, action, payload){
       }
       break;
     }
-    case "reset":           state = { ...EMPTY, event: state.event, dayPin: state.dayPin }; break;
+    case "reset":           state = { ...EMPTY, event: state.event, dayPin: state.dayPin, ioList: ioListClearProgress(state.ioList) }; break;
   }
   return state;
 }

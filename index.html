@@ -326,7 +326,7 @@
 <body>
 <div class="topwrap">
 <header class="topbar">
-  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.1.1</span></span></div>
+  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.1.2</span></span></div>
   <div class="clock"><div class="t" id="clockTime">--:--</div><div class="d" id="clockDate">SATURDAY</div></div>
 </header>
 <div class="nowstrip" id="nowStrip" onclick="goSchedule()">
@@ -389,7 +389,7 @@
       <div class="dashrow"><div class="t"><span>Tech I/O patched</span><span class="v" id="dIo">0 / 0 · 0%</span></div><div class="pbar"><i id="dIoBar"></i></div></div>
       <div class="dashrow"><div class="t"><span>Overdue setup items</span><span class="v" id="dOver">0</span></div></div>
       <button class="btn ink" id="resetBtn" style="margin-top:6px">♻️ Reset all data for next event</button>
-      <p class="hint">Reset clears checklists, check-ins, head count, issues, praise & announcements (keeps event name). Leaders only.</p>
+      <p class="hint">Reset clears checklists, check-ins, head count, issues, praise & announcements (keeps event name, Day PIN & Tech I/O roster; clears patch checkmarks). Leaders only.</p>
     </div>
   </section>
   <section class="page" id="page-checkin">
@@ -1383,6 +1383,14 @@ var ioEditing=false, ioBuf=null;
 function ioClone(o){return JSON.parse(JSON.stringify(o));}
 function ioCurrent(){return (STATE.ioList&&STATE.ioList.length)?STATE.ioList:IO_DEFAULT;}
 function ioCounts(list){var d=0,t=0;list.forEach(function(p){if(p.off)return;p.rows.forEach(function(r){t++;if(r.done)d++;});});return{done:d,total:t};}
+function ioListClearProgress(list){
+  if(!list||!list.length)return list;
+  return list.map(function(p){
+    return{id:p.id,name:p.name,inst:p.inst,pack:p.pack,color:p.color,qmix:p.qmix,off:p.off,rows:(p.rows||[]).map(function(r){
+      return{id:r.id,role:r.role,gear:r.gear,loc:r.loc};
+    })};
+  });
+}
 function renderIOList(){
   var mount=document.getElementById("ioMount");
   if(!mount)return;
@@ -1730,7 +1738,7 @@ document.getElementById("countPlus").addEventListener("click",function(){bumpCou
 document.getElementById("countMinus").addEventListener("click",function(){bumpCount(-1);});
 document.addEventListener("visibilitychange",function(){if(document.visibilityState!=="visible")flushCount();});
 document.getElementById("evSave").addEventListener("click",function(){var name=document.getElementById("evName").value.trim(),date=document.getElementById("evDate").value.trim();doAction("setEvent",{name:name,date:date},function(){STATE.event={name:name,date:date};});});
-document.getElementById("resetBtn").addEventListener("click",function(){if(confirm("Reset ALL event data (checklists, check-ins, head count, issues, praise, announcements)? This can't be undone.")){doAction("reset",{},function(){var ev=STATE.event;STATE={checklist:{},announcements:[],checkins:[],feedback:[],praises:[],count:0,event:ev};});}});
+document.getElementById("resetBtn").addEventListener("click",function(){if(confirm("Reset event data (checklists, check-ins, head count, issues, praise, announcements)? Keeps event name, Day PIN & Tech I/O roster; clears patch checkmarks. This can't be undone.")){doAction("reset",{},function(){var ev=STATE.event,dp=STATE.dayPin,io=ioListClearProgress(STATE.ioList);STATE={checklist:{},announcements:[],checkins:[],feedback:[],praises:[],count:0,event:ev,dayPin:dp,ioList:io};});}});
 document.addEventListener("click",function(e){var row=e.target.closest(".chk");if(row)toggleCheck(row.getAttribute("data-id"));});
 document.getElementById("annBarX").addEventListener("click",function(e){e.stopPropagation();barDismissed=true;document.getElementById("annBar").classList.remove("show");});
 var annBarMode="checkin";
