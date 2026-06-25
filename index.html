@@ -204,7 +204,9 @@
   .phitem .psub{font-size:11.5px;color:var(--muted);display:block;margin-top:2px}
   .iobar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
   .iobar .prog{font-size:12.5px;color:var(--muted);font-weight:700}.iobar .prog b{color:var(--ink);font-size:14px}
+  .iobar .ioacts{display:flex;gap:7px;flex-wrap:wrap}
   .iobtn{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:12.5px;padding:8px 13px;border-radius:10px;cursor:pointer}
+  .iobtn.reload{color:var(--wine);border-color:#dcc9ce;background:#faf6f7}
   .iolock{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:7px}
   .iolock button{border:none;background:var(--ink);color:var(--cream);font-weight:700;font-size:12px;padding:6px 11px;border-radius:8px;cursor:pointer}
   .ioperf{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:11px;overflow:hidden;box-shadow:var(--shadow)}
@@ -431,7 +433,7 @@
   <section class="page" id="page-techio">
     <button class="back" onclick="show('crew')">‹ Specialists</button>
     <p class="eyebrow">Tech · FOH · Worship</p><h1 class="title">Tech I/O List</h1>
-    <div class="ionote">🎛️ <b>Input / Mic / IEM Pack assignments</b> — Michael Nelson (Tech/FOH). Enter your initials, then tap each input to check it off as it's patched &amp; line-checked — your initials &amp; time are logged on the card. Leaders can <b>Edit list</b> after entering the PIN.</div>
+    <div class="ionote">🎛️ <b>Input / Mic / IEM Pack assignments</b> — Michael Nelson (Tech/FOH). Enter your initials, then tap each input to check it off as it's patched &amp; line-checked — your initials &amp; time are logged on the card. Leaders can <b>Edit list</b> or <b>Reload roster from defaults</b> after entering the PIN.</div>
     <div class="idbar" id="idbar-io"><label>Your initials</label><input id="initIo" maxlength="4" placeholder="e.g. MN" /></div>
     <div id="ioMount"></div>
   </section>
@@ -1403,7 +1405,7 @@ function renderIOList(){
   var list=ioCurrent();
   var c=ioCounts(list);
   var bar='<div class="iobar"><span class="prog"><b>'+c.done+'</b> / '+c.total+' inputs patched &amp; checked</span>'+
-    (LEADER?'<button class="iobtn" onclick="ioStartEdit()">✏️ Edit list</button>'
+    (LEADER?'<span class="ioacts"><button class="iobtn reload" onclick="ioReloadDefaults()">↺ Reload defaults</button><button class="iobtn" onclick="ioStartEdit()">✏️ Edit list</button></span>'
            :'<span class="iolock">🔒 Leaders can edit<button onclick="askPin(function(){renderIOList();})">Unlock</button></span>')+'</div>';
   var body=list.map(function(p){
     var rows=p.rows.map(function(r){
@@ -1436,6 +1438,15 @@ function ioToggle(pid,rid){
 function ioStartEdit(){
   if(!LEADER){askPin(function(){ioStartEdit();});return;}
   ioBuf=ioClone(ioCurrent());ioEditing=true;renderIOList();
+}
+function ioReloadDefaults(){
+  if(!LEADER){askPin(function(){ioReloadDefaults();});return;}
+  if(ioEditing)ioCancelEdit();
+  if(!confirm("Reload the Tech I/O roster from the deployed defaults? This replaces the current list for everyone and clears all patch checkmarks."))return;
+  var list=ioClone(IO_DEFAULT);
+  STATE.ioList=list;
+  doAction("setIOList",{list:list},function(){STATE.ioList=list;renderIOList();});
+  renderIOList();
 }
 function ioCancelEdit(){ioEditing=false;ioBuf=null;renderIOList();}
 function ioSaveEdit(){
