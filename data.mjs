@@ -3,7 +3,7 @@ import { getStore } from "@netlify/blobs";
 const STORE = "k2c-ambassador";
 const KEY = "state";
 const DEFAULT_DAY_PIN = "0627";
-const EMPTY = { checklist:{}, announcements:[], checkins:[], feedback:[], praises:[], count:0, event:{name:"",date:""}, ioList:[], dayPin:DEFAULT_DAY_PIN };
+const EMPTY = { checklist:{}, announcements:[], checkins:[], feedback:[], praises:[], count:0, tally:[], event:{name:"",date:""}, ioList:[], dayPin:DEFAULT_DAY_PIN };
 
 function ioListClearProgress(list){
   if(!Array.isArray(list) || !list.length) return list;
@@ -22,11 +22,16 @@ function normalize(s){
     feedback:      s.feedback      || [],
     praises:       s.praises       || [],
     count:         s.count         || 0,
+    tally:         Array.isArray(s.tally) ? s.tally : [],
     event:         s.event         || { name:"", date:"" },
     ioList:        Array.isArray(s.ioList) ? s.ioList : [],
     dayPin:        typeof s.dayPin === "string" ? s.dayPin : DEFAULT_DAY_PIN
   };
 }
+
+function newId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function cleanInitials(v){ return (v||"").toString().toUpperCase().replace(/[^A-Z]/g,"").slice(0,4); }
+function recount(state){ state.count = Math.max(0, state.tally.reduce((s,r)=>s+(Number(r.delta)||0),0)); }
 
 function apply(state, action, payload){
   payload = payload || {};
@@ -43,7 +48,32 @@ function apply(state, action, payload){
     case "addAnnouncement": state.announcements.unshift(payload); break;
     case "addPraise":       state.praises.unshift(payload); break;
     case "addFeedback":     state.feedback.unshift(payload); break;
-    case "bump":            state.count = Math.max(0, (state.count||0) + (payload.delta||0)); break;
+    case "bump": {
+      const delta = Number(payload.delta) || 0;
+      if(delta !== 0){
+        state.tally.push({
+          id: payload.id || newId(),
+          by: cleanInitials(payload.by),
+          delta,
+          t: payload.t || ""
+        });
+        recount(state);
+      }
+      break;
+    }
+    case "undoLast": {
+      const by = cleanInitials(payload.by);
+      for(let i = state.tally.length - 1; i >= 0; i--){
+        const e = state.tally[i];
+        if(e.by === by && !e.undone && !e.isUndo){
+          e.undone = true;
+          state.tally.push({ id: newId(), by, delta: -(Number(e.delta)||0), t: payload.t || "", isUndo: true, ref: e.id });
+          break;
+        }
+      }
+      recount(state);
+      break;
+    }
     case "setEvent":        state.event = { name: payload.name || "", date: payload.date || "" }; break;
     case "setIOList":       if(Array.isArray(payload.list)) state.ioList = payload.list; break;
     case "setDayPin":       state.dayPin = (payload.pin || "").toString().trim(); break;
