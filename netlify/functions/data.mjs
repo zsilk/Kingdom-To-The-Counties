@@ -2,7 +2,8 @@ import { getStore } from "@netlify/blobs";
 
 const STORE = "k2c-ambassador";
 const KEY = "state";
-const EMPTY = { checklist:{}, announcements:[], checkins:[], feedback:[], praises:[], count:0, event:{name:"",date:""} };
+const DEFAULT_DAY_PIN = "0627";
+const EMPTY = { checklist:{}, announcements:[], checkins:[], feedback:[], praises:[], count:0, event:{name:"",date:""}, ioList:[], dayPin:DEFAULT_DAY_PIN };
 
 function normalize(s){
   s = s || {};
@@ -13,7 +14,9 @@ function normalize(s){
     feedback:      s.feedback      || [],
     praises:       s.praises       || [],
     count:         s.count         || 0,
-    event:         s.event         || { name:"", date:"" }
+    event:         s.event         || { name:"", date:"" },
+    ioList:        Array.isArray(s.ioList) ? s.ioList : [],
+    dayPin:        typeof s.dayPin === "string" ? s.dayPin : DEFAULT_DAY_PIN
   };
 }
 
@@ -34,7 +37,20 @@ function apply(state, action, payload){
     case "addFeedback":     state.feedback.unshift(payload); break;
     case "bump":            state.count = Math.max(0, (state.count||0) + (payload.delta||0)); break;
     case "setEvent":        state.event = { name: payload.name || "", date: payload.date || "" }; break;
-    case "reset":           state = { ...EMPTY, event: state.event }; break;
+    case "setIOList":       if(Array.isArray(payload.list)) state.ioList = payload.list; break;
+    case "setDayPin":       state.dayPin = (payload.pin || "").toString().trim(); break;
+    case "ackCard": {
+      const arr = payload.kind === "praise" ? state.praises : state.feedback;
+      const it = arr.find(x => x.id === payload.id);
+      if(it){
+        const hide = !it.hidden;
+        it.hidden = hide;
+        it.ackBy  = hide ? (payload.by || "") : "";
+        it.ackT   = hide ? (payload.t  || "") : "";
+      }
+      break;
+    }
+    case "reset":           state = { ...EMPTY, event: state.event, dayPin: state.dayPin }; break;
   }
   return state;
 }
