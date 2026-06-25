@@ -41,6 +41,7 @@
   .brand{display:flex;flex-direction:column;line-height:1}
   .brand .k{font-family:var(--serif);font-weight:900;font-size:18px;letter-spacing:.3px}
   .brand .s{font-size:10.5px;letter-spacing:2.4px;text-transform:uppercase;color:var(--slate);margin-top:4px}
+  .brand .s .ver{color:var(--rust);letter-spacing:1px;margin-left:4px;font-weight:700}
   .clock{text-align:right;font-variant-numeric:tabular-nums}
   .clock .t{font-family:var(--serif);font-weight:700;font-size:17px}
   .clock .d{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);margin-top:3px}
@@ -201,6 +202,37 @@
   .phitem.crit .dot{background:var(--wine)}
   .phitem .ptxt{font-size:13.5px;color:var(--ink);line-height:1.4}
   .phitem .psub{font-size:11.5px;color:var(--muted);display:block;margin-top:2px}
+  .iobar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+  .iobar .prog{font-size:12.5px;color:var(--muted);font-weight:700}.iobar .prog b{color:var(--ink);font-size:14px}
+  .iobtn{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:12.5px;padding:8px 13px;border-radius:10px;cursor:pointer}
+  .iolock{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:7px}
+  .iolock button{border:none;background:var(--ink);color:var(--cream);font-weight:700;font-size:12px;padding:6px 11px;border-radius:8px;cursor:pointer}
+  .ioperf{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:11px;overflow:hidden;box-shadow:var(--shadow)}
+  .ioperf .ph{display:flex;align-items:center;gap:9px;padding:10px 12px;background:var(--cream);border-bottom:1px solid var(--line)}
+  .ioperf .chip{flex:none;min-width:30px;height:30px;padding:0 7px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;letter-spacing:.3px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)}
+  .ioperf .pn{flex:1;min-width:0;font-family:var(--serif);font-weight:700;font-size:15px;line-height:1.12}
+  .ioperf .pn small{display:block;font-family:var(--sans);font-weight:600;font-size:11px;color:var(--muted);margin-top:1px}
+  .ioperf .qx{flex:none;font-size:11px;font-weight:700;color:var(--wine);background:#fff;border:1px solid var(--line);border-radius:7px;padding:4px 8px;white-space:nowrap}
+  .iorow{display:flex;align-items:center;gap:11px;padding:9px 12px;border-bottom:1px solid var(--line)}
+  .iorow:last-child{border-bottom:none}.iorow.tap{cursor:pointer}
+  .iorow .box{flex:none;width:21px;height:21px;border-radius:6px;border:2px solid var(--slate);display:flex;align-items:center;justify-content:center;transition:all .15s}
+  .iorow .box svg{width:12px;height:12px;stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:0;transform:scale(.6);transition:all .15s}
+  .iorow.done .box{background:var(--rust);border-color:var(--rust)}.iorow.done .box svg{opacity:1;transform:scale(1)}
+  .iorow .w{flex:1;min-width:0;font-size:13.5px;line-height:1.3}.iorow .w b{font-weight:700;color:var(--ink)}
+  .iorow .w span{display:block;font-size:12px;color:var(--muted);margin-top:1px}
+  .iorow.done .w b{text-decoration:line-through;color:var(--muted)}
+  .iorow .loc{flex:none;font-size:11px;font-weight:700;color:var(--wine);font-variant-numeric:tabular-nums;background:#fff;border:1px solid var(--line);border-radius:7px;padding:4px 7px;white-space:nowrap}
+  .ioperf.off{opacity:.6}.ioperf.off .ph{background:#f1efe9}
+  .iotag{font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#fff;background:var(--slate);border-radius:5px;padding:2px 6px;margin-left:7px;vertical-align:middle}
+  .ioph{flex-wrap:wrap;gap:6px}
+  .ioe{display:flex;gap:6px;flex:1;flex-wrap:wrap;min-width:0}
+  .ioe input,.ioph input{font-size:12.5px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-family:inherit;min-width:80px;flex:1}
+  .iodel{flex:none;border:none;background:#f3e1e3;color:#6E2F3A;font-weight:800;font-size:13px;width:26px;height:26px;border-radius:7px;cursor:pointer}
+  .ioadd{display:block;width:100%;border:1px dashed var(--line);background:transparent;color:var(--rust);font-weight:700;font-size:12px;padding:8px;border-radius:9px;cursor:pointer}
+  .ioaddperf{display:block;width:100%;border:1px dashed var(--rust);background:transparent;color:var(--rust);font-weight:800;font-size:13px;padding:11px;border-radius:11px;cursor:pointer;margin-bottom:12px}
+  .ioedbar{display:flex;gap:8px;margin-bottom:12px}
+  .ioedbar button{flex:1;border:none;border-radius:11px;padding:11px;font-weight:800;font-size:13.5px;cursor:pointer}
+  .ioedbar .save{background:var(--rust);color:#fff}.ioedbar .cancel{background:var(--card);color:var(--ink);border:1px solid var(--line)}
   .stat{display:flex;gap:10px;margin-bottom:14px}
   .stat .box{flex:1;background:var(--ink);color:var(--cream);border-radius:14px;padding:14px;text-align:center}
   .stat .box.alt{background:var(--card);color:var(--ink);border:1px solid var(--line)}
@@ -272,7 +304,7 @@
 <body>
 <div class="topwrap">
 <header class="topbar">
-  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion</span></div>
+  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.1</span></span></div>
   <div class="clock"><div class="t" id="clockTime">--:--</div><div class="d" id="clockDate">SATURDAY</div></div>
 </header>
 <div class="nowstrip" id="nowStrip" onclick="goSchedule()">
@@ -370,10 +402,9 @@
   </section>
   <section class="page" id="page-techio">
     <button class="back" onclick="show('crew')">‹ Specialists</button>
-    <p class="eyebrow">Tech · FOH · Worship</p><h1 class="title">Tech Setup Doc</h1>
-    <div class="ionote">📋 Full setup runbook — Michael Nelson (Tech/FOH). Click & Guide → IEMs only, never to house. ARK console + Papa V stage box. Tracks + routing via Ableton/multitrack. Planning Center for setlists.</div>
-    <div id="techPhasesMount"></div>
-    <p class="legend">Phases 0–9 cover 2-week pre-event prep through Saturday fit & finish. Confirm all DBL maximums before event day.</p>
+    <p class="eyebrow">Tech · FOH · Worship</p><h1 class="title">Tech I/O List</h1>
+    <div class="ionote">🎛️ <b>Input / Mic / IEM Pack assignments</b> — Michael Nelson (Tech/FOH). Tap each input to check it off as it's patched &amp; line-checked. Leaders can <b>Edit list</b> after entering the PIN.</div>
+    <div id="ioMount"></div>
   </section>
   <section class="page" id="page-board">
     <p class="eyebrow">Communication</p><h1 class="title">Post</h1><p class="sub">Praise, issues & announcements.</p>
@@ -529,13 +560,7 @@
 #page-playbook .pb .callout.note{background:var(--canvas-soft);border:1px solid var(--line);}
 #page-playbook .pb .callout.fire{background:#F8E9DF;border:1px solid #E5BC9C;}
 #page-playbook .pb .callout.cool{background:#EAF1F6;border:1px solid var(--powder);}
-#page-playbook .pb .stop{font-family:var(--body);font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--burgundy);}
-#page-playbook .pb .check{background:var(--ink);color:var(--cream);border-radius:12px;padding:16px;margin:16px 0;}
-#page-playbook .pb .check .tag{font-family:var(--body);text-transform:uppercase;letter-spacing:.12em;font-size:10.5px;color:var(--rust-glow);font-weight:600;}
-#page-playbook .pb .check h5{font-family:var(--display);font-size:18px;margin:5px 0 7px;font-weight:700;}
-#page-playbook .pb .check p{font-size:13.5px;opacity:.92;margin:0 0 12px;}
-#page-playbook .pb .check a.mail{display:inline-block;text-decoration:none;background:var(--rust);color:#fff;font-family:var(--body);text-transform:uppercase;letter-spacing:.04em;font-weight:600;font-size:12.5px;padding:9px 14px;border-radius:8px;}
-#page-playbook .pb .contact{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line);}
+#page-playbook .pb .stop{font-family:var(--body);font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--burgundy);}#page-playbook .pb .contact{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line);}
 #page-playbook .pb .contact:last-child{border-bottom:none;}
 #page-playbook .pb .c-name{font-family:var(--display);font-weight:700;font-size:17px;color:var(--ink);line-height:1.1;}
 #page-playbook .pb .c-role{font-size:12px;color:var(--ink-soft);margin-top:2px;}
@@ -553,24 +578,7 @@
 #page-playbook .pb .tent:last-child{border-bottom:none;}
 #page-playbook .pb .swatch{width:26px;height:26px;border-radius:6px;flex:none;border:1px solid rgba(0,0,0,.12);margin-top:2px;}
 #page-playbook .pb .tent .tn{font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink);}
-#page-playbook .pb .tent .tw{font-size:13px;color:var(--ink-soft);margin-top:2px;}
-#page-playbook .pb section.sacred{background:radial-gradient(120% 80% at 50% 0%, rgba(202,122,80,.16), transparent 55%),var(--sacred);color:var(--cream);border:1px solid #4a2730;}
-#page-playbook .pb section.sacred .s-tt h3{color:#fff;}
-#page-playbook .pb section.sacred .s-tt .s-sub{color:#d6b6ad;}
-#page-playbook .pb section.sacred .chev{color:var(--rust-glow);}
-#page-playbook .pb section.sacred .body{color:var(--cream);}
-#page-playbook .pb section.sacred strong{color:#fff;}
-#page-playbook .pb section.sacred .em{color:var(--rust-glow);}
-#page-playbook .pb section.sacred h4{color:var(--rust-glow);}
-#page-playbook .pb section.sacred hr.div{border-top-color:rgba(243,241,233,.14);}
-#page-playbook .pb section.sacred blockquote.verse{background:rgba(255,255,255,.05);color:#f3e7da;border-left-color:var(--rust-glow);}
-#page-playbook .pb section.sacred blockquote.verse .ref{color:var(--rust-glow);}
-#page-playbook .pb section.sacred .callout.alert{background:rgba(110,47,58,.4);border-color:rgba(217,174,180,.4);color:#f1d3d7;}
-#page-playbook .pb section.sacred .callout.alert strong{color:#fff;}
-#page-playbook .pb section.sacred .callout.note{background:rgba(255,255,255,.05);border-color:rgba(243,241,233,.14);color:#eaded0;}
-#page-playbook .pb section.sacred .stop{color:#e79aa3;}
-#page-playbook .pb section.sacred .check{background:rgba(0,0,0,.32);border:1px solid rgba(243,241,233,.12);}
-#page-playbook .pb .sacred-flag{text-align:center;font-family:var(--body);text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--burgundy);font-weight:700;margin:26px 14px 2px;}
+#page-playbook .pb .tent .tw{font-size:13px;color:var(--ink-soft);margin-top:2px;}#page-playbook .pb .sacred-flag{text-align:center;font-family:var(--body);text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--burgundy);font-weight:700;margin:26px 14px 2px;}
 #page-playbook .pb .sacred-flag::before, #page-playbook .pb .sacred-flag::after{content:"✦";margin:0 8px;color:var(--rust);opacity:.7;}
 #page-playbook .pb footer{text-align:center;padding:30px 20px 10px;color:var(--ink-soft);}
 #page-playbook .pb footer .tag{font-family:var(--display);font-size:15px;color:var(--ink);font-weight:700;}
@@ -656,13 +664,6 @@
         <p>The <strong>business of ministry</strong> is the tent, AV, parking, medical, the crane, sound check, setup, teardown. Necessary — and we're grateful for everyone who serves there. <strong>Ministry itself</strong> is the conversation, the prayer, the arm around a shoulder, the eye contact with someone standing alone.</p>
         <p>The business of ministry should NEVER take precedence over ministry itself. Carrying a crate and see someone who needs a conversation? Set down the crate. The systems serve the people — never the other way around.</p>
         <div class="callout alert">🔴 <span class="stop">The Practical Test.</span> Ask yourself: <em>"Am I doing the business of ministry, or am I doing ministry?"</em> If you're doing the business and a person nearby needs Jesus — <strong>STOP.</strong> The business can wait. The person in front of you cannot. When the two conflict, ministry wins. Every time. No exceptions.</div>
-
-        <div class="check">
-          <div class="tag">🚦 "Did You Read Me?" Check #1</div>
-          <h5>Pick your fighter</h5>
-          <p>Send ONE emoji that represents how you're feeling about K2C. Just one. No words. 🔥 🐅 🦒 🦄 🍕 🙏</p>
-          <a class="mail" href="mailto:info@thefourthministries.com?subject=Did%20You%20Read%20Me%20Check%20%231">✉ Send to info@</a>
-        </div>
       </div>
     </details>
   </section>
@@ -699,8 +700,8 @@
 
         <h4>🙏 Invitation Zone Protocol</h4>
         <p>No ropes. No barriers. The host verbally asks the crowd near the front to step back and make room. Responders step forward TO THE CROSS. Ambassadors approach them there — but <strong>never interrupt someone still deep in a moment with God.</strong></p>
-        <div class="callout note"><strong>The flow:</strong> Step back → invite responders forward to the CROSS → play a response song with no counselors yet → Jeff releases Ambassadors after <strong>2–5 minutes</strong> to approach those who stepped forward.</div>
-        <div class="callout alert">⛺ <strong>Ambassador Tent = supply point ONLY.</strong> Gift bags, cards, materials live there. Ambassadors GO TO people. People should never have to walk to the tent to receive ministry — that's your job.</div>
+        <div class="callout note"><strong>The flow:</strong> Step back → new believers, rededicators, and counselors all move to the CROSS together → response song plays soft → the preacher leads the sinner's prayer → Amen and celebration → counselors relationally walk new believers to the Ambassador Tent for their gift. (Full sequence is in <strong>The Altar Call Moment</strong> guide.)</div>
+        <div class="callout alert">⛺ <strong>Ambassador Tent = where the gifts live.</strong> Bibles, gift items, follow-up cards, and materials are staged there. Never send a new believer to the tent alone — <strong>walk them there yourself</strong>, relationally, as part of caring for them. You go WITH them.</div>
       </div>
     </details>
   </section>
@@ -739,13 +740,6 @@
         <p style="font-size:12.5px;color:var(--ink-soft);margin-top:10px;">Soft keys/acoustic plays during Intro, TTT Moments, Gospel Presentations, and Altar Call response windows — a band break that keeps the atmosphere warm. Official setlist lives in Planning Center Services.</p>
 
         <div class="callout alert">📌 <strong>The plan will NOT change on event day.</strong> We rely fully on the Holy Spirit. If He calls for a shift, that confirmation must come through MULTIPLE senior leaders in agreement and be announced from the PRIMARY MICROPHONE. Until that announcement — we run the plan exactly as written.</div>
-
-        <div class="check">
-          <div class="tag">🚦 "Did You Read Me?" Check #2</div>
-          <h5>Confirm the schedule</h5>
-          <p>Send a short message confirming you've reviewed the Order of Events and understand the day's schedule.</p>
-          <a class="mail" href="mailto:info@thefourthministries.com?subject=Did%20You%20Read%20Me%20Check%20%232%20-%20Order%20of%20Events">✉ Send to info@</a>
-        </div>
       </div>
     </details>
   </section>
@@ -819,13 +813,6 @@
         </ul>
         <blockquote class="verse">"Behold, I send you out as sheep in the midst of wolves. Therefore, be wise as serpents and harmless as doves."<span class="ref">Matthew 10:16 · NASB 2020</span></blockquote>
         <p>Social media is a catapult for the gospel — but the comments section is NOT the place to minister or debate theology. Be wise. Trust the Holy Spirit in you to set a good example.</p>
-
-        <div class="check">
-          <div class="tag">🚦 "Did You Read Me?" Check #3</div>
-          <h5>Send your favorite worship song</h5>
-          <p>We'll see if Karielle &amp; John can work it into a set at a future event. 🎵</p>
-          <a class="mail" href="mailto:info@thefourthministries.com?subject=Did%20You%20Read%20Me%20Check%20%233%20-%20Worship%20Song">✉ Send to info@</a>
-        </div>
       </div>
     </details>
   </section>
@@ -874,13 +861,6 @@
         <h4>🎤 Main Event Program</h4>
         <p><strong>Same program for all 10 events?</strong> Mostly yes. Speakers and teams may vary by county, but call times, setup days, worship sets, speaking segments, and flow stay consistent — it honors the work and makes 10 events feasible. The program is intentionally designed with room for the Spirit to move uniquely in each location.</p>
         <p><strong>On-site baptism?</strong> No. After prayer, we've chosen not to offer on-site baptism at K2C 2026. Baptism needs preparation and follow-up best provided by the local church a new believer connects with. Not ruled out for future events designed for it.</p>
-
-        <div class="check">
-          <div class="tag">🚦 "Did You Read Me?" Check #5</div>
-          <h5>🏁 You made it to the end</h5>
-          <p>Send one root vegetable emoji to confirm you read the whole playbook. (No vegetable, no event. Just kidding. Mostly.) 🥕🥔🧅🌽</p>
-          <a class="mail" href="mailto:info@thefourthministries.com?subject=Did%20You%20Read%20Me%20Check%20%235%20-%20Finished">✉ Send to info@</a>
-        </div>
       </div>
     </details>
   </section>
@@ -888,7 +868,7 @@
   <div class="sacred-flag">Ambassador Counselors Only</div>
 
   <!-- ALTAR CALL (sacred) -->
-  <section class="card sacred" id="altar">
+  <section class="card" id="altar">
     <details>
       <summary><span class="s-ico">🙏</span><span class="s-tt"><h3>The Altar Call Moment</h3><div class="s-sub">Two-call protocol · for counselors</div></span><span class="chev">▶</span></summary>
       <div class="body">
@@ -900,11 +880,25 @@
         <p>Both calls are <strong>general calls to repent from sin.</strong> We do not separate first-time believers from those returning. Whoever the Holy Spirit is drawing — first time or rededicating — is welcome at the cross. Same invitation. Same Savior. Same protocol.</p>
         <div class="callout note"><strong>Gift bags</strong> are given to anyone stepping forward who doesn't have one. <strong>Healing</strong> is called out separately during the gospel presentation — do not conflate it with the altar call. <strong>Counseling approach:</strong> questions-first. Meet them at the cross.</div>
 
+        <h4>🔄 The Altar Call Flow · Start to Finish</h4>
+        <p>This is the program sequence from the front — what the preacher leads and what you'll see unfold. Know it cold so you can move in step with it. Your specific counselor actions are in <strong>Steps 1–9</strong> below.</p>
+        <ol style="margin:0 0 14px;padding-left:22px;font-size:14.5px;line-height:1.5;">
+          <li style="margin:0 0 8px;">During the gospel presentation, the preacher asks people to <strong>step back and make room around the cross</strong> — believing God is going to draw people to Himself.</li>
+          <li style="margin:0 0 8px;">The preacher gives the invite — <strong>dedicate or rededicate your life to Jesus.</strong> He makes it clear this will be brief and you'll be back with the group you came with shortly, and he explains exactly what will happen: come to the cross, he'll lead a short prayer, a counselor will introduce themselves and celebrate with you, and you'll receive a Bible and other gifts.</li>
+          <li style="margin:0 0 8px;"><strong>New believers, rededicators, and counselors all move to the cross together, at the same time.</strong> Once movement starts — if anyone is unable to come forward, raise your hand and keep it up, and a counselor will come to you. Music starts to build (still soft and light so everyone can still hear the preacher).</li>
+          <li style="margin:0 0 8px;">The <strong>altar call response song</strong> <em>[placeholder]</em> plays soft — 2–3 min — while everyone gathers.</li>
+          <li style="margin:0 0 8px;">The preacher leads the <strong>sinner's prayer</strong>, music stays soft.</li>
+          <li style="margin:0 0 8px;"><strong>Amen → big musical celebration moment.</strong></li>
+          <li style="margin:0 0 8px;">Counselors relationally walk new believers from the cross to the <strong>Ambassador's tent</strong>, where their gift is — New Believer's Bible, a worship album CD, the <em>Identity in Christ</em> book, and a small wooden cross.</li>
+          <li style="margin:0 0 8px;">The preacher <strong>opens the altar for anyone who needs prayer</strong> — physical, emotional, or spiritual healing, or a fresh touch from God. Same structure as step 3: come to the altar, and if you're unable to come, raise your hand and keep it up, a counselor will come to you. A worship song plays during this time.</li>
+          <li style="margin:0 0 8px;">The worship team continues to play response songs until the next segment of the K2C program.</li>
+        </ol>
+
         <h4>📋 Steps 1–9 · General Guidance</h4>
-        <p><strong>1 — Be ready.</strong> Gift bags in hand before the altar call begins. Get in position near the invitation zone. Know who's around you. Check in with Jeff.</p>
+        <p><strong>1 — Be ready.</strong> Follow-up card and pen in hand before the altar call begins. Know where the gifts are staged at the Ambassador Tent. Get in position near the invitation zone. Know who's around you. Check in with Jeff.</p>
         <p><strong>2 — The crowd steps back.</strong> The host asks everyone near the front to step back and clear the invitation zone. If you're near the front — step back too. Create the space.</p>
-        <p><strong>3 — The invitation goes out. Pray and watch.</strong> The gospel is presented and the invitation given. <strong>Do NOT move yet</strong> — but don't stand idle. Begin scanning: who's crying? Who's visibly moved? Who came forward alone? Who's hesitant near you? Go quietly to anyone weeping, stand beside them, place a gentle hand on their shoulder, and pray SILENTLY. Don't speak yet. A response song plays — honor it. Reverence the presence of God above all else.</p>
-        <p><strong>4 — Jeff releases the team.</strong> The host says: <em>"If you just met Jesus at the cross — first time or coming home — we have a gift for you, and someone wants to walk with you into the next step."</em> Jeff gives the release. NOW you move.</p>
+        <p><strong>3 — Move to the cross together.</strong> When the invitation goes out, new believers, rededicators, and counselors all move forward to the cross <strong>at the same time.</strong> As you go, begin scanning: who's crying? Who's visibly moved? Who came forward alone? Who's hesitant near you? Go quietly to anyone weeping, stand beside them, place a gentle hand on their shoulder, and pray SILENTLY. <strong>Don't start counseling yet</strong> — the response song is playing and the preacher will lead the sinner's prayer. Honor the moment. Reverence the presence of God above all else.</p>
+        <p><strong>4 — The prayer, then the celebration.</strong> The preacher leads the sinner's prayer while the music stays soft — pray right along with the people beside you. At the "Amen," it breaks into a big celebration. <strong>NOW you connect</strong> — turn to the new believer beside you and begin.</p>
         <p><strong>5 — Go to your person, 1-on-1.</strong> Women go to women, men to men — no exceptions. One Ambassador per new believer — don't crowd them. Close your live stream, put your phone down. Walk over calmly. Smile. You're the first face of the Church they'll ever see.</p>
         <p><strong>6 — Questions first. Always.</strong> Don't preach at them — they just met Jesus. Be curious, warm, present. Ask, then listen:</p>
         <ul>
@@ -913,7 +907,7 @@
           <li>"What made you want to step forward today?"</li>
         </ul>
         <p>15 minutes is enough for an initial connection. Listen, affirm, swap numbers, schedule next steps. <strong>Do NOT equate emotion with authenticity</strong> — some weep, some show nothing. Both are valid.</p>
-        <p><strong>7 — Give the gift.</strong> Hand them the gift bag and walk through what's inside. <strong class="em">Critical:</strong> get their phone number and email. Do NOT ask for a mailing address at this stage.</p>
+        <p><strong>7 — Walk them to the gift.</strong> Relationally walk your new believer from the cross to the Ambassador Tent, where their gift is waiting — a New Believer's Bible, a worship album CD, the <em>Identity in Christ</em> book, and a small wooden cross. Walk through what's inside together. <strong class="em">Critical:</strong> get their phone number and email. Do NOT ask for a mailing address at this stage.</p>
         <p><strong>8 — Stay with them. Take it offsite.</strong> Don't hand off and walk away. Sit with them through the closing. Walk out with them. As 5:00 approaches, move the conversation offsite.</p>
         <p><strong>9 — Offer dinner.</strong> <em>"I'd love to take you and your family out to dinner this week. Would that be okay?"</em> Congratulations — you're now discipling a baby Christian. This is the whole point.</p>
 
@@ -925,7 +919,7 @@
   </section>
 
   <!-- NEW BIRTH (sacred) -->
-  <section class="card sacred" id="newbirth">
+  <section class="card" id="newbirth">
     <details>
       <summary><span class="s-ico">👶</span><span class="s-tt"><h3>The New Birth</h3><div class="s-sub">Handle with fear and trembling</div></span><span class="chev">▶</span></summary>
       <div class="body">
@@ -969,13 +963,6 @@
           <li>The booklet in your gift bag is your first Bible study. Start there tonight.</li>
         </ul>
         <p>Always close in prayer. Lay a hand on their shoulder and pray OUT LOUD over their new life, their family, the road ahead. Let the last thing they hear from you be blessing spoken in the Name of Jesus.</p>
-
-        <div class="check">
-          <div class="tag">🚦 "Did You Read Me?" Check #4</div>
-          <h5>Who would you invite?</h5>
-          <p>Send the first name of the person you'd most want to invite to a future K2C. Don't actually invite them yet — just send their first name. 🙌</p>
-          <a class="mail" href="mailto:info@thefourthministries.com?subject=Did%20You%20Read%20Me%20Check%20%234">✉ Send to info@</a>
-        </div>
       </div>
     </details>
   </section>
@@ -1311,210 +1298,122 @@ function renderClock(){
   if(simActive){tEl.textContent=fmt(Math.floor(nowMinutes()));dEl.textContent="PREVIEW";}
   else{var h=d.getHours(),mn=d.getMinutes(),ap=h>=12?"PM":"AM",hh=h%12||12;tEl.textContent=hh+":"+String(mn).padStart(2,"0")+" "+ap;dEl.textContent=d.toLocaleDateString(undefined,{weekday:"long"}).toUpperCase();}
 }
-var TECH_PHASES=[
-  {num:"0",name:"Pre-Event Prep",time:"2 weeks prior",groups:[
-    {g:"Logistics",items:[
-      {t:"Confirm DBL maximums if required",f:"crit"},
-      {t:"Reach out to event POC — confirm details & changes"},
-      {t:"Musicians confirmed"},
-      {t:"Materials PRINTED — 12 copies of each",f:"warn"},
-      {t:"Stage plot confirmed and posted to teams, distributed via PCO"},
-      {t:"Input list confirmed and posted via PCO"},
-      {t:"Order of events confirmed and posted via PCO"}
-    ]},
-    {g:"Tech Prep",items:[
-      {t:"Computer set up — Tracks, routing"},
-      {t:"ARK console set up and fully prepped"},
-      {t:"Confirm Multitracks setlist built in Planning Center + all tracks downloaded for offline playback"},
-      {t:"iPad backup prepped — same tracks downloaded + connects to ARK with correct adapter",f:"warn"}
-    ]}
+/* ===== Tech I/O List (Input / Mic / IEM Pack assignments) ===== */
+var IO_DEFAULT=[
+  {id:"p1",name:"Karielle",inst:"",pack:"Pack 1",color:"#ED8B0B",qmix:"1 / 2",rows:[
+    {id:"k-vox",role:"Lead Vox",gear:"Wireless Mic B",loc:"N/A (Wireless)"}
   ]},
-  {num:"1",name:"Unloading",time:"Friday · 9:00 AM – 11:30 AM",groups:[
-    {g:"Site Plot",items:[
-      {t:"Check radios"},
-      {t:"Confirm and plot: crane location"},
-      {t:"Confirm and plot: stage location"},
-      {t:"Confirm and plot: FOH tent location"}
-    ]},
-    {g:"Trusses & Tents",items:[
-      {t:"Unload trusses from Papa V trailer — bring Little Giant ladder"},
-      {t:"Set up trusses (THE Tower) — do NOT set up mains or subs yet",f:"warn"},
-      {t:"Unload band tents 2x (10x20 white) — anchor to trusses"},
-      {t:"Unload FOH tent 1x (10x15 white)"},
-      {t:"Unload Green room tent 1x (10x15 white)"},
-      {t:"Leave guest services tent in trailer",f:"crit"},
-      {t:"Set up 2x shade tents"},
-      {t:"Set up band and tech tents"}
-    ]},
-    {g:"Trailer Unload",items:[
-      {t:"LEAVE ALL MERCH IN TRAILER",f:"crit"},
-      {t:"LEAVE TVs and EVs IN TRAILER",f:"crit"},
-      {t:"Unload Packout system bins behind stage, facing towards stage"},
-      {t:"Unload Papa V trailer — personal gear staged"},
-      {t:"Print copies of order of events, IP sheet, stage plot"}
-    ]}
+  {id:"p2",name:"Zach",inst:"",pack:"Pack 2",color:"#E23B2E",qmix:"3 / 4",rows:[
+    {id:"z-vox",role:"Lead Vox",gear:"Wireless Mic A",loc:"N/A (Wireless)"},
+    {id:"z-tb",role:"Stage Talkback",gear:"Wireless Mic I (Switch)",loc:"N/A (Wireless)"},
+    {id:"z-ag",role:"Acoustic Guitar 1",gear:"1× Active DI",loc:"ARK – 18"}
   ]},
-  {num:"2",name:"Power Up!",time:"Friday · 11:30 AM – 2:30 PM",groups:[
-    {g:"Power",items:[
-      {t:"Generator power on"},
-      {t:"Plug T4 trailer into power — 120v extension into side of trailer"},
-      {t:"Stage power drops: 2 front stage, 2 back stage"},
-      {t:"FOH power drop"}
-    ]},
-    {g:"FOH Setup",items:[
-      {t:"Set up Starlink"},
-      {t:"FOH tables"},
-      {t:"Lunch break 1:00–2:00 PM (60 min)",f:"warn"},
-      {t:"Set up ARK — power, table, wifi, antennas, computer"},
-      {t:"Extend antenna combiner cables"},
-      {t:"Confirm computer routing — tracks, video, click, guide"}
-    ]},
-    {g:"Wiring",items:[
-      {t:"Cable covers from band tent to FOH tent"},
-      {t:"Run 2x ethernet band tent → FOH tent (1x AVB, 1x internet)"},
-      {t:"FOH sound console and Papa V stage box — connect all AVB cables"}
-    ]},
-    {g:"Speaker System",items:[
-      {t:"Mount mains"},
-      {t:"Set subs"},
-      {t:"Run power and XLRs"},
-      {t:"Turn speakers on"},
-      {t:"Power cycle ARK and FOH for AVB sync",f:"warn"}
-    ]},
-    {g:"Wireless & Routing",items:[
-      {t:"Configure wireless frequencies — 500/900 MHz scan, 15 min max",f:"warn"},
-      {t:"Coordinate speaker handhelds + band packs — no frequency collisions",f:"crit"},
-      {t:"XLR drops to musician stations per stage plot"},
-      {t:"Connect all drum microphones per stage plot"},
-      {t:"Call local PD to request overnight field patrol"}
-    ]}
+  {id:"p3",name:"Annie",inst:"",pack:"Pack 3",color:"#79C24A",qmix:"5 / 6",rows:[
+    {id:"a-vox",role:"Add'l Vox",gear:"Wireless Mic C",loc:"N/A (Wireless)"}
   ]},
-  {num:"3",name:"System Tuning",time:"Friday · 2:30 PM – 4:30 PM",groups:[
-    {g:"Line Check",items:[
-      {t:"Connect Papa V computer for system tuning"},
-      {t:"Line check all inputs / I/Os — test with wired mic"},
-      {t:"Blast and balance — refer to FOH guide from NLC days"}
-    ]},
-    {g:"Tuning",items:[
-      {t:"Board and iPad roaming — move speakers as needed"},
-      {t:"Obtain DBL readings at property boundary per municipal requirements",f:"warn"},
-      {t:"Adjust sound system as necessary"},
-      {t:"Ring out all microphones — check for feedback"},
-      {t:"Gate MD mics appropriately"},
-      {t:"Gate Host mics appropriately"},
-      {t:"Balance drum kit"}
-    ]},
-    {g:"Recording",items:[
-      {t:"Confirm all recording SD destinations — Onboard SD + Logic recording"}
-    ]}
+  {id:"p4",name:"Mike",inst:"Playback",pack:"Pack 4",color:"#9E6B33",qmix:"7 / 8",rows:[
+    {id:"m-vox",role:"Add'l Vox",gear:"Wireless Mic D",loc:"N/A (Wireless)"},
+    {id:"m-tb",role:"Stage Talkback",gear:"Wireless Mic K (Switch)",loc:"N/A (Wireless)"}
   ]},
-  {num:"4",name:"Build Jesus Rig",time:"Saturday (moved from Friday)",groups:[
-    {g:"Assembly",items:[
-      {t:"Set up Home Depot crates for props"},
-      {t:"Assemble square truss rig on top of props"},
-      {t:"Attach Jesus banners 4x"},
-      {t:"Attach speaker shells"}
-    ]}
+  {id:"p5",name:"Sean",inst:"Bass Guitar",pack:"Pack 5",color:"#F2CB05",qmix:"9 / 10",rows:[
+    {id:"s-bass",role:"Bass Guitar",gear:"1× Active DI / Modeler",loc:"ARK – 17"}
   ]},
-  {num:"5",name:"Hang",time:"Friday · 5:30 PM – 6:00 PM",groups:[
-    {g:"",items:[
-      {t:"Eat, worship, fellowship 🙏"}
-    ]}
+  {id:"p6",name:"Ron",inst:"Electric Guitar",pack:"Pack 6",color:"#9AA0A6",qmix:"11 / 12",rows:[
+    {id:"r-elec",role:"Electric Guitar",gear:"2× Stereo DI / Modeler",loc:"ARK – 13 & 14"}
   ]},
-  {num:"6",name:"Shut Down",time:"Friday · 6:00 PM – 7:00 PM",groups:[
-    {g:"Secure",items:[
-      {t:"Save scenes on all PreSonus consoles",f:"warn"},
-      {t:"Label, disconnect & store speakers"},
-      {t:"Possibly disconnect and store ARK"},
-      {t:"Fasten tent walls"},
-      {t:"Cover rig — rain proof everything",f:"warn"},
-      {t:"Lock trailers — doors, padlocks, tongue lock",f:"crit"},
-      {t:"Turn off generators"},
-      {t:"Return radios"},
-      {t:"Plug T4 trailer into mains for overnight charging"},
-      {t:"Implement security protocol",f:"crit"}
-    ]}
+  {id:"pna",name:"N/A",inst:"Acoustic Guitar 2",pack:"",color:"#c7c2b8",qmix:"",off:true,rows:[
+    {id:"na-ag2",role:"Acoustic Guitar 2",gear:"1× Active DI",loc:"ARK – 19"}
   ]},
-  {num:"7",name:"Open Up",time:"Saturday · 8:00 AM – 8:30 AM",groups:[
-    {g:"",items:[
-      {t:"Check out radios"},
-      {t:"Turn on generators"},
-      {t:"Reconnect speakers (and ARK)"},
-      {t:"Turn on FOH and host mic"},
-      {t:"Set out wireless packs on ARK table"}
-    ]}
+  {id:"p7",name:"John",inst:"Keys",pack:"Pack 7",color:"#7B3FF2",qmix:"13 / 14",rows:[
+    {id:"j-tb",role:"Stage Talkback",gear:"Wireless Mic J (Switch)",loc:"N/A (Wireless)"},
+    {id:"j-keys",role:"Keys",gear:"2× Stereo DI",loc:"ARK – 15 & 16"}
   ]},
-  {num:"8a",name:"Worship Set Up",time:"Saturday · 10:00 AM – 12:00 PM",groups:[
-    {g:"Personal Gear",items:[
-      {t:"Set up personal gear — power, XLR"},
-      {t:"Worship team: retrieve wireless pack — do NOT change batteries yet",f:"warn"},
-      {t:"Playback sync enabled"}
-    ]},
-    {g:"Worship Team App Access",items:[
-      {t:"Connect to wifi: T4 Sound"},
-      {t:"Chart builder open — setlist downloaded and synced"},
-      {t:"Q-Mix downloaded and connected to ARK — grant permissions"}
-    ]},
-    {g:"Gain Stage",items:[
-      {t:"GAIN STAGE — line check all channels, peaks ≤ -6.0 dB",f:"crit"},
-      {t:"DO NOT TOUCH GAIN AFTER THIS POINT",f:"crit"},
-      {t:"ALL FX, EQ, COMPRESSION OFF to start"}
-    ]},
-    {g:"Mix",items:[
-      {t:"Pink noise — direct musicians to adjust wireless pack master level"},
-      {t:"Play one chorus on loop — purpose: mix IEMs"},
-      {t:"Mix FOH — DO NOT touch gains/preamp",f:"warn"},
-      {t:"EQ all channels"},
-      {t:"Compress → FX"},
-      {t:"Run through transitions"}
-    ]}
-  ]},
-  {num:"8b",name:"Crane Rigging",time:"Saturday · 11:00 AM – 12:00 PM",groups:[
-    {g:"",items:[
-      {t:"Guide crane to appropriate spot"},
-      {t:"Attach prebuilt crane rig"},
-      {t:"Attach guy lines to the rig"},
-      {t:"Balance rig"},
-      {t:"Raise rig to appropriate height"},
-      {t:"Secure guy lines to ground"},
-      {t:"⚠️ Rig must be wind-tied and flown by 12:00 PM LATEST",f:"crit"}
-    ]}
-  ]},
-  {num:"9",name:"Fit & Finish",time:"Saturday · 12:00 PM – 12:10 PM",groups:[
-    {g:"",items:[
-      {t:"Clean up stage — bags, cases, totes to green room"},
-      {t:"Cable management — perpendicular & parallel"},
-      {t:"Swap batteries — mics + packs; keep old ones charging",f:"warn"},
-      {t:"WiFi OFF on phones until on stage",f:"warn"},
-      {t:"Prayer over venue 🙏"},
-      {t:"Arm multitrack recording to SD / standalone on ARK",f:"crit"},
-      {t:"Rest"}
-    ]}
+  {id:"p8",name:"Kyle",inst:"Drums",pack:"Pack 8",color:"#2E7CD6",qmix:"15 / 16",rows:[
+    {id:"d1",role:"",gear:"Kick Mic",loc:"ARK – 20"},
+    {id:"d2",role:"",gear:"Snare Top Mic",loc:"ARK – 21"},
+    {id:"d3",role:"",gear:"Snare Bottom Mic",loc:"ARK – 22"},
+    {id:"d4",role:"",gear:"Tom 1 Mic",loc:"NSB.32 – 1"},
+    {id:"d5",role:"",gear:"Tom 2 Mic",loc:"NSB.32 – 2"},
+    {id:"d6",role:"",gear:"Tom 3 Mic",loc:"NSB.32 – 3"},
+    {id:"d7",role:"",gear:"Overhead (L) Condenser",loc:"NSB.32 – 4"},
+    {id:"d8",role:"",gear:"Overhead (R) Condenser",loc:"NSB.32 – 5"}
   ]}
 ];
-function renderIO(){
-  var mount=document.getElementById("techPhasesMount");
+var ioEditing=false, ioBuf=null;
+function ioClone(o){return JSON.parse(JSON.stringify(o));}
+function ioCurrent(){return (STATE.ioList&&STATE.ioList.length)?STATE.ioList:IO_DEFAULT;}
+function ioCounts(list){var d=0,t=0;list.forEach(function(p){if(p.off)return;p.rows.forEach(function(r){t++;if(r.done)d++;});});return{done:d,total:t};}
+function renderIOList(){
+  var mount=document.getElementById("ioMount");
   if(!mount)return;
-  mount.innerHTML=TECH_PHASES.map(function(ph,idx){
-    var body=ph.groups.map(function(grp){
-      var items=grp.items.map(function(it){
-        var f=it.f||"";
-        var sub=it.s?('<span class="psub">'+it.s+'</span>'):"";
-        return '<div class="phitem '+f+'"><span class="dot"></span><span class="ptxt">'+it.t+sub+'</span></div>';
-      }).join("");
-      var header=grp.g?('<div class="phgroup">'+grp.g+'</div>'):"";
-      return header+items;
+  if(ioEditing){renderIOEdit(mount);return;}
+  var list=ioCurrent();
+  var c=ioCounts(list);
+  var bar='<div class="iobar"><span class="prog"><b>'+c.done+'</b> / '+c.total+' inputs patched &amp; checked</span>'+
+    (LEADER?'<button class="iobtn" onclick="ioStartEdit()">✏️ Edit list</button>'
+           :'<span class="iolock">🔒 Leaders can edit<button onclick="askPin(function(){renderIOList();})">Unlock</button></span>')+'</div>';
+  var body=list.map(function(p){
+    var rows=p.rows.map(function(r){
+      var prim=r.role||r.gear, sec=r.role?r.gear:"";
+      return '<div class="iorow'+(r.done?' done':'')+(p.off?'':' tap')+'"'+(p.off?'':' onclick="ioToggle(\''+p.id+'\',\''+r.id+'\')"')+'>'+
+        '<span class="box"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></span>'+
+        '<span class="w"><b>'+esc(prim)+'</b>'+(sec?'<span>'+esc(sec)+'</span>':'')+'</span>'+
+        (r.loc?'<span class="loc">'+esc(r.loc)+'</span>':'')+'</div>';
     }).join("");
-    return '<div class="phase" id="techph'+idx+'"><div class="phasehead" onclick="togglePhase('+idx+')">'
-      +'<span class="num">'+ph.num+'</span>'
-      +'<span class="phinfo"><span class="phname">'+ph.name+'</span><span class="phtime">'+ph.time+'</span></span>'
-      +'<span class="chevron">›</span>'
-      +'</div><div class="phasebody">'+body+'</div></div>';
+    var chip='<span class="chip" style="background:'+esc(p.color||'#c7c2b8')+'">'+esc(p.pack?p.pack.replace("Pack ","P"):"—")+'</span>';
+    var qx=p.qmix?'<span class="qx">Q-Mix '+esc(p.qmix)+'</span>':'';
+    var tag=p.off?'<span class="iotag">Not used</span>':'';
+    return '<div class="ioperf'+(p.off?' off':'')+'"><div class="ph">'+chip+
+      '<span class="pn">'+esc(p.name)+tag+(p.inst?'<small>'+esc(p.inst)+'</small>':'')+'</span>'+qx+'</div>'+rows+'</div>';
   }).join("");
+  mount.innerHTML=bar+body;
 }
-function togglePhase(idx){
-  var el=document.getElementById("techph"+idx);
-  if(el)el.classList.toggle("open");
+function ioToggle(pid,rid){
+  if(!LEADER){askPin(function(){renderIOList();});return;}
+  var list=ioClone(ioCurrent());
+  list.forEach(function(p){if(p.id===pid)p.rows.forEach(function(r){if(r.id===rid)r.done=!r.done;});});
+  STATE.ioList=list;
+  doAction("setIOList",{list:list},function(){STATE.ioList=list;});
+  renderIOList();
+}
+function ioStartEdit(){
+  if(!LEADER){askPin(function(){ioStartEdit();});return;}
+  ioBuf=ioClone(ioCurrent());ioEditing=true;renderIOList();
+}
+function ioCancelEdit(){ioEditing=false;ioBuf=null;renderIOList();}
+function ioSaveEdit(){
+  var list=ioBuf;ioEditing=false;ioBuf=null;
+  STATE.ioList=list;
+  doAction("setIOList",{list:list},function(){STATE.ioList=list;});
+  renderIOList();
+}
+function ioUid(){return "x"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
+function ioSet(pi,ri,field,val){if(ri<0)ioBuf[pi][field]=val;else ioBuf[pi].rows[ri][field]=val;}
+function ioAddRow(pi){ioBuf[pi].rows.push({id:ioUid(),role:"",gear:"",loc:""});renderIOList();}
+function ioDelRow(pi,ri){ioBuf[pi].rows.splice(ri,1);renderIOList();}
+function ioAddPerf(){ioBuf.push({id:ioUid(),name:"New Performer",inst:"",pack:"",color:"#2E7CD6",qmix:"",rows:[{id:ioUid(),role:"",gear:"",loc:""}]});renderIOList();}
+function ioDelPerf(pi){if(confirm("Remove this performer and all their inputs?")){ioBuf.splice(pi,1);renderIOList();}}
+function renderIOEdit(mount){
+  var bar='<div class="ioedbar"><button class="cancel" onclick="ioCancelEdit()">Cancel</button><button class="save" onclick="ioSaveEdit()">✓ Save list</button></div>';
+  var body=ioBuf.map(function(p,pi){
+    var col=/^#[0-9a-fA-F]{6}$/.test(p.color)?p.color:"#2E7CD6";
+    var head='<div class="ph ioph">'+
+      '<input value="'+esc(p.name)+'" placeholder="Name" oninput="ioSet('+pi+',-1,\'name\',this.value)" style="max-width:118px">'+
+      '<input value="'+esc(p.pack)+'" placeholder="Pack" oninput="ioSet('+pi+',-1,\'pack\',this.value)" style="max-width:78px">'+
+      '<input type="color" value="'+col+'" oninput="ioSet('+pi+',-1,\'color\',this.value)" style="width:34px;flex:none;padding:2px">'+
+      '<input value="'+esc(p.qmix)+'" placeholder="Q-Mix" oninput="ioSet('+pi+',-1,\'qmix\',this.value)" style="max-width:66px">'+
+      '<button class="iodel" onclick="ioDelPerf('+pi+')" title="Remove performer">✕</button></div>';
+    var inst='<div class="iorow"><span class="ioe"><input value="'+esc(p.inst||"")+'" placeholder="Instrument label (optional)" oninput="ioSet('+pi+',-1,\'inst\',this.value)"></span></div>';
+    var rows=p.rows.map(function(r,ri){
+      return '<div class="iorow"><span class="ioe">'+
+        '<input value="'+esc(r.role)+'" placeholder="Role / part" oninput="ioSet('+pi+','+ri+',\'role\',this.value)">'+
+        '<input value="'+esc(r.gear)+'" placeholder="Mic / hardware" oninput="ioSet('+pi+','+ri+',\'gear\',this.value)">'+
+        '<input value="'+esc(r.loc)+'" placeholder="Input location" oninput="ioSet('+pi+','+ri+',\'loc\',this.value)">'+
+        '</span><button class="iodel" onclick="ioDelRow('+pi+','+ri+')" title="Remove input">✕</button></div>';
+    }).join("");
+    return '<div class="ioperf ed">'+head+inst+rows+'<button class="ioadd" onclick="ioAddRow('+pi+')">＋ Add input</button></div>';
+  }).join("");
+  mount.innerHTML=bar+body+'<button class="ioaddperf" onclick="ioAddPerf()">＋ Add performer</button>'+bar;
 }
 var LEADERS=[
   {name:"Zach Silk",role:"Founder · The Fourth Ministries",tel:"6035550101"},
@@ -1546,14 +1445,14 @@ var SETUP=[
   {day:"sat",team:"Phase 9 · Fit & Finish — Sat 12:00–12:10",lead:"M. Nelson",items:[["Clean up stage (bags/cases/totes → green room)",m(12,10)],["Cable management (perpendicular & parallel)",m(12,10)],["Swap batteries (mics + packs; keep old charging)",m(12,10)],["WiFi OFF on phones until on stage",m(12,10)],["Prayer over venue",m(12,10)],["Arm multitrack recording to SD / standalone on ARK",m(12,10)],["Rest",m(12,10)]]}
 ];
 var TEARDOWN=[];
-var STATE={checklist:{},announcements:[],checkins:[],feedback:[],praises:[],count:0,event:{name:"",date:""}};
+var STATE={checklist:{},announcements:[],checkins:[],feedback:[],praises:[],count:0,event:{name:"",date:""},ioList:[]};
 var LIVE=false,LEADER=false,seenAnn=0,seenIssue=0,barDismissed=false;
 var API="/.netlify/functions/data";
 var MY={name:"",initials:""};
 function nowLabel(){return fmt(nowMinutes());}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 function esc(s){return(s||"").replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
-function normalize(s){return{checklist:s.checklist||{},announcements:s.announcements||[],checkins:s.checkins||[],feedback:s.feedback||[],praises:s.praises||[],count:s.count||0,event:s.event||{name:"",date:""}};}
+function normalize(s){return{checklist:s.checklist||{},announcements:s.announcements||[],checkins:s.checkins||[],feedback:s.feedback||[],praises:s.praises||[],count:s.count||0,event:s.event||{name:"",date:""},ioList:s.ioList||[]};}
 function apiGet(){return fetch(API,{method:"GET"}).then(function(r){if(!r.ok)throw 0;return r.json();});}
 function apiPost(a,p){return fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:a,payload:p})}).then(function(r){if(!r.ok)throw 0;return r.json();});}
 function doAction(action,payload,localApply){
@@ -1656,7 +1555,7 @@ function renderDashboard(){
   if(document.activeElement!==en)en.value=ev.name||"";
   if(document.activeElement!==ed)ed.value=ev.date||"";
 }
-function renderDynamic(){refreshChecklists();renderAnnouncements();renderPraise();renderIssues();renderRoster();renderCount();renderEvent();renderDashboard();updateBadges();}
+function renderDynamic(){refreshChecklists();renderAnnouncements();renderPraise();renderIssues();renderRoster();renderCount();renderEvent();renderDashboard();updateBadges();if(!ioEditing)renderIOList();}
 function updateBadges(){
   function set(id,n){var e=document.getElementById(id);if(!e)return;e.textContent=n;e.style.display=n?"flex":"none";}
   set("crewCheckinPill",STATE.checkins.length);set("crewCountPill",STATE.count);
@@ -1707,7 +1606,7 @@ simRange.addEventListener("input",function(){simActive=true;simAnchor=parseInt(s
 document.getElementById("simReset").addEventListener("click",function(){simActive=false;document.getElementById("simNow").textContent="Off — using real time";refreshAll();refreshChecklists();renderDashboard();});
 function refreshAll(){renderClock();renderNow();renderSpine();renderStrip();}
 function boot(){
-  renderIO();renderLeaders();
+  renderIOList();renderLeaders();
   apiGet().then(function(s){STATE=normalize(s);LIVE=true;finishBoot();}).catch(function(){LIVE=false;STATE=seedDemo();finishBoot();});
 }
 function finishBoot(){
