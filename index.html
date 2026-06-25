@@ -299,12 +299,34 @@
   @keyframes pulse{0%{opacity:1}50%{opacity:.25}100%{opacity:1}}
   @keyframes ring{0%{box-shadow:0 0 0 0 rgba(184,98,57,.5)}70%{box-shadow:0 0 0 9px rgba(184,98,57,0)}100%{box-shadow:0 0 0 0 rgba(184,98,57,0)}}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  /* Tech I/O — who checked & when */
+  .iostamp{display:block;font-size:10.5px;font-weight:800;color:var(--rust);letter-spacing:.3px;margin-top:3px}
+  /* Leader contacts — email */
+  .acts a.mail{background:var(--wine)}
+  .leader .who a.mail-l{display:block;color:var(--muted);font-weight:600;font-size:11px;margin-top:2px;text-decoration:none;word-break:break-all}
+  /* Acknowledge & hide cards (leaders) */
+  .ackbtn{margin-top:11px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:12px;padding:7px 12px;border-radius:9px;cursor:pointer}
+  .ackbtn.un{color:var(--wine);border-color:var(--wine)}
+  .ackmeta{font-size:11px;font-weight:700;color:var(--good);margin-top:8px}
+  .item.acked{opacity:.6}
+  .item.acked .pri{text-decoration:line-through}
+  /* Day PIN gate — locks the whole app */
+  .daygate{position:fixed;inset:0;z-index:200;background:rgba(28,27,25,.94);display:none;align-items:center;justify-content:center;padding:24px}
+  .daygate.show{display:flex}
+  .dgsheet{background:var(--cream);border-radius:20px;padding:26px 22px;width:100%;max-width:360px;box-shadow:0 24px 60px rgba(0,0,0,.45);text-align:center}
+  .dgbrand{font-weight:900;letter-spacing:1.5px;font-size:13px;color:var(--wine);margin-bottom:14px}
+  .dgbrand small{font-weight:600;font-size:9px;letter-spacing:1px}
+  .dgsheet h3{font-family:var(--serif);font-size:21px;margin:0 0 6px}
+  .dgsheet p{font-size:13px;color:var(--muted);margin:0 0 16px;line-height:1.45}
+  .dgsheet input{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px;font-size:18px;text-align:center;letter-spacing:3px;font-family:var(--sans);background:#fff;color:var(--ink);box-sizing:border-box}
+  .dgsheet .err{color:var(--bad);font-size:12px;font-weight:700;min-height:16px;margin:8px 0 0}
+  .dgsheet .ok{margin-top:12px;width:100%;border:none;border-radius:12px;padding:13px;font-weight:700;font-size:15px;cursor:pointer;background:var(--wine);color:#fff}
 </style>
 </head>
 <body>
 <div class="topwrap">
 <header class="topbar">
-  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.1</span></span></div>
+  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.1.1</span></span></div>
   <div class="clock"><div class="t" id="clockTime">--:--</div><div class="d" id="clockDate">SATURDAY</div></div>
 </header>
 <div class="nowstrip" id="nowStrip" onclick="goSchedule()">
@@ -328,7 +350,8 @@
     <div class="checkinprompt" id="checkinPrompt"><span>👋 New on the field? Check yourself in.</span><button onclick="show('checkin')">Check in</button></div>
     <div class="next" id="nextCard"><div class="lbl">Up Next</div><h3 id="nextName">—</h3><div class="when" id="nextWhen"></div></div>
     <details class="preview"><summary>🎚️ Leader preview — scrub the day to test it</summary>
-      <div class="body"><input type="range" id="simRange" min="480" max="1140" step="5" value="480" />
+      <div id="simLock"></div>
+      <div class="body" id="simBody"><input type="range" id="simRange" min="480" max="1140" step="5" value="480" />
       <div class="rlbl"><span>8:00 AM</span><span id="simNow">Off — using real time</span><span>7:00 PM</span></div>
       <button class="reset" id="simReset">↺ Back to real time</button></div></details>
     <div id="scheduleAnchor" style="margin-top:28px;padding-top:22px;border-top:1px solid var(--line)">
@@ -356,9 +379,14 @@
         <input id="evName" placeholder="Event name (e.g. Sullivan County)" />
         <input id="evDate" placeholder="Date (e.g. Sat, June 13)" />
         <button class="btn ghost" id="evSave">Save event info</button></div>
+      <div class="eventedit"><div class="ttl">🔒 Day PIN — locks the whole app</div>
+        <input id="dayPinEdit" inputmode="numeric" maxlength="10" placeholder="Set a Day PIN (leave blank for no lock)" />
+        <button class="btn ghost" id="dayPinSave">Save Day PIN</button>
+        <p class="hint">Every volunteer must enter this PIN to open the app today. Share it at morning huddle. Leave blank to remove the lock. Leaders can always get in with the Leader PIN.</p></div>
       <div class="stat"><div class="box"><div class="n" id="dVols">0</div><div class="l">Volunteers In</div></div><div class="box alt"><div class="n" id="dHeads">0</div><div class="l">Attendees</div></div></div>
       <div class="stat"><div class="box alt"><div class="n" id="dIssues" style="color:var(--bad)">0</div><div class="l">Open Issues</div></div><div class="box alt"><div class="n" id="dPraise" style="color:#8a6d1f">0</div><div class="l">Praises</div></div></div>
-      <div class="dashrow"><div class="t"><span>Setup readiness</span><span class="v" id="dSetup">0%</span></div><div class="pbar"><i id="dSetupBar"></i></div></div>
+      <div class="dashrow"><div class="t"><span>Setup readiness</span><span class="v" id="dSetup">0 / 0 · 0%</span></div><div class="pbar"><i id="dSetupBar"></i></div></div>
+      <div class="dashrow"><div class="t"><span>Tech I/O patched</span><span class="v" id="dIo">0 / 0 · 0%</span></div><div class="pbar"><i id="dIoBar"></i></div></div>
       <div class="dashrow"><div class="t"><span>Overdue setup items</span><span class="v" id="dOver">0</span></div></div>
       <button class="btn ink" id="resetBtn" style="margin-top:6px">♻️ Reset all data for next event</button>
       <p class="hint">Reset clears checklists, check-ins, head count, issues, praise & announcements (keeps event name). Leaders only.</p>
@@ -403,7 +431,8 @@
   <section class="page" id="page-techio">
     <button class="back" onclick="show('crew')">‹ Specialists</button>
     <p class="eyebrow">Tech · FOH · Worship</p><h1 class="title">Tech I/O List</h1>
-    <div class="ionote">🎛️ <b>Input / Mic / IEM Pack assignments</b> — Michael Nelson (Tech/FOH). Tap each input to check it off as it's patched &amp; line-checked. Leaders can <b>Edit list</b> after entering the PIN.</div>
+    <div class="ionote">🎛️ <b>Input / Mic / IEM Pack assignments</b> — Michael Nelson (Tech/FOH). Enter your initials, then tap each input to check it off as it's patched &amp; line-checked — your initials &amp; time are logged on the card. Leaders can <b>Edit list</b> after entering the PIN.</div>
+    <div class="idbar" id="idbar-io"><label>Your initials</label><input id="initIo" maxlength="4" placeholder="e.g. MN" /></div>
     <div id="ioMount"></div>
   </section>
   <section class="page" id="page-board">
@@ -418,7 +447,8 @@
     <button class="back" onclick="show('board')">‹ Post</button>
     <p class="eyebrow">From Leadership</p><h1 class="title">Announcements</h1>
     <span class="syncpill" id="sp-ann"><span class="d"></span>Demo mode</span>
-    <div class="form"><div class="ttl">📣 Post an announcement</div>
+    <div id="annLock"></div>
+    <div class="form" id="annForm"><div class="ttl">📣 Post an announcement</div>
       <input id="aName" placeholder="Your name (e.g. Kyle DeTrude)" />
       <input id="aTitle" placeholder="Headline (e.g. Lunch is ready!)" />
       <textarea id="aBody" rows="2" placeholder="Message…"></textarea>
@@ -502,7 +532,7 @@
   </section>
   <section class="page" id="page-playbook">
     <button class="back" onclick="show('guides')">‹ Resources</button>
-    <p class="eyebrow">Ambassador</p><h1 class="title">Playbook</h1><span class="draft">Your full field guide</span>
+    <p class="eyebrow">Ambassador</p><h1 class="title">Playbook</h1><span class="draft">Your full field guide · V2</span>
     <style>/* ===== Ambassador Playbook (scoped + app-themed) ===== */
 #page-playbook .pb{--ink-soft:var(--muted);--paper:var(--card);--canvas:var(--cream);--canvas-soft:var(--cream);--rust-deep:var(--rust);--rust-glow:var(--rust);--burgundy:var(--wine);--burgundy-deep:var(--wine);--display:var(--serif);--body:var(--sans);--scripture:var(--serif);background:transparent;color:var(--ink);font-family:var(--sans);}
 #page-playbook .pb .wrap{max-width:100%;padding:0 0 8px;margin:0}
@@ -1223,6 +1253,16 @@
   <div class="err" id="pinErr"></div>
   <div class="row"><button class="cancel" id="pinCancel">Cancel</button><button class="ok" id="pinOk">Unlock</button></div>
 </div></div>
+<div class="daygate" id="dayGate">
+  <div class="dgsheet">
+    <div class="dgbrand">KINGDOM <small>TO THE</small> COUNTIES '26</div>
+    <h3>🔒 Today's Day PIN</h3>
+    <p>Enter today's Day PIN to use the Ambassador Companion. Ask your team leader if you don't have it yet.</p>
+    <input id="dayPinInput" inputmode="numeric" maxlength="10" placeholder="Day PIN" />
+    <div class="err" id="dayPinErr"></div>
+    <button class="ok" id="dayPinOk">Unlock app</button>
+  </div>
+</div>
 <nav class="tabbar">
   <button class="tab active" data-tab="now"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="tl">Now</span></button>
   <button class="tab" data-tab="crew"><svg viewBox="0 0 24 24"><rect x="5" y="6" width="14" height="14" rx="2"/><path d="M9 6V4h6v2"/><path d="M9 13l2 2 3-3"/></svg><span class="tl">Specialists</span></button>
@@ -1355,9 +1395,10 @@ function renderIOList(){
   var body=list.map(function(p){
     var rows=p.rows.map(function(r){
       var prim=r.role||r.gear, sec=r.role?r.gear:"";
+      var stamp=(r.done&&r.by)?'<span class="iostamp">✓ '+esc(r.by)+(r.t?(' · '+esc(r.t)):'')+'</span>':'';
       return '<div class="iorow'+(r.done?' done':'')+(p.off?'':' tap')+'"'+(p.off?'':' onclick="ioToggle(\''+p.id+'\',\''+r.id+'\')"')+'>'+
         '<span class="box"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></span>'+
-        '<span class="w"><b>'+esc(prim)+'</b>'+(sec?'<span>'+esc(sec)+'</span>':'')+'</span>'+
+        '<span class="w"><b>'+esc(prim)+'</b>'+(sec?'<span>'+esc(sec)+'</span>':'')+stamp+'</span>'+
         (r.loc?'<span class="loc">'+esc(r.loc)+'</span>':'')+'</div>';
     }).join("");
     var chip='<span class="chip" style="background:'+esc(p.color||'#c7c2b8')+'">'+esc(p.pack?p.pack.replace("Pack ","P"):"—")+'</span>';
@@ -1368,13 +1409,16 @@ function renderIOList(){
   }).join("");
   mount.innerHTML=bar+body;
 }
+function ioNudgeInit(){var bar=document.getElementById("idbar-io");if(bar){bar.classList.add("nudge");setTimeout(function(){bar.classList.remove("nudge");},500);}var inp=document.getElementById("initIo");if(inp)inp.focus();}
 function ioToggle(pid,rid){
-  if(!LEADER){askPin(function(){renderIOList();});return;}
+  var init=(MY.initials||"").trim().toUpperCase();
+  if(!init){ioNudgeInit();return;}
   var list=ioClone(ioCurrent());
-  list.forEach(function(p){if(p.id===pid)p.rows.forEach(function(r){if(r.id===rid)r.done=!r.done;});});
-  STATE.ioList=list;
+  list.forEach(function(p){if(p.id===pid)p.rows.forEach(function(r){if(r.id===rid){
+    if(r.done){r.done=false;r.by="";r.t="";}
+    else{r.done=true;r.by=init;r.t=nowLabel();}
+  }});});
   doAction("setIOList",{list:list},function(){STATE.ioList=list;});
-  renderIOList();
 }
 function ioStartEdit(){
   if(!LEADER){askPin(function(){ioStartEdit();});return;}
@@ -1423,13 +1467,20 @@ var LEADERS=[
   {name:"Kat Roedell",role:"Logistics / Intercession",tel:"6035550105"},
   {name:"Laura McCollum",role:"Marketing / First Aid",tel:"6035550106"},
   {name:"Michael Nelson",role:"Technology / FOH",tel:"6035550107"},
-  {name:"Liz DeTrude",role:"Guest Services",tel:"6035550108"}
+  {name:"Liz DeTrude",role:"Guest Services",tel:"6035550108"},
+  {name:"John Huff",role:"Music Director",tel:"6036178654",email:"john.huff@thefourthministries.com"}
 ];
 var PHONE='<svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 7a2 2 0 0 1 2-3z"/></svg>';
 var CHAT='<svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 3z"/></svg>';
+var MAIL='<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>';
 function fmtTel(t){return "("+t.slice(0,3)+") "+t.slice(3,6)+"-"+t.slice(6);}
 function renderLeaders(){
-  document.getElementById("leadersMount").innerHTML=LEADERS.map(function(l){var p=l.name.split(" ");var init=p.map(function(w){return w[0];}).slice(-2).join("");return '<div class="leader"><span class="av">'+init+'</span><span class="who"><b>'+l.name+'</b><span>'+l.role+'</span><a class="tel" href="tel:+1'+l.tel+'">'+fmtTel(l.tel)+'</a></span><span class="acts"><a class="call" href="tel:+1'+l.tel+'" rel="noopener" aria-label="Call '+l.name+'">'+PHONE+'</a><a class="text" href="sms:+1'+l.tel+'" rel="noopener" aria-label="Text '+l.name+'">'+CHAT+'</a></span></div>';}).join("");
+  document.getElementById("leadersMount").innerHTML=LEADERS.map(function(l){
+    var p=l.name.split(" ");var init=p.map(function(w){return w[0];}).slice(-2).join("");
+    var emailLine=l.email?'<a class="tel mail-l" href="mailto:'+esc(l.email)+'">'+esc(l.email)+'</a>':'';
+    var emailBtn=l.email?'<a class="mail" href="mailto:'+esc(l.email)+'" rel="noopener" aria-label="Email '+esc(l.name)+'">'+MAIL+'</a>':'';
+    return '<div class="leader"><span class="av">'+init+'</span><span class="who"><b>'+esc(l.name)+'</b><span>'+esc(l.role)+'</span><a class="tel" href="tel:+1'+l.tel+'">'+fmtTel(l.tel)+'</a>'+emailLine+'</span><span class="acts"><a class="call" href="tel:+1'+l.tel+'" rel="noopener" aria-label="Call '+esc(l.name)+'">'+PHONE+'</a><a class="text" href="sms:+1'+l.tel+'" rel="noopener" aria-label="Text '+esc(l.name)+'">'+CHAT+'</a>'+emailBtn+'</span></div>';
+  }).join("");
 }
 var SETUP=[
   {day:"fri",team:"Phase 0 · Pre-Event Prep — 2 wks prior",lead:"M. Nelson",items:[["Confirm dBL maximums (if required)",m(9,0)],["Reach out to event POC — confirm details & changes",m(9,0)],["Musicians confirmed",m(9,0)],["Materials PRINTED — 12 copies of each",m(9,0)],["Stage Plot confirmed, posted to Teams, sent via PCO",m(9,0)],["Input List confirmed, posted, sent via PCO",m(9,0)],["Order of Events confirmed, posted, sent via PCO",m(9,0)],["Computer set up (tracks, routing)",m(9,0)],["ARK console set up & fully prepped",m(9,0)],["Multitracks setlist built in PCO + tracks downloaded offline",m(9,0)],["iPad backup prepped (tracks + ARK adapter)",m(9,0)]]},
@@ -1445,19 +1496,31 @@ var SETUP=[
   {day:"sat",team:"Phase 9 · Fit & Finish — Sat 12:00–12:10",lead:"M. Nelson",items:[["Clean up stage (bags/cases/totes → green room)",m(12,10)],["Cable management (perpendicular & parallel)",m(12,10)],["Swap batteries (mics + packs; keep old charging)",m(12,10)],["WiFi OFF on phones until on stage",m(12,10)],["Prayer over venue",m(12,10)],["Arm multitrack recording to SD / standalone on ARK",m(12,10)],["Rest",m(12,10)]]}
 ];
 var TEARDOWN=[];
-var STATE={checklist:{},announcements:[],checkins:[],feedback:[],praises:[],count:0,event:{name:"",date:""},ioList:[]};
-var LIVE=false,LEADER=false,seenAnn=0,seenIssue=0,barDismissed=false;
+var STATE={checklist:{},announcements:[],checkins:[],feedback:[],praises:[],count:0,event:{name:"",date:""},ioList:[],dayPin:"0627"};
+var LIVE=false,LEADER=false,seenAnn=0,seenIssue=0,barDismissed=false,inflight=0,pendingCount=0,countFlushT=null;
+function settled(){return inflight===0&&pendingCount===0;}
 var API="/.netlify/functions/data";
 var MY={name:"",initials:""};
 function nowLabel(){return fmt(nowMinutes());}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 function esc(s){return(s||"").replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
-function normalize(s){return{checklist:s.checklist||{},announcements:s.announcements||[],checkins:s.checkins||[],feedback:s.feedback||[],praises:s.praises||[],count:s.count||0,event:s.event||{name:"",date:""},ioList:s.ioList||[]};}
+var DEFAULT_DAY_PIN="0627";
+function normalize(s){return{checklist:s.checklist||{},announcements:s.announcements||[],checkins:s.checkins||[],feedback:s.feedback||[],praises:s.praises||[],count:s.count||0,event:s.event||{name:"",date:""},ioList:s.ioList||[],dayPin:typeof s.dayPin==="string"?s.dayPin:DEFAULT_DAY_PIN};}
 function apiGet(){return fetch(API,{method:"GET"}).then(function(r){if(!r.ok)throw 0;return r.json();});}
 function apiPost(a,p){return fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:a,payload:p})}).then(function(r){if(!r.ok)throw 0;return r.json();});}
 function doAction(action,payload,localApply){
-  if(LIVE){apiPost(action,payload).then(function(s){STATE=normalize(s);renderDynamic();}).catch(function(){LIVE=false;updateSync();localApply();renderDynamic();});}
-  else{localApply();renderDynamic();}
+  // Apply optimistically right away so the UI feels instant, then reconcile
+  // with the server. While any write is in flight we ignore polls & server
+  // echoes so a slow round-trip can't clobber a fresh local change.
+  localApply();renderDynamic();
+  if(LIVE){
+    inflight++;
+    apiPost(action,payload).then(function(s){
+      if(--inflight===0&&settled()){STATE=normalize(s);renderDynamic();}
+    }).catch(function(){
+      inflight=Math.max(0,inflight-1);LIVE=false;updateSync();renderDynamic();
+    });
+  }
 }
 function seedDemo(){return normalize({
   announcements:[{id:uid(),pri:"heads",title:"Doors open at 1:00 PM",body:"Final setup check now — parking team to your posts.",by:"Kat Roedell · Logistics",t:"12:40 PM"},{id:uid(),pri:"urgent",title:"Stay clear of the crane zone",body:"Jesus Rig going up. Non-Tech volunteers keep outside the marked area until the all-clear.",by:"Kyle DeTrude · COO",t:"11:00 AM"}],
@@ -1533,8 +1596,39 @@ function renderAnnouncements(){
   document.getElementById("annBarText").innerHTML="👋 Did you check in? <b>Tap here to check in!</b>";
   if(!barDismissed)bar.classList.add("show");else bar.classList.remove("show");
 }
-function renderPraise(){var f=document.getElementById("praiseFeed");f.innerHTML=STATE.praises.length?STATE.praises.map(function(p){return '<div class="item praise"><div class="top"><span class="pri">Praise 🎉</span><span class="meta">'+esc(p.t)+'</span></div><p>'+esc(p.body)+'</p><div class="by">— '+esc(p.name)+'</div></div>';}).join(""):'<div class="empty">Be the first to celebrate something! 🎉</div>';}
-function renderIssues(){var f=document.getElementById("issueFeed");f.innerHTML=STATE.feedback.length?STATE.feedback.map(function(x){return '<div class="item '+x.priority+'"><div class="top"><span class="pri">'+({low:"Low",med:"Attention",urgent:"Urgent"}[x.priority]||"Note")+'</span><span class="meta">'+esc(x.t)+'</span></div><h4>'+esc(x.title)+'</h4><p>'+esc(x.body)+'</p><div class="by">— '+esc(x.by)+'</div></div>';}).join(""):'<div class="empty">No open issues. Smooth sailing. ⛵</div>';}
+function renderAnnGate(){
+  var lock=document.getElementById("annLock"),form=document.getElementById("annForm");
+  if(!lock||!form)return;
+  if(LEADER){lock.innerHTML="";form.style.display="";}
+  else{lock.innerHTML='<div class="lockbar">🔒 Posting announcements is leaders only.<button onclick="askPin(function(){})">Unlock</button></div>';form.style.display="none";}
+}
+function renderSimGate(){
+  var lock=document.getElementById("simLock"),body=document.getElementById("simBody");
+  if(!lock||!body)return;
+  if(LEADER){lock.innerHTML="";body.style.display="";}
+  else{lock.innerHTML='<div class="lockbar">🔒 Leaders only — scrub the day timeline to test it.<button onclick="askPin(function(){})">Unlock</button></div>';body.style.display="none";}
+}
+function visCount(arr){var n=0;for(var i=0;i<arr.length;i++)if(!arr[i].hidden)n++;return n;}
+function ackBtn(kind,x){return LEADER?'<button class="ackbtn'+(x.hidden?' un':'')+'" onclick="ackCard(\''+kind+'\',\''+x.id+'\')">'+(x.hidden?'↩ Unhide':'✓ Acknowledge &amp; hide')+'</button>':'';}
+function ackMeta(x){return (x.hidden&&x.ackBy)?'<div class="ackmeta">✓ Acknowledged by '+esc(x.ackBy)+(x.ackT?(' · '+esc(x.ackT)):'')+'</div>':'';}
+function renderPraise(){
+  var f=document.getElementById("praiseFeed");
+  var list=STATE.praises.filter(function(p){return LEADER||!p.hidden;});
+  f.innerHTML=list.length?list.map(function(p){return '<div class="item praise'+(p.hidden?' acked':'')+'"><div class="top"><span class="pri">Praise 🎉</span><span class="meta">'+esc(p.t)+'</span></div><p>'+esc(p.body)+'</p><div class="by">— '+esc(p.name)+'</div>'+ackMeta(p)+ackBtn("praise",p)+'</div>';}).join(""):'<div class="empty">Be the first to celebrate something! 🎉</div>';
+}
+function renderIssues(){
+  var f=document.getElementById("issueFeed");
+  var list=STATE.feedback.filter(function(x){return LEADER||!x.hidden;});
+  f.innerHTML=list.length?list.map(function(x){return '<div class="item '+x.priority+(x.hidden?' acked':'')+'"><div class="top"><span class="pri">'+({low:"Low",med:"Attention",urgent:"Urgent"}[x.priority]||"Note")+'</span><span class="meta">'+esc(x.t)+'</span></div><h4>'+esc(x.title)+'</h4><p>'+esc(x.body)+'</p><div class="by">— '+esc(x.by)+'</div>'+ackMeta(x)+ackBtn("feedback",x)+'</div>';}).join(""):'<div class="empty">No open issues. Smooth sailing. ⛵</div>';
+}
+function ackCard(kind,id){
+  if(!LEADER){askPin(function(){ackCard(kind,id);});return;}
+  var by=(MY.initials||MY.name||"Leader").toString().trim()||"Leader";
+  doAction("ackCard",{kind:kind,id:id,by:by,t:nowLabel()},function(){
+    var arr=kind==="praise"?STATE.praises:STATE.feedback,it=arr.filter(function(x){return x.id===id;})[0];
+    if(it){var hide=!it.hidden;it.hidden=hide;it.ackBy=hide?by:"";it.ackT=hide?nowLabel():"";}
+  });
+}
 function renderRoster(){
   var list=STATE.checkins;document.getElementById("ciTotal").textContent=list.length;
   var teams={};list.forEach(function(c){if(c.team)teams[c.team]=1;});document.getElementById("ciTeams").textContent=Object.keys(teams).length;
@@ -1546,21 +1640,27 @@ function renderEvent(){var ev=STATE.event||{},tag=document.getElementById("event
 function renderDashboard(){
   document.getElementById("dVols").textContent=STATE.checkins.length;
   document.getElementById("dHeads").textContent=STATE.count;
-  document.getElementById("dIssues").textContent=STATE.feedback.length;
-  document.getElementById("dPraise").textContent=STATE.praises.length;
+  document.getElementById("dIssues").textContent=visCount(STATE.feedback);
+  document.getElementById("dPraise").textContent=visCount(STATE.praises);
   var sp=setupStats.total?Math.round(setupStats.done/setupStats.total*100):0;
-  document.getElementById("dSetup").textContent=sp+"%";document.getElementById("dSetupBar").style.width=sp+"%";
+  document.getElementById("dSetup").textContent=setupStats.done+" / "+setupStats.total+" · "+sp+"%";
+  document.getElementById("dSetupBar").style.width=sp+"%";
+  var ioc=ioCounts(ioCurrent()),ip=ioc.total?Math.round(ioc.done/ioc.total*100):0;
+  document.getElementById("dIo").textContent=ioc.done+" / "+ioc.total+" · "+ip+"%";
+  document.getElementById("dIoBar").style.width=ip+"%";
   document.getElementById("dOver").textContent=setupStats.overdue;
   var ev=STATE.event||{},en=document.getElementById("evName"),ed=document.getElementById("evDate");
   if(document.activeElement!==en)en.value=ev.name||"";
   if(document.activeElement!==ed)ed.value=ev.date||"";
+  var dp=document.getElementById("dayPinEdit");
+  if(dp&&document.activeElement!==dp)dp.value=STATE.dayPin||"";
 }
-function renderDynamic(){refreshChecklists();renderAnnouncements();renderPraise();renderIssues();renderRoster();renderCount();renderEvent();renderDashboard();updateBadges();if(!ioEditing)renderIOList();}
+function renderDynamic(){refreshChecklists();renderAnnouncements();renderAnnGate();renderSimGate();renderPraise();renderIssues();renderRoster();renderCount();renderEvent();renderDashboard();updateBadges();if(!ioEditing)renderIOList();}
 function updateBadges(){
   function set(id,n){var e=document.getElementById(id);if(!e)return;e.textContent=n;e.style.display=n?"flex":"none";}
   set("crewCheckinPill",STATE.checkins.length);set("crewCountPill",STATE.count);
-  set("boardAnnPill",STATE.announcements.length);set("boardPraisePill",STATE.praises.length);set("boardIssuePill",STATE.feedback.length);
-  var u=Math.max(0,(STATE.announcements.length-seenAnn)+(STATE.feedback.length-seenIssue));
+  set("boardAnnPill",STATE.announcements.length);set("boardPraisePill",visCount(STATE.praises));set("boardIssuePill",visCount(STATE.feedback));
+  var u=Math.max(0,(STATE.announcements.length-seenAnn)+(visCount(STATE.feedback)-seenIssue));
   var b=document.getElementById("boardBadge");b.textContent=u;b.style.display=u?"flex":"none";
 }
 function updateSync(){var els=document.querySelectorAll(".syncpill");for(var i=0;i<els.length;i++){els[i].classList.toggle("live",LIVE);els[i].innerHTML='<span class="d"></span>'+(LIVE?"Live — synced to everyone":"Demo mode — deploy to sync");}}
@@ -1572,16 +1672,63 @@ function applyLeaderUI(){var locked=document.getElementById("dashLocked"),body=d
 document.getElementById("pinCancel").addEventListener("click",closePin);
 document.getElementById("pinOk").addEventListener("click",tryPin);
 document.getElementById("pinInput").addEventListener("keydown",function(e){if(e.key==="Enter")tryPin();});
+/* ===== Day PIN — locks the whole app for all volunteers ===== */
+function dayKey(){try{return sessionStorage.getItem("k2c_day");}catch(_){return null;}}
+function setDayKey(v){try{sessionStorage.setItem("k2c_day",v);}catch(_){}}
+function dayUnlocked(){return !STATE.dayPin || LEADER || dayKey()===STATE.dayPin;}
+function maybeDayGate(){
+  var g=document.getElementById("dayGate");if(!g)return;
+  if(LIVE&&STATE.dayPin&&!dayUnlocked()){
+    g.classList.add("show");
+    setTimeout(function(){var i=document.getElementById("dayPinInput");if(i)i.focus();},60);
+  }else{g.classList.remove("show");}
+}
+function tryDayPin(){
+  var v=document.getElementById("dayPinInput").value.trim();
+  if(STATE.dayPin&&v===STATE.dayPin){setDayKey(STATE.dayPin);document.getElementById("dayPinErr").textContent="";maybeDayGate();}
+  else if(v===PIN){LEADER=true;setDayKey(STATE.dayPin||"");document.getElementById("dayPinErr").textContent="";applyLeaderUI();renderDynamic();maybeDayGate();}
+  else{document.getElementById("dayPinErr").textContent="Wrong Day PIN — ask your team leader.";}
+}
+document.getElementById("dayPinOk").addEventListener("click",tryDayPin);
+document.getElementById("dayPinInput").addEventListener("keydown",function(e){if(e.key==="Enter")tryDayPin();});
+document.getElementById("dayPinSave").addEventListener("click",function(){
+  var v=document.getElementById("dayPinEdit").value.trim();
+  setDayKey(v);
+  doAction("setDayPin",{pin:v},function(){STATE.dayPin=v;});
+});
 function pre(id,val){var e=document.getElementById(id);if(e&&!e.value&&val)e.value=val;}
 function prefillNames(){pre("ciName",MY.name);pre("aName",MY.name);pre("pName",MY.name);pre("fName",MY.name);}
-document.getElementById("initSu").addEventListener("input",function(e){MY.initials=e.target.value;});
+function bindInit(id){var el=document.getElementById(id);if(!el)return;el.addEventListener("input",function(e){MY.initials=e.target.value;syncInits(id);});}
+function syncInits(except){["initSu","initIo"].forEach(function(id){if(id===except)return;var el=document.getElementById(id);if(el&&el.value!==MY.initials)el.value=MY.initials;});}
+bindInit("initSu");bindInit("initIo");
 document.getElementById("ciBtn").addEventListener("click",function(){var name=document.getElementById("ciName").value.trim(),team=document.getElementById("ciTeam").value;if(!name){flash("ciName");return;}if(!document.getElementById("ciAttest").checked){document.getElementById("ciAttestMsg").classList.add("show");document.getElementById("ciAttestRow").classList.add("nudge");setTimeout(function(){document.getElementById("ciAttestRow").classList.remove("nudge");},600);return;}MY.name=name;var rec={id:uid(),name:name,team:team,attested:true,t:nowLabel()};doAction("addCheckin",rec,function(){STATE.checkins.push(rec);});document.getElementById("ciName").value="";document.getElementById("ciAttest").checked=false;document.getElementById("ciAttestMsg").classList.remove("show");document.getElementById("checkinPrompt").style.display="none";prefillNames();});
-document.getElementById("aBtn").addEventListener("click",function(){var by=document.getElementById("aName").value.trim()||"Leadership",title=document.getElementById("aTitle").value.trim(),body=document.getElementById("aBody").value.trim(),pri=document.getElementById("aPri").value;if(!title||!body){flash(title?"aBody":"aTitle");return;}MY.name=by;var rec={id:uid(),pri:pri,title:title,body:body,by:by,t:nowLabel()};barDismissed=false;doAction("addAnnouncement",rec,function(){STATE.announcements.unshift(rec);});document.getElementById("aTitle").value="";document.getElementById("aBody").value="";prefillNames();});
+document.getElementById("aBtn").addEventListener("click",function(){if(!LEADER){askPin(function(){});return;}var by=document.getElementById("aName").value.trim()||"Leadership",title=document.getElementById("aTitle").value.trim(),body=document.getElementById("aBody").value.trim(),pri=document.getElementById("aPri").value;if(!title||!body){flash(title?"aBody":"aTitle");return;}MY.name=by;var rec={id:uid(),pri:pri,title:title,body:body,by:by,t:nowLabel()};barDismissed=false;doAction("addAnnouncement",rec,function(){STATE.announcements.unshift(rec);});document.getElementById("aTitle").value="";document.getElementById("aBody").value="";prefillNames();});
 document.getElementById("pBtn").addEventListener("click",function(){var name=document.getElementById("pName").value.trim()||"Anonymous",body=document.getElementById("pBody").value.trim();if(!body){flash("pBody");return;}MY.name=name;var rec={id:uid(),name:name,body:body,t:nowLabel()};doAction("addPraise",rec,function(){STATE.praises.unshift(rec);});document.getElementById("pBody").value="";prefillNames();});
 document.getElementById("fBtn").addEventListener("click",function(){var by=document.getElementById("fName").value.trim()||"Volunteer",title=document.getElementById("fTitle").value.trim(),body=document.getElementById("fBody").value.trim(),priority=document.getElementById("fPri").value;if(!title){flash("fTitle");return;}MY.name=by;var rec={id:uid(),priority:priority,title:title,body:body,by:by,t:nowLabel()};doAction("addFeedback",rec,function(){STATE.feedback.unshift(rec);});document.getElementById("fTitle").value="";document.getElementById("fBody").value="";prefillNames();});
 function flash(id){var e=document.getElementById(id);if(e){e.style.borderColor="#B86239";e.focus();setTimeout(function(){e.style.borderColor="";},1200);}}
-document.getElementById("countPlus").addEventListener("click",function(){doAction("bump",{delta:1},function(){STATE.count=Math.max(0,STATE.count+1);});});
-document.getElementById("countMinus").addEventListener("click",function(){doAction("bump",{delta:-1},function(){STATE.count=Math.max(0,STATE.count-1);});});
+// Attendance counter: apply each tap instantly, then batch a burst of taps into
+// ONE server write. Fewer concurrent read-modify-writes = no lost counts when
+// several phones are counting at once.
+function bumpCount(delta){
+  STATE.count=Math.max(0,(STATE.count||0)+delta);
+  renderCount();updateBadges();renderDashboard();
+  if(!LIVE)return;
+  pendingCount+=delta;
+  if(countFlushT)clearTimeout(countFlushT);
+  countFlushT=setTimeout(flushCount,350);
+}
+function flushCount(){
+  countFlushT=null;
+  if(!LIVE||pendingCount===0)return;
+  var d=pendingCount;pendingCount=0;
+  inflight++;
+  apiPost("bump",{delta:d}).then(function(s){
+    if(--inflight===0&&settled()){STATE=normalize(s);renderDynamic();}
+  }).catch(function(){inflight=Math.max(0,inflight-1);LIVE=false;updateSync();renderDynamic();});
+}
+document.getElementById("countPlus").addEventListener("click",function(){bumpCount(1);});
+document.getElementById("countMinus").addEventListener("click",function(){bumpCount(-1);});
+document.addEventListener("visibilitychange",function(){if(document.visibilityState!=="visible")flushCount();});
 document.getElementById("evSave").addEventListener("click",function(){var name=document.getElementById("evName").value.trim(),date=document.getElementById("evDate").value.trim();doAction("setEvent",{name:name,date:date},function(){STATE.event={name:name,date:date};});});
 document.getElementById("resetBtn").addEventListener("click",function(){if(confirm("Reset ALL event data (checklists, check-ins, head count, issues, praise, announcements)? This can't be undone.")){doAction("reset",{},function(){var ev=STATE.event;STATE={checklist:{},announcements:[],checkins:[],feedback:[],praises:[],count:0,event:ev};});}});
 document.addEventListener("click",function(e){var row=e.target.closest(".chk");if(row)toggleCheck(row.getAttribute("data-id"));});
@@ -1597,12 +1744,12 @@ function show(id){
   window.scrollTo({top:0,behavior:"smooth"});
   if(id==="now")renderSpine();
   if(id==="dashboard"){applyLeaderUI();renderDashboard();}
-  if(id==="announcements"||id==="issue"){seenAnn=STATE.announcements.length;seenIssue=STATE.feedback.length;updateBadges();}
+  if(id==="announcements"||id==="issue"){seenAnn=STATE.announcements.length;seenIssue=visCount(STATE.feedback);updateBadges();}
 }
 function goSchedule(){show("now");setTimeout(function(){var a=document.getElementById("scheduleAnchor");if(a)a.scrollIntoView({behavior:"smooth"});},80);}
 var tabsEls=document.querySelectorAll(".tab");for(var ti=0;ti<tabsEls.length;ti++){(function(btn){btn.addEventListener("click",function(){show(btn.getAttribute("data-tab"));});})(tabsEls[ti]);}
 var simRange=document.getElementById("simRange");
-simRange.addEventListener("input",function(){simActive=true;simAnchor=parseInt(simRange.value,10);simEpoch=Date.now();document.getElementById("simNow").textContent="Previewing "+fmt(simAnchor)+" (running)";refreshAll();refreshChecklists();renderDashboard();});
+simRange.addEventListener("input",function(){if(!LEADER){askPin(function(){});return;}simActive=true;simAnchor=parseInt(simRange.value,10);simEpoch=Date.now();document.getElementById("simNow").textContent="Previewing "+fmt(simAnchor)+" (running)";refreshAll();refreshChecklists();renderDashboard();});
 document.getElementById("simReset").addEventListener("click",function(){simActive=false;document.getElementById("simNow").textContent="Off — using real time";refreshAll();refreshChecklists();renderDashboard();});
 function refreshAll(){renderClock();renderNow();renderSpine();renderStrip();}
 function boot(){
@@ -1610,10 +1757,10 @@ function boot(){
   apiGet().then(function(s){STATE=normalize(s);LIVE=true;finishBoot();}).catch(function(){LIVE=false;STATE=seedDemo();finishBoot();});
 }
 function finishBoot(){
-  updateSync();applyLeaderUI();renderDynamic();refreshAll();
+  updateSync();applyLeaderUI();maybeDayGate();renderDynamic();refreshAll();
   setInterval(function(){renderClock();renderNow();renderStrip();updateDueChips();if(simActive)document.getElementById("simNow").textContent="Previewing "+fmt(Math.floor(nowMinutes()))+" (running)";},1000);
   setInterval(function(){refreshChecklists();renderDashboard();renderSpine();},15000);
-  setInterval(function(){if(LIVE&&document.visibilityState==="visible"){apiGet().then(function(s){STATE=normalize(s);renderDynamic();}).catch(function(){LIVE=false;updateSync();});}},5000);
+  setInterval(function(){if(LIVE&&settled()&&document.visibilityState==="visible"){apiGet().then(function(s){if(settled()){STATE=normalize(s);maybeDayGate();renderDynamic();}}).catch(function(){LIVE=false;updateSync();});}},5000);
 }
 boot();
 </script>
