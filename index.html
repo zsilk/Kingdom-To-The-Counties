@@ -1676,8 +1676,8 @@ var SETUP=[
   {day:"fri",team:"Phase 2 · Power Up — Fri 11:30–2:00 (lunch 12:00–1:00)",lead:"M. Nelson",items:[["Generator power on",m(12,0)],["Plug T4 trailer into power (120v ext into side)",m(12,0)],["Power drops from Papa V trailer",m(12,0)],["Stage power drops (2 front / 2 back)",m(12,0)],["Set up Starlink",m(12,0)],["FOH tables set",m(12,0)],["Lunch break 12:00–1:00 (60 min)",m(13,0)],["Assemble Drum Kit Riser, Drum Kit Shells & All Hardware.",m(14,0)],["Set up ARK (power, table, wifi, antennas, computer)",m(14,0)],["Extend antenna combiner cables",m(14,0)],["Confirm computer routing (tracks, video, click, guide)",m(14,0)],["FOH wiring — cable covers + 2x ethernet band→FOH (1 AVB / 1 internet)",m(14,0)],["FOH console + Papa V stage box — connect all AVB cables",m(14,0)],["FOH speakers — mount mains, set subs, run power + XLRs, power on",m(14,0)],["Power cycle ARK & FOH (AVB sync)",m(14,0)],["Mic stands & mics per stage plot (→ moved to Sat)",m(14,0)],["Configure wireless freqs (500/900 MHz scan, 15 min max — packs + handhelds)",m(14,0)],["XLR drops to musician stations per stage plot",m(14,0)],["Connect all drum mics per stage plot",m(14,0)],["Call local PD — request overnight patrol",m(14,0)]]},
   {day:"fri",team:"Phase 3 · System Tuning — Fri 2:00–3:30",lead:"M. Nelson",items:[["Connect Papa V computer for system tuning",m(15,30)],["Line check all I/Os — test with wired mic",m(15,30)],["Blast & balance (refer to NLC FOH guide)",m(15,30)],["Board + iPad roaming; move speakers as needed",m(15,30)],["dBL readings at property boundary per municipal req; adjust",m(15,30)],["Ring out all mics (check feedback)",m(15,30)],["Gate MD mics appropriately",m(15,30)],["Gate Host mics appropriately",m(15,30)],["Balance drum kit",m(15,30)],["Confirm recording SD destinations (onboard SD + Logic)",m(15,30)]]},
   {day:"fri",team:"Phase 4 · Build Jesus Rig — Fri 3:30–4:00 (→ Sat)",lead:"Kyle DeTrude",items:[["Assemble square truss rig. Leave on the ground.",m(16,0)],["Assemble threaded pipe square. Leave on the ground next to truss rig.",m(16,0)]]},
-  {day:"fri",team:"Phase 5 · Hang — Fri 4:00–4:15",lead:"Zach Silk",items:[["Eat, worship, fellowship",m(16,15)]]},
-  {day:"fri",team:"Phase 6 · Shut Down — Fri 4:15–5:00",lead:"M. Nelson",items:[["Save scenes on all PreSonus consoles",m(17,0)],["Label, disconnect & store speakers",m(17,0)],["Disconnect & store ARK (if needed)",m(17,0)],["Fasten tent walls",m(17,0)],["Cover rig",m(17,0)],["Rainproof everything",m(17,0)],["Lock trailers (doors, padlocks, tongue lock)",m(17,0)],["Turn off generators",m(17,0)],["Return radios",m(17,0)],["Plug T4 trailer into mains for overnight charging",m(17,0)],["Implement security protocol",m(17,0)]]},
+  {day:"fri",team:"Phase 5 · Hang — Fri 4:30–4:45",lead:"Zach Silk",items:[["Eat, worship, fellowship",m(16,45)]]},
+  {day:"fri",team:"Phase 6 · Shut Down — Fri 4:45–5:00",lead:"M. Nelson",items:[["Save scenes on all PreSonus consoles",m(17,0)],["Label, disconnect & store speakers",m(17,0)],["Disconnect & store ARK (if needed)",m(17,0)],["Fasten tent walls",m(17,0)],["Cover rig",m(17,0)],["Rainproof everything",m(17,0)],["Lock trailers (doors, padlocks, tongue lock)",m(17,0)],["Turn off generators",m(17,0)],["Return radios",m(17,0)],["Plug T4 trailer into mains for overnight charging",m(17,0)],["Implement security protocol",m(17,0)]]},
   {day:"sat",team:"Phase 7 · Open Up — Sat 8:00–8:30",lead:"M. Nelson",items:[["Check out radios",m(8,30)],["Turn on generators",m(8,30)],["Reconnect speakers (and ARK)",m(8,30)],["Turn on FOH and host mic — host mic ON and UNMUTED (ready for all-team huddle)",m(8,30)]]},
   {day:"sat",team:"Phase 8a · Worship Set Up — Sat 10:00–12:00",lead:"Karielle Silk",items:[["Set up personal gear (power, XLR)",m(12,0)],["Worship Team - Retrieve wireless pack from red Packout drawer.",m(12,0)],["Playback sync enabled",m(12,0)],["Worship app — connect to 'T4 Sound' wifi",m(12,0)],["Chart builder open, setlist downloaded & synced",m(12,0)],["Q-Mix downloaded, connected to ARC (grant permissions)",m(12,0)],["GAIN STAGE — line check all (peaks ≤ -6.0 dB); DO NOT TOUCH GAIN AFTER",m(12,0)],["All FX, EQ, compression OFF",m(12,0)],["Mix IEMs — pink noise; musicians set pack master; loop one chorus",m(12,0)],["Mix FOH — do NOT touch gains/preamp; EQ; compress; FX",m(12,0)],["Run through transitions",m(12,0)]]},
   {day:"sat",team:"Phase 8b · Crane Rigging — Sat 11:00–12:00",lead:"Kyle DeTrude",items:[["Guide crane to spot",m(12,0)],["Attach prebuilt square truss rig, then hoist the rig to a workable height with the crane.",m(12,0)],["Attach (4) JESUS banners to the trussing with zip ties. Attach the threaded pipe square to the bottom of the (4) banners with zip ties.",m(12,0)],["Attach guy lines to rig",m(12,0)],["Notify Zach and Marketing team when rig is 100% ready to be raised. Do NOT raise the rig yet.",m(12,0)],["When given the order by Zach/Marketing Team, raise the rig to its final height.",m(12,0)],["Secure guy lines to ground",m(12,0)],["Rig wind-tied & flown by 12:00 PM latest",m(12,0)]]},
@@ -1718,30 +1718,87 @@ function seedDemo(){return normalize({
   checkins:[{id:uid(),name:"Rachel",team:"Ambassadors",t:"9:05 AM"},{id:uid(),name:"Bethanie",team:"Guest Services",t:"9:02 AM"}],
   count:0
 });}
-function itemStatus(due,rec){
-  var t=nowMinutes();
-  if(rec){if(rec.dm==null)return{cls:"good",txt:"Done"};var diff=due-rec.dm;if(diff>=0)return{cls:"good",txt:"On time ("+Math.round(diff)+"m early)"};return{cls:"warn",txt:Math.round(-diff)+"m late"};}
-  var left=due-t;if(left>20)return{cls:"good",txt:"Due "+fmt(due)};if(left>=0)return{cls:"warn",txt:Math.round(left)+"m left ("+fmt(due)+")"};return{cls:"bad",txt:"Overdue "+Math.round(-left)+"m"};
+function stripDate(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
+function dateKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function parseEventSaturday(){
+  var raw=((STATE.event&&STATE.event.date)||"").trim();
+  if(!raw)return null;
+  var iso=raw.match(/(\d{4}-\d{2}-\d{2})/);
+  if(iso){var d=new Date(iso[1]+"T12:00:00");if(!isNaN(d.getTime()))return stripDate(d);}
+  var md=raw.match(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+(\d{1,2})\b/i);
+  if(md){var d=new Date(md[1]+" "+md[2]+", "+new Date().getFullYear());if(!isNaN(d.getTime()))return stripDate(d);}
+  var d=new Date(raw);if(!isNaN(d.getTime()))return stripDate(d);
+  return null;
+}
+function setupDayLabel(day){return day==="fri"?"Fri":"Sat";}
+function setupTimingContext(day){
+  var sat=parseEventSaturday(),today=stripDate(new Date());
+  if(sat){
+    var target=new Date(sat.getTime());
+    if(day==="fri")target.setDate(target.getDate()-1);
+    var diff=Math.round((today-target)/86400000);
+    if(diff<0)return{phase:"before",day:day};
+    if(diff>0)return{phase:"after",now:99999};
+    return{phase:"live",now:nowMinutes()};
+  }
+  var dow=today.getDay();
+  if((day==="fri"&&dow===5)||(day==="sat"&&dow===6))return{phase:"live",now:nowMinutes()};
+  if((day==="fri"&&dow===6)||(day==="sat"&&dow===0))return{phase:"after",now:99999};
+  return{phase:"before",day:day};
+}
+function itemStatus(due,rec,day){
+  var ctx=setupTimingContext(day);
+  if(rec){
+    if(rec.dm==null||ctx.phase!=="live")return{cls:"good",txt:"Done"};
+    var diff=due-rec.dm;
+    if(diff>=0)return{cls:"good",txt:"On time ("+Math.round(diff)+"m early)"};
+    return{cls:"warn",txt:Math.round(-diff)+"m late"};
+  }
+  if(ctx.phase==="before")return{cls:"good",txt:setupDayLabel(day)+" · Due "+fmt(due)};
+  if(ctx.phase==="after")return{cls:"bad",txt:"Overdue · was "+fmt(due)};
+  var left=due-ctx.now;
+  if(left>20)return{cls:"good",txt:"Due "+fmt(due)};
+  if(left>=0)return{cls:"warn",txt:Math.round(left)+"m left ("+fmt(due)+")"};
+  return{cls:"bad",txt:"Overdue "+Math.round(-left)+"m"};
 }
 var curDay="fri",hideCompleted=true;
 function curSetup(){return SETUP.filter(function(s){return s.day===curDay;});}
 function setDay(d){curDay=d;document.getElementById("dtFri").classList.toggle("on",d==="fri");document.getElementById("dtSat").classList.toggle("on",d==="sat");refreshChecklists();}
 function toggleHideCompleted(){hideCompleted=!hideCompleted;document.getElementById("toggleHide").textContent=hideCompleted?"Show completed":"Hide completed";refreshChecklists();}
 function hms(mins){var s=Math.max(0,Math.round(mins*60));var h=Math.floor(s/3600),m=Math.floor((s%3600)/60),ss=s%60;if(h>0)return h+"h "+String(m).padStart(2,"0")+"m";if(m>0)return m+"m "+String(ss).padStart(2,"0")+"s";return ss+"s";}
-function updateDueChips(){var chips=document.querySelectorAll("#setupMount .duechip[data-live]");for(var i=0;i<chips.length;i++){var due=parseFloat(chips[i].getAttribute("data-due"));var left=due-nowMinutes();var cls,txt;if(left<0){cls="bad";txt="⏱ overdue "+hms(-left);}else if(left<=20){cls="warn";txt="⏳ due in "+hms(left);}else{cls="good";txt="due in "+hms(left);}chips[i].className="duechip "+cls;chips[i].textContent=txt;}}
+function updateDueChips(){
+  var chips=document.querySelectorAll("#setupMount .duechip[data-live]");
+  for(var i=0;i<chips.length;i++){
+    var day=chips[i].getAttribute("data-setup-day")||curDay;
+    var ctx=setupTimingContext(day);
+    var due=parseFloat(chips[i].getAttribute("data-due"));
+    var cls,txt;
+    if(ctx.phase==="before"){cls="good";txt=setupDayLabel(day)+" · Due "+fmt(due);}
+    else if(ctx.phase==="after"){cls="bad";txt="⏱ overdue · was "+fmt(due);}
+    else{
+      var left=due-ctx.now;
+      if(left<0){cls="bad";txt="⏱ overdue "+hms(-left);}
+      else if(left<=20){cls="warn";txt="⏳ due in "+hms(left);}
+      else{cls="good";txt="due in "+hms(left);}
+    }
+    chips[i].className="duechip "+cls;
+    chips[i].textContent=txt;
+  }
+}
 function renderChecklist(mountId,data,key,overallId,overallBarId,overdueId){
   var html="",done=0,total=0,overdue=0,hidden=0;
+  var ctx=setupTimingContext(curDay);
   data.forEach(function(sec,si){
     var secDone=0,secTotal=sec.items.length;
     var rows=sec.items.map(function(it,ii){
       var label=it[0],due=it[1],id=key+"-"+curDay+"-"+si+"-"+ii;total++;
       var rec=STATE.checklist[id];if(rec){done++;secDone++;}
-      if(!rec&&(due-nowMinutes())<0)overdue++;
+      if(!rec&&ctx.phase==="live"&&(due-ctx.now)<0)overdue++;
       var stamp=rec?("✓ "+esc(rec.by)+(rec.t?(" · "+rec.t):"")):"";
       var hide=rec&&hideCompleted;if(hide)hidden++;
       var chip;
-      if(rec){var st=itemStatus(due,rec);chip='<span class="duechip '+st.cls+'">'+st.txt+'</span>';}
-      else{chip='<span class="duechip good" data-live="1" data-due="'+due+'">due in —</span>';}
+      if(rec){var st=itemStatus(due,rec,curDay);chip='<span class="duechip '+st.cls+'">'+st.txt+'</span>';}
+      else{chip='<span class="duechip good" data-live="1" data-due="'+due+'" data-setup-day="'+curDay+'">due in —</span>';}
       return '<div class="chk'+(rec?" done":"")+(hide?" hidden":"")+'" data-id="'+id+'"><span class="box"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></span><span class="lab"><span class="txt">'+label+'</span><span class="sub2">'+chip+'<span class="stamp">'+stamp+'</span></span></span></div>';
     }).join("");
     var secHidden=hideCompleted&&secDone===secTotal;
@@ -1773,8 +1830,10 @@ function toggleCheck(id){
   var init=(MY.initials||"").trim().toUpperCase();
   var already=!!STATE.checklist[id];
   if(!already&&!init){var bar=document.getElementById("idbar-su");bar.classList.add("nudge");setTimeout(function(){bar.classList.remove("nudge");},500);document.getElementById("initSu").focus();return;}
-  var payload={id:id,by:init,t:nowLabel(),dm:Math.round(nowMinutes())};
-  doAction("toggleCheck",payload,function(){if(STATE.checklist[id])delete STATE.checklist[id];else STATE.checklist[id]={by:init,t:nowLabel(),dm:Math.round(nowMinutes())};});
+  var tctx=setupTimingContext(curDay);
+  var dm=tctx.phase==="live"?Math.round(tctx.now):null;
+  var payload={id:id,by:init,t:nowLabel(),dm:dm};
+  doAction("toggleCheck",payload,function(){if(STATE.checklist[id])delete STATE.checklist[id];else STATE.checklist[id]={by:init,t:nowLabel(),dm:dm};});
 }
 function renderAnnouncements(){
   var f=document.getElementById("annFeed");
