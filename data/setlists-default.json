@@ -1,0 +1,24 @@
+{
+  "Worship Set 1": [
+    { "title": "The Joy", "key": "G", "lead": "Karielle" },
+    { "title": "Song Of Freedom", "key": "Bb", "lead": "Zach" },
+    { "title": "I Thank God", "key": "A", "lead": "Mike" }
+  ],
+  "Worship Set 2": [
+    { "title": "Revival's In The Air", "key": "A", "lead": "Annie" },
+    { "title": "Throne Room Song", "key": "A", "lead": "Karielle + Mike" },
+    { "title": "Revelation Song", "key": "C", "lead": "Hollee" }
+  ],
+  "Worship Set 3": [
+    { "title": "Come Boldly To The Throne", "key": "C", "lead": "Karielle" },
+    { "title": "Nothing Else", "key": "D", "lead": "Hollee" }
+  ],
+  "Worship Set 4": [
+    { "title": "Jesus Be The Name", "key": "D", "lead": "Karielle" },
+    { "title": "What A Beautiful Name", "key": "D", "lead": "Annie" },
+    { "title": "Holy Ground", "key": "D", "lead": "Karielle" }
+  ],
+  "Outro + Blessing": [
+    { "title": "I Speak Jesus", "key": "E", "lead": "Karielle" }
+  ]
+}

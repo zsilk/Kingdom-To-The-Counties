@@ -105,6 +105,18 @@
   .seg .meta{font-size:12px;color:#574f44;margin-top:3px}
   .seg.now .content{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 12px;box-shadow:var(--shadow)}
   .group-label{font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:var(--wine);font-weight:700;margin:18px 0 8px;padding-left:32px}
+  .setdrop{margin:0;padding:0;border:none}
+  .setdrop summary{list-style:none;cursor:pointer}
+  .setdrop summary::-webkit-details-marker{display:none}
+  .setdrop .setchev{font-size:10px;color:var(--muted);margin-left:2px;transition:transform .2s;display:inline-block}
+  .setdrop[open] .setchev{transform:rotate(90deg)}
+  .setlist{list-style:none;margin:8px 0 0;padding:0;display:block}
+  .setlist li{display:block;width:100%;padding:9px 0;border-top:1px solid var(--line);font-size:12.5px;line-height:1.4}
+  .setlist li:first-child{border-top:none;padding-top:2px}
+  .setlist .sn{display:block;font-weight:600;color:var(--ink);font-size:13px;margin-bottom:3px}
+  .setlist .sm{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .setlist .sk{flex:none;font-weight:700;font-size:10.5px;color:var(--wine);background:#f4e6dc;padding:2px 7px;border-radius:99px;letter-spacing:.2px}
+  .setlist .sl{flex:none;color:var(--muted);font-size:11.5px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 17px;box-shadow:var(--shadow);margin-bottom:13px}
   .card h3{font-family:var(--serif);font-weight:600;font-size:17px;margin:0 0 6px;display:flex;align-items:center;gap:8px}
   .card p{margin:0 0 8px;font-size:14px;color:#403d38}.card p:last-child{margin-bottom:0}
@@ -1439,6 +1451,38 @@
 </nav>
 <script>
 function m(h,min){return h*60+(min||0);}
+/* Worship set songs — keep in sync with data/setlists-default.json */
+var SETLISTS_DEFAULT={
+  "Worship Set 1":[
+    {title:"The Joy",key:"G",lead:"Karielle"},
+    {title:"Song Of Freedom",key:"Bb",lead:"Zach"},
+    {title:"I Thank God",key:"A",lead:"Mike"}
+  ],
+  "Worship Set 2":[
+    {title:"Revival's In The Air",key:"A",lead:"Annie"},
+    {title:"Throne Room Song",key:"A",lead:"Karielle + Mike"},
+    {title:"Revelation Song",key:"C",lead:"Hollee"}
+  ],
+  "Worship Set 3":[
+    {title:"Come Boldly To The Throne",key:"C",lead:"Karielle"},
+    {title:"Nothing Else",key:"D",lead:"Hollee"}
+  ],
+  "Worship Set 4":[
+    {title:"Jesus Be The Name",key:"D",lead:"Karielle"},
+    {title:"What A Beautiful Name",key:"D",lead:"Annie"},
+    {title:"Holy Ground",key:"D",lead:"Karielle"}
+  ],
+  "Outro + Blessing":[
+    {title:"I Speak Jesus",key:"E",lead:"Karielle"}
+  ]
+};
+function setlistFor(name){return SETLISTS_DEFAULT[name]||null;}
+function setlistRowsHtml(songs){
+  if(!songs||!songs.length)return "";
+  return '<ul class="setlist">'+songs.map(function(s){
+    return '<li><span class="sn">'+esc(s.title)+'</span><div class="sm"><span class="sk">'+esc(s.key)+'</span><span class="sl">'+esc(s.lead)+'</span></div></li>';
+  }).join("")+'</ul>';
+}
 const SEGMENTS=[
   {s:m(8,0),e:m(8,30),name:"Leadership Early Call",group:"setup",music:"setup",meta:"Leadership only · radios, Command Post, prayer"},
   {s:m(9,0),e:m(9,30),name:"Volunteers & Ambassadors Call",group:"setup",music:"setup",meta:"Arrival, orientation, staff tags, fellowship"},
@@ -1485,10 +1529,28 @@ function renderNow(){
 }
 function renderSpine(){
   var t=nowMinutes(),ci=findCurrent(t),mount=document.getElementById("spineMount"),html="",lastGroup="";
+  var openSets={};
+  mount.querySelectorAll(".setdrop[open]").forEach(function(d){
+    var k=d.getAttribute("data-set");
+    if(k) openSets[k]=true;
+  });
   SEGMENTS.forEach(function(seg,i){
     if(seg.group!==lastGroup){html+='<div class="group-label">'+(seg.group==="setup"?"Setup · 8 AM – 1 PM":"Program · 2 – 5 PM Sharp")+'</div>';lastGroup=seg.group;}
     var cls="seg";if(i===ci)cls+=" now";else if(t>=seg.e)cls+=" past";
-    html+='<div class="'+cls+'"><div class="rail"><div class="knob"></div></div><div class="content"><div class="row"><span class="nm">'+(seg.altar?"🙏 ":"")+seg.name+'</span><span class="tm">'+fmt(seg.s)+'</span></div><div class="meta">'+MUSIC_LABEL[seg.music]+(seg.meta?(" · "+seg.meta):"")+'</div></div></div>';
+    var songs=setlistFor(seg.name);
+    var meta=MUSIC_LABEL[seg.music]+(seg.meta?(" · "+seg.meta):"");
+    if(songs&&songs.length)meta+=" · "+songs.length+" song"+(songs.length===1?"":"s");
+    var openNow=i===ci&&songs&&songs.length;
+    html+='<div class="'+cls+'"><div class="rail"><div class="knob"></div></div><div class="content">';
+    if(songs&&songs.length){
+      html+='<details class="setdrop" data-set="'+esc(seg.name)+'"'+(openSets[seg.name]||openNow?' open':'')+'><summary><div class="row"><span class="nm">'+(seg.altar?"🙏 ":"")+esc(seg.name)+'</span><span class="tm">'+fmt(seg.s)+'</span></div>';
+      html+='<div class="meta">'+esc(meta)+' <span class="setchev">▶</span></div></summary>';
+      html+=setlistRowsHtml(songs)+'</details>';
+    }else{
+      html+='<div class="row"><span class="nm">'+(seg.altar?"🙏 ":"")+esc(seg.name)+'</span><span class="tm">'+fmt(seg.s)+'</span></div>';
+      html+='<div class="meta">'+esc(meta)+'</div>';
+    }
+    html+='</div></div>';
   });
   mount.innerHTML=html;
 }
