@@ -41,7 +41,7 @@
         "id": "zach-acoustic-guitar-1-di",
         "role": "Acoustic Guitar 1",
         "gear": "1x Active DI",
-        "loc": "ARK In 21"
+        "loc": "Ch 18 · AVB 21 · Ark 21"
       }
     ]
   },
@@ -75,7 +75,7 @@
         "id": "sean-bass-guitar-di",
         "role": "Bass Guitar",
         "gear": "1x Active DI / Modeler",
-        "loc": "ARK In 18"
+        "loc": "Ch 17 · AVB 18 · Ark 18"
       }
     ]
   },
@@ -115,7 +115,7 @@
         "id": "jeanne-acoustic-guitar-2-di",
         "role": "Acoustic Guitar 2",
         "gear": "1x Active DI",
-        "loc": "ARK In 22"
+        "loc": "Ch 19 · AVB 22 · Ark 22"
       }
     ]
   },
@@ -166,13 +166,13 @@
         "id": "brett-electric-guitar-l",
         "role": "Electric Guitar (L)",
         "gear": "Stereo DI / Modeler (Left)",
-        "loc": "ARK In 19"
+        "loc": "Ch 13 · AVB 19 · Ark 19"
       },
       {
         "id": "brett-electric-guitar-r",
         "role": "Electric Guitar (R)",
         "gear": "Stereo DI / Modeler (Right)",
-        "loc": "ARK In 20"
+        "loc": "Ch 14 · AVB 20 · Ark 20"
       }
     ]
   },
@@ -195,13 +195,13 @@
         "id": "john-keys-l",
         "role": "Keys (L)",
         "gear": "2x Stereo DI (Left)",
-        "loc": "ARK In 23"
+        "loc": "Ch 15 · AVB 23 · Ark 23"
       },
       {
         "id": "john-keys-r",
         "role": "Keys (R)",
         "gear": "2x Stereo DI (Right)",
-        "loc": "ARK In 24"
+        "loc": "Ch 16 · AVB 24 · Ark 24"
       }
     ]
   },
@@ -218,31 +218,31 @@
         "id": "tyler-kick-drum",
         "role": "Kick Drum",
         "gear": "1. Kick Mic",
-        "loc": "ARK In 25"
+        "loc": "Ch 20 · AVB 25 · Ark 25"
       },
       {
         "id": "tyler-snare-top",
         "role": "Snare Top",
         "gear": "2. Snare Top Mic",
-        "loc": "ARK In 26"
+        "loc": "Ch 21 · AVB 26 · Ark 26"
       },
       {
         "id": "tyler-snare-bottom",
         "role": "Snare Bottom",
         "gear": "3. Snare Bottom Mic",
-        "loc": "ARK In 27"
+        "loc": "Ch 22 · AVB 27 · Ark 27"
       },
       {
         "id": "tyler-toms-mixdown",
         "role": "Toms - Mixdown",
         "gear": "4-6. Tom Mics",
-        "loc": "NSB.32 In 1-3"
+        "loc": "Ch 23 · AVB 57 · NSB 1-3"
       },
       {
         "id": "tyler-overheads-mixdown",
         "role": "Overheads - Mixdown",
         "gear": "7-8. Overhead (LR) Condensers",
-        "loc": "NSB.32 In 4-5"
+        "loc": "Ch 24 · AVB 58 · NSB 4-5"
       }
     ]
   },
