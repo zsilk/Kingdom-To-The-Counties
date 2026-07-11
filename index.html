@@ -139,6 +139,50 @@
   .btn.wine{background:var(--wine)}.btn.rust{background:var(--rust)}.btn.ink{background:var(--ink)}.btn.ghost{background:none;color:var(--wine);border:1px solid var(--line)}
   .hint{font-size:11.5px;color:var(--muted);margin:9px 2px 0;line-height:1.4}
   .idbar{display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:12px}
+  /* ===== v1.3.0 ===== */
+  .idbar.err{border-color:#B3261E;background:#FBEDEB}
+  .idbar.err label{color:#B3261E;font-weight:700}
+  .cattabs{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 12px}
+  .cattabs button{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:7px 12px;font-size:12.5px;font-weight:600;color:var(--ink)}
+  .cattabs button.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+  .toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:11px 16px;border-radius:22px;font-size:13.5px;font-weight:600;z-index:400;box-shadow:0 6px 18px rgba(0,0,0,.25);opacity:0;transition:opacity .2s;pointer-events:none;max-width:88vw;text-align:center}
+  .toast.show{opacity:1}
+  .ackedwrap{margin-top:14px}
+  .ackedwrap summary{cursor:pointer;font-weight:700;font-size:13.5px;color:var(--muted);padding:8px 2px;list-style:none}
+  .cmts{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+  .cmt{background:var(--cream);border-radius:9px;padding:7px 10px;margin-bottom:6px;font-size:13px}
+  .cmt b{font-size:12.5px}
+  .cmt .ct2{color:var(--muted);font-size:11px;margin-left:6px}
+  .cmt p{margin:3px 0 0}
+  .cmtbtn{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:5px 11px;font-size:12px;font-weight:600;color:var(--muted)}
+  .cmtform{display:none;margin-top:8px}
+  .cmtform.show{display:block}
+  .cmtform input,.cmtform textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:13.5px;margin-bottom:6px;font-family:inherit;background:#fff}
+  .cmtform button{background:var(--ink);color:var(--cream);border:0;border-radius:9px;padding:8px 14px;font-weight:700;font-size:13px}
+  .radio-row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+  .radio-row .rn{font-weight:800;font-size:15px;min-width:74px}
+  .radio-row .rs{flex:1;font-size:12.5px;color:var(--muted);line-height:1.45}
+  .radio-row .rs b{color:var(--ink)}
+  .radio-row button{border:0;border-radius:10px;padding:9px 13px;font-weight:700;font-size:13px}
+  .radio-row button.co{background:var(--ink);color:var(--cream)}
+  .radio-row button.ci{background:var(--rust);color:#fff}
+  .radio-row.out{border-left:4px solid var(--rust)}
+  .tourstop{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:var(--shadow)}
+  .tourstop .tn{flex:none;width:30px;height:30px;border-radius:50%;background:var(--wine);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .tourstop h3{margin:0 0 4px;font-size:15px}
+  .tourstop p{margin:0 0 8px;font-size:13.5px;color:var(--muted);line-height:1.5}
+  .tourstop button{border:1px solid var(--line);background:var(--cream);border-radius:9px;padding:7px 12px;font-weight:700;font-size:12.5px}
+  .tpcard .open{min-height:44px}
+  #tpPerm{flex-direction:column;gap:14px;overflow:auto}
+  #tpPerm .pbox{max-width:340px;text-align:left;font-size:14px;line-height:1.6;background:#1d1c1a;border:1px solid #3a3733;border-radius:14px;padding:16px}
+  #tpPerm .pbox ol{margin:8px 0 0 18px;padding:0}
+  #tpPerm .pbox li{margin-bottom:4px}
+  #tpPerm .pbtns{display:flex;flex-direction:column;gap:9px;width:min(340px,86vw)}
+  #tpPerm .pbtns button{border:0;border-radius:12px;padding:13px;font-weight:700;font-size:14.5px}
+  #tpPerm .pbtns .try{background:var(--rust);color:#fff}
+  #tpPerm .pbtns .prac{background:#3a3733;color:var(--cream)}
+  #tpPerm .pbtns .bk{background:transparent;color:var(--powder);border:1px solid #3a3733}
+  .tallyrow{display:flex;justify-content:space-between;padding:6px 2px;border-bottom:1px dashed var(--line);font-size:13px}
   .idbar label{font-size:12px;font-weight:700;color:var(--muted);flex:none}
   .idbar input{flex:1;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:14px;font-family:var(--sans);text-transform:uppercase;letter-spacing:1px;background:#fff;color:var(--ink)}
   .idbar.nudge{border-color:var(--rust);animation:shake .4s}
@@ -429,7 +473,7 @@
 <body>
 <div class="topwrap">
 <header class="topbar">
-  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.2.0</span></span></div>
+  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.3.0</span></span></div>
   <div class="clock"><div class="t" id="clockTime">--:--</div><div class="d" id="clockDate">SATURDAY</div></div>
 </header>
 <div class="nowstrip" id="nowStrip" onclick="goSchedule()">
@@ -451,6 +495,8 @@
       <div class="countdown" id="nowCountdown"></div>
     </div>
     <div class="checkinprompt" id="checkinPrompt"><span>👋 New on the field? Check yourself in.</span><button onclick="show('checkin')">Check in</button></div>
+    <div class="checkinprompt" id="tourPrompt" style="display:none"><span>🧭 First time in the app?</span><button onclick="show('tour')">Take the tour</button></div>
+    <div class="checkinprompt"><span>🎬 Record your county invite video.</span><button onclick="show('prompter')">Open studio</button></div>
     <div class="next" id="nextCard"><div class="lbl">Up Next</div><h3 id="nextName">—</h3><div class="when" id="nextWhen"></div></div>
     <details class="preview"><summary>🎚️ Leader preview — scrub the day to test it</summary>
       <div id="simLock"></div>
@@ -468,6 +514,7 @@
     <div class="hub">
       <button class="hubcard slate" onclick="show('count')"><span class="ic">👥</span><span class="tx"><b>Attendance Counter</b><span>Count non-volunteer attendees · syncs live</span></span><span class="pill" id="crewCountPill">0</span></button>
       <button class="hubcard" onclick="show('setup')"><span class="ic">✅</span><span class="tx"><b>Setup Checklist</b><span>Fri build + Sat production</span></span><span class="arr">›</span></button>
+      <button class="hubcard" onclick="show('radios')"><span class="ic">📻</span><span class="tx"><b>Radio Checkout</b><span>10 radios · initials in &amp; out</span></span><span class="pill" id="crewRadioPill">0</span></button>
       <button class="hubcard slate" onclick="show('techio')"><span class="ic">🎛️</span><span class="tx"><b>Tech I/O List</b><span>32-channel patch · tracks, click, guide</span></span><span class="arr">›</span></button>
       <button class="hubcard dark" onclick="show('dashboard')"><span class="ic">📊</span><span class="tx"><b style="color:var(--ink)">Leader Dashboard 🔒</b><span>Live progress · leaders only</span></span><span class="arr">›</span></button>
     </div>
@@ -496,13 +543,16 @@
       <div class="dashrow"><div class="t"><span>Setup readiness</span><span class="v" id="dSetup">0 / 0 · 0%</span></div><div class="pbar"><i id="dSetupBar"></i></div></div>
       <div class="dashrow"><div class="t"><span>Tech I/O patched</span><span class="v" id="dIo">0 / 0 · 0%</span></div><div class="pbar"><i id="dIoBar"></i></div></div>
       <div class="dashrow"><div class="t"><span>Overdue setup items</span><span class="v" id="dOver">0</span></div></div>
+      <div class="dashrow"><div class="t"><span>👥 Attendees by counter (initials)</span></div><div id="dTally" style="margin-top:6px"><p class="hint">No counts logged yet.</p></div></div>
+      <div class="dashrow"><div class="t"><span>📻 Radios out</span><span class="v" id="dRadios">0</span></div><div id="dRadioList" style="margin-top:6px"></div></div>
       <button class="btn ghost" id="csvBtn" style="margin-top:6px">📊 Export day report (CSV)</button>
       <button class="btn ink" id="resetBtn" style="margin-top:6px">♻️ Reset all data for next event</button>
-      <p class="hint">Reset clears checklists, check-ins, head count, issues, praise & announcements (keeps event name, Day PIN & Tech I/O roster; clears patch checkmarks). Leaders only.</p>
+      <p class="hint">Reset asks for the reset password. Clears checklists, check-ins, head count, radios, praise & announcements — <b>issues are kept</b>. Keeps event name, Day PIN & Tech I/O roster (patch checkmarks cleared). Leaders only.</p>
     </div>
   </section>
   <section class="page" id="page-checkin">
     <button class="back" onclick="show('guides')">‹ Ambassador Resources</button>
+    <div class="checkinprompt" id="ciTour" style="display:none"><span>🧭 New to the app? Take the 2-minute tour.</span><button onclick="show('tour')">Take the tour</button></div>
     <p class="eyebrow">Arrival</p><h1 class="title">Check In</h1>
     <span class="syncpill" id="sp-checkin"><span class="d"></span>Demo mode</span>
     <div class="stat"><div class="box"><div class="n" id="ciTotal">0</div><div class="l">Checked In</div></div><div class="box alt"><div class="n" id="ciTeams">0</div><div class="l">Teams Here</div></div></div>
@@ -518,9 +568,20 @@
     <button class="back" onclick="show('crew')">‹ Specialists</button>
     <p class="eyebrow">Attendance</p><h1 class="title">Attendance Counter</h1>
     <span class="syncpill" id="sp-count"><span class="d"></span>Demo mode</span>
-    <div class="counter"><div class="big" id="countBig">0</div><div class="cl">Non-volunteer attendees</div></div>
+    <div class="idbar" id="idbar-ct"><label>Your initials</label><input id="initCt" maxlength="4" placeholder="e.g. ZS" /></div>
+    <div class="counter"><div class="big" id="countBig">0</div><div class="cl">Non-volunteer attendees · whole team</div></div>
     <div class="cbtns"><button class="minus" id="countMinus">−1</button><button class="plus" id="countPlus">+1</button></div>
-    <p class="hint">Count non-volunteer attendees as they arrive. Everyone counting sees the same total — it syncs live across phones. Use −1 for corrections.</p>
+    <p class="hint" id="ctMine" style="display:none"></p>
+    <div class="card" id="ctBreakWrap" style="display:none"><h3>👥 Counted by</h3><div id="ctBreak"></div></div>
+    <p class="hint">Put your initials in first — every tap is logged to you, so several people can count at once and leaders see who counted what. Use −1 for corrections. Everyone sees the same live total.</p>
+  </section>
+  <section class="page" id="page-radios">
+    <button class="back" onclick="show('crew')">‹ Specialists</button>
+    <p class="eyebrow">Equipment</p><h1 class="title">Radio Checkout</h1>
+    <span class="syncpill" id="sp-radios"><span class="d"></span>Demo mode</span>
+    <p class="sub">10 radios. Put in your initials, tap <b>Check out</b> when you grab one, tap <b>Return</b> when you bring it back. 📻</p>
+    <div class="idbar" id="idbar-rad"><label>Your initials</label><input id="initRad" maxlength="4" placeholder="e.g. ZS" /></div>
+    <div id="radioMount"></div>
   </section>
   <section class="page" id="page-setup">
     <button class="back" onclick="show('crew')">‹ Specialists</button>
@@ -530,6 +591,7 @@
       <button class="daytab on" id="dtFri" onclick="setDay('fri')">🔨 Friday Build</button>
       <button class="daytab" id="dtSat" onclick="setDay('sat')">🎤 Saturday</button>
     </div>
+    <div class="cattabs" id="catTabs"><button class="on" data-cat="all" onclick="setCat('all')">All</button><button data-cat="tech" onclick="setCat('tech')">🎛 Tech/Worship</button><button data-cat="log" onclick="setCat('log')">🚚 Logistics</button><button data-cat="guest" onclick="setCat('guest')">🤝 Guest Services</button><button data-cat="amb" onclick="setCat('amb')">🧡 Ambassadors</button></div>
     <div class="hidebar"><span id="doneCount">0 completed</span><button id="toggleHide" onclick="toggleHideCompleted()">Show completed</button></div>
     <div id="lock-su"></div>
     <div class="idbar" id="idbar-su"><label>Your initials</label><input id="initSu" maxlength="4" placeholder="e.g. ZS" /></div>
@@ -631,6 +693,7 @@
   <section class="page" id="page-guides">
     <p class="eyebrow">Reference</p><h1 class="title">Ambassador Resources</h1><p class="sub">Guides, check-in, contacts & graphics.</p>
     <div class="hub">
+      <button class="hubcard wine" onclick="show('tour')"><span class="ic">🧭</span><span class="tx"><b>App Tour</b><span>New here? 2-minute walkthrough</span></span><span class="arr">›</span></button>
       <button class="hubcard" onclick="show('checkin')"><span class="ic">🙋</span><span class="tx"><b>Volunteer Check-In</b><span>Tap in when you arrive</span></span><span class="pill" id="crewCheckinPill">0</span></button>
       <button class="hubcard" onclick="show('playbook')"><span class="ic">📘</span><span class="tx"><b>Ambassador Playbook</b><span>Your role, the 3 T's, altar call</span></span><span class="arr">›</span></button>
       <button class="hubcard wine" onclick="show('handbook')"><span class="ic">📗</span><span class="tx"><b>Counselor Booklet</b><span>Praying with people, the Gospel simply</span></span><span class="arr">›</span></button>
@@ -639,6 +702,17 @@
       <button class="hubcard wine" onclick="show('donate')"><span class="ic">❤️</span><span class="tx"><b>Give / Donate</b><span>Support the mission · ways to give</span></span><span class="arr">›</span></button>
       <button class="hubcard" onclick="show('graphics')"><span class="ic">🖼️</span><span class="tx"><b>Graphics for Sharing!</b><span>Download & share on socials</span></span><span class="arr">›</span></button>
     </div>
+  </section>
+  <section class="page" id="page-tour">
+    <button class="back" onclick="show('guides')">‹ Ambassador Resources</button>
+    <p class="eyebrow">Welcome</p><h1 class="title">App Tour</h1><p class="sub">2 minutes. 7 stops. You'll know the whole app. 🧭</p>
+    <div class="tourstop"><span class="tn">1</span><div><h3>🏠 Event Day</h3><p>The home tab. It follows the clock all day — it shows what's happening <b>Now</b>, what's <b>Next</b>, and the full order of events. No refreshing needed.</p><button onclick="show('now')">See Event Day ›</button></div></div>
+    <div class="tourstop"><span class="tn">2</span><div><h3>🙋 Check yourself in</h3><p>Do this first when you arrive. It tells leadership you're on the field and puts you on the day's roster.</p><button onclick="show('checkin')">Check in ›</button></div></div>
+    <div class="tourstop"><span class="tn">3</span><div><h3>📣 Post</h3><p>Three boards: <b>Praise Wall</b> (celebrate God moments), <b>Report an Issue</b> (flag problems to leadership fast), and <b>Announcements</b> from leaders. You can comment on any post.</p><button onclick="show('board')">Open Post ›</button></div></div>
+    <div class="tourstop"><span class="tn">4</span><div><h3>🧰 Specialists</h3><p>Work tools: the live <b>Attendance Counter</b> (put your initials in — every tap is logged to you), the <b>Setup Checklist</b>, <b>Radio Checkout</b>, and the Tech I/O list.</p><button onclick="show('crew')">Open Specialists ›</button></div></div>
+    <div class="tourstop"><span class="tn">5</span><div><h3>🎬 Recording Studio</h3><p>Pick your county's script and record an invite video with the built-in teleprompter. Then send it to Laura (Marketing).</p><button onclick="show('prompter')">Open the studio ›</button></div></div>
+    <div class="tourstop"><span class="tn">6</span><div><h3>📘 Resources</h3><p>The Ambassador Playbook, Counselor Booklet, leader contacts, shareable graphics, and ways to give — all under Ambassador Resources.</p><button onclick="show('guides')">Open Resources ›</button></div></div>
+    <div class="tourstop"><span class="tn">7</span><div><h3>📶 Good to know</h3><p>The app syncs live across everyone's phones — and if the field signal drops, it keeps working and catches up when you're back. Initials boxes are how work gets credited to you, so fill them in!</p><button onclick="show('now')">🎉 Done — go to Event Day</button></div></div>
   </section>
   <section class="page" id="page-playbook">
     <button class="back" onclick="show('guides')">‹ Resources</button>
@@ -1761,29 +1835,44 @@ function renderLeaders(){
   }).join("");
 }
 var SETUP=[
-  {day:"fri",team:"Phase 0 · Pre-Event Prep — 2 wks prior",lead:"M. Nelson",items:[["Confirm dBL maximums (if required)",m(9,0)],["Reach out to event POC — confirm details & changes",m(9,0)],["Musicians confirmed",m(9,0)],["Materials PRINTED — 12 copies of each",m(9,0)],["Stage Plot confirmed, posted to Teams, sent via PCO",m(9,0)],["Input List confirmed, posted, sent via PCO",m(9,0)],["Site Layout Confirmed, posted to Teams, sent via PCO",m(9,0)],["Companion App order of events double checked. Leadership PIN given to Leadership. App Link and Volunteer day PIN sent to leadership to forward to their volunteers.",m(9,0)],["Print copies of IP list & Set List.",m(9,0)],["Computer set up (tracks, routing)",m(9,0)],["ARK console set up & fully prepped",m(9,0)],["Multitracks setlist built in PCO + tracks downloaded offline",m(9,0)],["iPad backup prepped (tracks + ARK adapter)",m(9,0)]]},
-  {day:"fri",team:"Phase 1 · Unloading — Fri 9:00–11:30",lead:"M. Nelson",items:[["Check radios",m(11,30)],["Plot all tent locations with cones according to Site Layout",m(11,30)],["Confirm & plot crane location",m(11,30)],["Unload trusses from Papa V trailer (bring 'Little Giant' ladder)",m(11,30)],["Set up trusses (THE Tower) — do NOT set up mains or subs",m(11,30)],["Unload all tents, kits, and weight bags at each cone",m(11,30)],["Split into teams of 6 and build tents. Order of priority: 1. Band Tents 2. FOH 3. Guest Services 4. Ambassadors. Note: Do not set up logistics tents or green room tent. Leave items staged on the ground.",m(11,30)],["Tech team begins Tech setup after Band & FOH tents are constructed. Everyone else finish Guest Services & Ambassador tents.",m(11,30)]]},
-  {day:"fri",team:"Phase 2 · Power Up — Fri 11:30–2:00 (lunch 12:00–1:00)",lead:"M. Nelson",items:[["Generator power on",m(12,0)],["Plug T4 trailer into power (120v ext into side)",m(12,0)],["Power drops from Papa V trailer",m(12,0)],["Stage power drops (2 front / 2 back)",m(12,0)],["Set up Starlink",m(12,0)],["FOH tables set",m(12,0)],["Lunch break 12:00–1:00 (60 min)",m(13,0)],["Assemble Drum Kit Riser, Drum Kit Shells & All Hardware.",m(14,0)],["Set up ARK (power, table, wifi, antennas, computer)",m(14,0)],["Extend antenna combiner cables",m(14,0)],["Confirm computer routing (tracks, video, click, guide)",m(14,0)],["FOH wiring — cable covers + 2x ethernet band→FOH (1 AVB / 1 internet)",m(14,0)],["FOH console + Papa V stage box — connect all AVB cables",m(14,0)],["FOH speakers — mount mains, set subs, run power + XLRs, power on",m(14,0)],["Power cycle ARK & FOH (AVB sync)",m(14,0)],["Mic stands & mics per stage plot (→ moved to Sat)",m(14,0)],["Configure wireless freqs (500/900 MHz scan, 15 min max — packs + handhelds)",m(14,0)],["XLR drops to musician stations per stage plot",m(14,0)],["Connect all drum mics per stage plot",m(14,0)],["Call local PD — request overnight patrol",m(14,0)]]},
-  {day:"fri",team:"Phase 3 · System Tuning — Fri 2:00–3:30",lead:"M. Nelson",items:[["Connect Papa V computer for system tuning",m(15,30)],["Line check all I/Os — test with wired mic",m(15,30)],["Blast & balance (refer to NLC FOH guide)",m(15,30)],["Board + iPad roaming; move speakers as needed",m(15,30)],["dBL readings at property boundary per municipal req; adjust",m(15,30)],["Ring out all mics (check feedback)",m(15,30)],["Gate MD mics appropriately",m(15,30)],["Gate Host mics appropriately",m(15,30)],["Balance drum kit",m(15,30)],["Confirm recording SD destinations (onboard SD + Logic)",m(15,30)]]},
-  {day:"fri",team:"Phase 4 · Build Jesus Rig — Fri 3:30–4:00 (→ Sat)",lead:"Kyle DeTrude",items:[["Assemble square truss rig. Leave on the ground.",m(16,0)],["Assemble threaded pipe square. Leave on the ground next to truss rig.",m(16,0)]]},
-  {day:"fri",team:"Phase 5 · Hang — Fri 4:30–4:45",lead:"Zach Silk",items:[["Eat, worship, fellowship",m(16,45)]]},
-  {day:"fri",team:"Phase 6 · Shut Down — Fri 4:45–5:00",lead:"M. Nelson",items:[["Save scenes on all PreSonus consoles",m(17,0)],["Label, disconnect & store speakers",m(17,0)],["Disconnect & store ARK (if needed)",m(17,0)],["Fasten tent walls",m(17,0)],["Cover rig",m(17,0)],["Rainproof everything",m(17,0)],["Lock trailers (doors, padlocks, tongue lock)",m(17,0)],["Turn off generators",m(17,0)],["Return radios",m(17,0)],["Plug T4 trailer into mains for overnight charging",m(17,0)],["Implement security protocol",m(17,0)]]},
-  {day:"sat",team:"Phase 7 · Open Up — Sat 8:00–8:30",lead:"M. Nelson",items:[["Check out radios",m(8,30)],["Turn on generators",m(8,30)],["Reconnect speakers (and ARK)",m(8,30)],["Turn on FOH and host mic — host mic ON and UNMUTED (ready for all-team huddle)",m(8,30)]]},
-  {day:"sat",team:"Phase 8a · Worship Set Up — Sat 10:00–12:00",lead:"Karielle Silk",items:[["Set up personal gear (power, XLR)",m(12,0)],["Worship Team - Retrieve wireless pack from red Packout drawer.",m(12,0)],["Playback sync enabled",m(12,0)],["Worship app — connect to 'T4 Sound' wifi",m(12,0)],["Chart builder open, setlist downloaded & synced",m(12,0)],["Q-Mix downloaded, connected to ARC (grant permissions)",m(12,0)],["GAIN STAGE — line check all (peaks ≤ -6.0 dB); DO NOT TOUCH GAIN AFTER",m(12,0)],["All FX, EQ, compression OFF",m(12,0)],["Mix IEMs — pink noise; musicians set pack master; loop one chorus",m(12,0)],["Mix FOH — do NOT touch gains/preamp; EQ; compress; FX",m(12,0)],["Run through transitions",m(12,0)]]},
-  {day:"sat",team:"Phase 8b · Crane Rigging — Sat 11:00–12:00",lead:"Kyle DeTrude",items:[["Guide crane to spot",m(12,0)],["Attach prebuilt square truss rig, then hoist the rig to a workable height with the crane.",m(12,0)],["Attach (4) JESUS banners to the trussing with zip ties. Attach the threaded pipe square to the bottom of the (4) banners with zip ties.",m(12,0)],["Attach guy lines to rig",m(12,0)],["Notify Zach and Marketing team when rig is 100% ready to be raised. Do NOT raise the rig yet.",m(12,0)],["When given the order by Zach/Marketing Team, raise the rig to its final height.",m(12,0)],["Secure guy lines to ground",m(12,0)],["Rig wind-tied & flown by 12:00 PM latest",m(12,0)]]},
-  {day:"sat",team:"Phase 9 · Fit & Finish — Sat 12:00–12:10",lead:"M. Nelson",items:[["Clean up stage (bags/cases/totes → green room)",m(12,10)],["Cable management (perpendicular & parallel)",m(12,10)],["Change all mic and pack batteries. Only use Black Fujitsu batteries for mics and packs. Do NOT use green batteries for mics and packs.",m(12,10)],["Prayer over venue",m(12,10)],["Arm multitrack recording to SD / standalone on ARK",m(12,10)],["Rest",m(12,10)]]}
+  {day:"fri",cat:"tech",team:"Phase 0 · Pre-Event Prep — 2 wks prior",lead:"M. Nelson",items:[["Confirm dBL maximums (if required)",m(9,0)],["Reach out to event POC — confirm details & changes",m(9,0)],["Musicians confirmed",m(9,0)],["Materials PRINTED — 12 copies of each",m(9,0)],["Stage Plot confirmed, posted to Teams, sent via PCO",m(9,0)],["Input List confirmed, posted, sent via PCO",m(9,0)],["Site Layout Confirmed, posted to Teams, sent via PCO",m(9,0)],["Companion App order of events double checked. Leadership PIN given to Leadership. App Link and Volunteer day PIN sent to leadership to forward to their volunteers.",m(9,0)],["Print copies of IP list & Set List.",m(9,0)],["Computer set up (tracks, routing)",m(9,0)],["ARK console set up & fully prepped",m(9,0)],["Multitracks setlist built in PCO + tracks downloaded offline",m(9,0)],["iPad backup prepped (tracks + ARK adapter)",m(9,0)]]},
+  {day:"fri",cat:"log",team:"Phase 1 · Unloading — Fri 9:00–11:30",lead:"M. Nelson",items:[["Check radios",m(11,30)],["Plot all tent locations with cones according to Site Layout",m(11,30)],["Confirm & plot crane location",m(11,30)],["Unload trusses from Papa V trailer (bring 'Little Giant' ladder)",m(11,30)],["Set up trusses (THE Tower) — do NOT set up mains or subs",m(11,30)],["Unload all tents, kits, and weight bags at each cone",m(11,30)],["Split into teams of 6 and build tents. Order of priority: 1. Band Tents 2. FOH 3. Guest Services 4. Ambassadors. Note: Do not set up logistics tents or green room tent. Leave items staged on the ground.",m(11,30)],["Tech team begins Tech setup after Band & FOH tents are constructed. Everyone else finish Guest Services & Ambassador tents.",m(11,30)]]},
+  {day:"fri",cat:"tech",team:"Phase 2 · Power Up — Fri 11:30–2:00 (lunch 12:00–1:00)",lead:"M. Nelson",items:[["Generator power on",m(12,0)],["Plug T4 trailer into power (120v ext into side)",m(12,0)],["Power drops from Papa V trailer",m(12,0)],["Stage power drops (2 front / 2 back)",m(12,0)],["Set up Starlink",m(12,0)],["FOH tables set",m(12,0)],["Lunch break 12:00–1:00 (60 min)",m(13,0)],["Assemble Drum Kit Riser, Drum Kit Shells & All Hardware.",m(14,0)],["Set up ARK (power, table, wifi, antennas, computer)",m(14,0)],["Extend antenna combiner cables",m(14,0)],["Confirm computer routing (tracks, video, click, guide)",m(14,0)],["FOH wiring — cable covers + 2x ethernet band→FOH (1 AVB / 1 internet)",m(14,0)],["FOH console + Papa V stage box — connect all AVB cables",m(14,0)],["FOH speakers — mount mains, set subs, run power + XLRs, power on",m(14,0)],["Power cycle ARK & FOH (AVB sync)",m(14,0)],["Mic stands & mics per stage plot (→ moved to Sat)",m(14,0)],["Configure wireless freqs (500/900 MHz scan, 15 min max — packs + handhelds)",m(14,0)],["XLR drops to musician stations per stage plot",m(14,0)],["Connect all drum mics per stage plot",m(14,0)],["Call local PD — request overnight patrol",m(14,0)]]},
+  {day:"fri",cat:"tech",team:"Phase 3 · System Tuning — Fri 2:00–3:30",lead:"M. Nelson",items:[["Connect Papa V computer for system tuning",m(15,30)],["Line check all I/Os — test with wired mic",m(15,30)],["Blast & balance (refer to NLC FOH guide)",m(15,30)],["Board + iPad roaming; move speakers as needed",m(15,30)],["dBL readings at property boundary per municipal req; adjust",m(15,30)],["Ring out all mics (check feedback)",m(15,30)],["Gate MD mics appropriately",m(15,30)],["Gate Host mics appropriately",m(15,30)],["Balance drum kit",m(15,30)],["Confirm recording SD destinations (onboard SD + Logic)",m(15,30)]]},
+  {day:"fri",cat:"log",team:"Phase 4 · Build Jesus Rig — Fri 3:30–4:00 (→ Sat)",lead:"Kyle DeTrude",items:[["Assemble square truss rig. Leave on the ground.",m(16,0)],["Assemble threaded pipe square. Leave on the ground next to truss rig.",m(16,0)]]},
+  {day:"fri",cat:"log",team:"Phase 5 · Hang — Fri 4:30–4:45",lead:"Zach Silk",items:[["Eat, worship, fellowship",m(16,45)]]},
+  {day:"fri",cat:"tech",team:"Phase 6 · Shut Down — Fri 4:45–5:00",lead:"M. Nelson",items:[["Save scenes on all PreSonus consoles",m(17,0)],["Label, disconnect & store speakers",m(17,0)],["Disconnect & store ARK (if needed)",m(17,0)],["Fasten tent walls",m(17,0)],["Cover rig",m(17,0)],["Rainproof everything",m(17,0)],["Lock trailers (doors, padlocks, tongue lock)",m(17,0)],["Turn off generators",m(17,0)],["Return radios",m(17,0)],["Plug T4 trailer into mains for overnight charging",m(17,0)],["Implement security protocol",m(17,0)]]},
+  {day:"sat",cat:"tech",team:"Phase 7 · Open Up — Sat 8:00–8:30",lead:"M. Nelson",items:[["Check out radios",m(8,30)],["Turn on generators",m(8,30)],["Reconnect speakers (and ARK)",m(8,30)],["Turn on FOH and host mic — host mic ON and UNMUTED (ready for all-team huddle)",m(8,30)]]},
+  {day:"sat",cat:"tech",team:"Phase 8a · Worship Set Up — Sat 10:00–12:00",lead:"Karielle Silk",items:[["Set up personal gear (power, XLR)",m(12,0)],["Worship Team - Retrieve wireless pack from red Packout drawer.",m(12,0)],["Playback sync enabled",m(12,0)],["Worship app — connect to 'T4 Sound' wifi",m(12,0)],["Chart builder open, setlist downloaded & synced",m(12,0)],["Q-Mix downloaded, connected to ARC (grant permissions)",m(12,0)],["GAIN STAGE — line check all (peaks ≤ -6.0 dB); DO NOT TOUCH GAIN AFTER",m(12,0)],["All FX, EQ, compression OFF",m(12,0)],["Mix IEMs — pink noise; musicians set pack master; loop one chorus",m(12,0)],["Mix FOH — do NOT touch gains/preamp; EQ; compress; FX",m(12,0)],["Run through transitions",m(12,0)]]},
+  {day:"sat",cat:"log",team:"Phase 8b · Crane Rigging — Sat 11:00–12:00",lead:"Kyle DeTrude",items:[["Guide crane to spot",m(12,0)],["Attach prebuilt square truss rig, then hoist the rig to a workable height with the crane.",m(12,0)],["Attach (4) JESUS banners to the trussing with zip ties. Attach the threaded pipe square to the bottom of the (4) banners with zip ties.",m(12,0)],["Attach guy lines to rig",m(12,0)],["Notify Zach and Marketing team when rig is 100% ready to be raised. Do NOT raise the rig yet.",m(12,0)],["When given the order by Zach/Marketing Team, raise the rig to its final height.",m(12,0)],["Secure guy lines to ground",m(12,0)],["Rig wind-tied & flown by 12:00 PM latest",m(12,0)]]},
+  {day:"sat",cat:"tech",team:"Phase 9 · Fit & Finish — Sat 12:00–12:10",lead:"M. Nelson",items:[["Clean up stage (bags/cases/totes → green room)",m(12,10)],["Cable management (perpendicular & parallel)",m(12,10)],["Change all mic and pack batteries. Only use Black Fujitsu batteries for mics and packs. Do NOT use green batteries for mics and packs.",m(12,10)],["Prayer over venue",m(12,10)],["Arm multitrack recording to SD / standalone on ARK",m(12,10)],["Rest",m(12,10)]]},
+  {day:"sat",ord:0.5,cat:"log",team:"Phase 7b · Day-Of Logistics — Sat morning",lead:"Kat Roedell",items:[["Tents put up",m(10,0)],["Tents set up inside — tables, chairs & signage",m(10,0)],["Parking — cones, signs & flow set",m(10,0)],["Crowd control vests handed out",m(10,0)],["Security brief done",m(10,0)],["Ice picked up & in coolers",m(10,0)]]},
+  {day:"sat",ord:3.5,cat:"guest",team:"Guest Services · Day-Of — Sat",lead:"Guest Services",items:[["Welcome tables stocked — booklets, pens, signage",m(13,0)],["Water & ice at Guest Services tent",m(13,0)],["Kids & family area walked and safe",m(13,0)]]},
+  {day:"sat",ord:3.6,cat:"amb",team:"Ambassadors · Day-Of — Sat",lead:"Ambassador Leads",items:[["Ambassadors checked in & briefed",m(13,0)],["Counselor booklets in hand · counters have the app open",m(13,0)]]}
 ];
 var TEARDOWN=[];
-var STATE={checklist:{},announcements:[],checkins:[],feedback:[],praises:[],count:0,event:{name:"",date:""},ioList:[],dayPinSet:false,funding:{pct:64,needed:"$60,000"},prompter:{scripts:[]}};
+var STATE={checklist:{},announcements:[],checkins:[],feedback:[],praises:[],count:0,event:{name:"",date:""},ioList:[],dayPinSet:false,funding:{pct:64,needed:"$60,000"},prompter:{scripts:[]},tallyBy:{},radios:[]};
 var LIVE=false,LEADER=false,seenAnn=0,seenIssue=0,barDismissed=false,inflight=0,pendingCount=0,countFlushT=null;
 var lastSyncAt=0,everSynced=false; /* v1.2.0 — sync freshness */
 function settled(){return inflight===0&&pendingCount===0;}
 var API="/.netlify/functions/data";
 var MY={name:"",initials:""};
+try{MY.initials=(localStorage.getItem("k2c_init")||"").slice(0,4);}catch(_){}
 function nowLabel(){return fmt(nowMinutes());}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 function esc(s){return(s||"").replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
-function normalize(s){return{checklist:s.checklist||{},announcements:s.announcements||[],checkins:s.checkins||[],feedback:s.feedback||[],praises:s.praises||[],count:s.count||0,event:s.event||{name:"",date:""},ioList:s.ioList||[],dayPinSet:!!s.dayPinSet,funding:s.funding||{pct:64,needed:"$60,000"},prompter:(s.prompter&&Array.isArray(s.prompter.scripts))?s.prompter:{scripts:[]}};}
+function normalize(s){return{checklist:s.checklist||{},announcements:s.announcements||[],checkins:s.checkins||[],feedback:s.feedback||[],praises:s.praises||[],count:s.count||0,event:s.event||{name:"",date:""},ioList:s.ioList||[],dayPinSet:!!s.dayPinSet,funding:s.funding||{pct:64,needed:"$60,000"},tallyBy:s.tallyBy||{},radios:Array.isArray(s.radios)?s.radios:[],prompter:(s.prompter&&Array.isArray(s.prompter.scripts))?s.prompter:{scripts:[]}};}
+function toast(msg){var el=document.getElementById("toastEl");if(!el){el=document.createElement("div");el.id="toastEl";el.className="toast";document.body.appendChild(el);}el.textContent=msg;el.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(function(){el.classList.remove("show");},2600);}
+function vibr(ms){try{if(navigator.vibrate)navigator.vibrate(ms);}catch(_){}}
+/* v1.3.0 — like doAction, but re-renders only what the caller asks for.
+   Full renderDynamic() on every tap was the #1 source of checklist lag. */
+function doActionLight(action,payload,localApply,rerender){
+  localApply();rerender();
+  if(!LIVE)return;
+  inflight++;
+  apiPost(action,payload).then(function(st){if(--inflight===0&&settled()){STATE=normalize(st);renderDynamic();}})
+  .catch(function(){inflight=Math.max(0,inflight-1);LIVE=false;updateSync();renderDynamic();});
+}
 function apiGet(){return fetch(API,{method:"GET"}).then(function(r){if(!r.ok)throw 0;return r.json();});}
 var LEADERPIN=sessionStorage.getItem("k2c_lpin")||"";
 function apiPost(a,p){return fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:a,payload:p,pin:LEADERPIN})}).then(function(r){if(r.status===403){LEADER=false;LEADERPIN="";sessionStorage.removeItem("k2c_lpin");applyLeaderUI();renderDynamic();alert("Leader PIN check failed — tap a 🔒 to unlock again.");throw 403;}if(!r.ok)throw 0;return r.json();});}
@@ -1848,12 +1937,19 @@ function itemStatus(due,rec,day){
   if(ctx.phase==="before")return{cls:"good",txt:setupDayLabel(day)+" · Due "+fmt(due)};
   if(ctx.phase==="after")return{cls:"bad",txt:"Overdue · was "+fmt(due)};
   var left=due-ctx.now;
-  if(left>20)return{cls:"good",txt:"Due "+fmt(due)};
+  if(left>60)return{cls:"good",txt:"Due "+fmt(due)};
   if(left>=0)return{cls:"warn",txt:Math.round(left)+"m left ("+fmt(due)+")"};
   return{cls:"bad",txt:"Overdue "+Math.round(-left)+"m"};
 }
-var curDay="fri",hideCompleted=true;
-function curSetup(){return SETUP.filter(function(s){return s.day===curDay;});}
+var curDay="fri",hideCompleted=true,curCat="all";
+function curSetup(){
+  var out=[],k=0;
+  SETUP.forEach(function(sec){if(sec.day===curDay){sec._si=k++;out.push(sec);}});
+  out=out.filter(function(sec){return curCat==="all"||sec.cat===curCat;});
+  out.sort(function(a,b){return (a.ord!=null?a.ord:a._si)-(b.ord!=null?b.ord:b._si);});
+  return out;
+}
+function setCat(c){curCat=c;var btns=document.querySelectorAll("#catTabs button");for(var i=0;i<btns.length;i++)btns[i].classList.toggle("on",btns[i].getAttribute("data-cat")===c);refreshChecklists();}
 function setDay(d){curDay=d;document.getElementById("dtFri").classList.toggle("on",d==="fri");document.getElementById("dtSat").classList.toggle("on",d==="sat");refreshChecklists();}
 function toggleHideCompleted(){hideCompleted=!hideCompleted;document.getElementById("toggleHide").textContent=hideCompleted?"Show completed":"Hide completed";refreshChecklists();}
 function hms(mins){var s=Math.max(0,Math.round(mins*60));var h=Math.floor(s/3600),m=Math.floor((s%3600)/60),ss=s%60;if(h>0)return h+"h "+String(m).padStart(2,"0")+"m";if(m>0)return m+"m "+String(ss).padStart(2,"0")+"s";return ss+"s";}
@@ -1869,7 +1965,7 @@ function updateDueChips(){
     else{
       var left=due-ctx.now;
       if(left<0){cls="bad";txt="⏱ overdue "+hms(-left);}
-      else if(left<=20){cls="warn";txt="⏳ due in "+hms(left);}
+      else if(left<=60){cls="warn";txt="⏳ due in "+hms(left);}
       else{cls="good";txt="due in "+hms(left);}
     }
     chips[i].className="duechip "+cls;
@@ -1882,7 +1978,7 @@ function renderChecklist(mountId,data,key,overallId,overallBarId,overdueId){
   data.forEach(function(sec,si){
     var secDone=0,secTotal=sec.items.length;
     var rows=sec.items.map(function(it,ii){
-      var label=it[0],due=it[1],id=key+"-"+curDay+"-"+si+"-"+ii;total++;
+      var label=it[0],due=it[1],id=key+"-"+curDay+"-"+(sec._si!=null?sec._si:si)+"-"+ii;total++;
       var rec=STATE.checklist[id];if(rec){done++;secDone++;}
       if(!rec&&ctx.phase==="live"&&(due-ctx.now)<0)overdue++;
       var stamp=rec?("✓ "+esc(rec.by)+(rec.t?(" · "+rec.t):"")):"";
@@ -1920,16 +2016,16 @@ function toggleCheck(id){
   if(!LEADER){askPin(function(){});return;}
   var init=(MY.initials||"").trim().toUpperCase();
   var already=!!STATE.checklist[id];
-  if(!already&&!init){var bar=document.getElementById("idbar-su");bar.classList.add("nudge");setTimeout(function(){bar.classList.remove("nudge");},500);document.getElementById("initSu").focus();return;}
+  if(!already&&!init){var bar=document.getElementById("idbar-su");bar.classList.add("err");bar.classList.add("nudge");setTimeout(function(){bar.classList.remove("nudge");},500);window.scrollTo({top:0,behavior:"smooth"});setTimeout(function(){document.getElementById("initSu").focus();},350);toast("✍️ Enter your initials at the top first");return;}
   var tctx=setupTimingContext(curDay);
   var dm=tctx.phase==="live"?Math.round(tctx.now):null;
   var payload={id:id,by:init,t:nowLabel(),dm:dm};
-  doAction("toggleCheck",payload,function(){if(STATE.checklist[id])delete STATE.checklist[id];else STATE.checklist[id]={by:init,t:nowLabel(),dm:dm};});
+  vibr(10);doActionLight("toggleCheck",payload,function(){if(STATE.checklist[id])delete STATE.checklist[id];else STATE.checklist[id]={by:init,t:nowLabel(),dm:dm};},function(){refreshChecklists();renderDashboard();});
 }
 function renderAnnouncements(){
   var f=document.getElementById("annFeed");
   var pin='<div class="item heads" onclick="show(\'checkin\')" style="cursor:pointer"><div class="top"><span class="pri">Check-in</span><span class="meta">Pinned</span></div><h4>👋 Did you check in?</h4><p>Tap here to check yourself in for today\'s event — please do this before you serve.</p><div class="by">— Kingdom to the Counties</div></div>';
-  f.innerHTML=pin+STATE.announcements.map(function(a){return '<div class="item '+a.pri+'"><div class="top"><span class="pri">'+({urgent:"Urgent",heads:"Heads-up",info:"Info"}[a.pri]||"Info")+'</span><span class="meta">'+esc(a.t)+'</span></div><h4>'+esc(a.title)+'</h4><p>'+esc(a.body)+'</p><div class="by">— '+esc(a.by)+'</div></div>';}).join("");
+  f.innerHTML=pin+STATE.announcements.map(function(a){return '<div class="item '+a.pri+'"><div class="top"><span class="pri">'+({urgent:"Urgent",heads:"Heads-up",info:"Info"}[a.pri]||"Info")+'</span><span class="meta">'+esc(a.t)+'</span></div><h4>'+esc(a.title)+'</h4><p>'+esc(a.body)+'</p><div class="by">— '+esc(a.by)+'</div>'+cmtBlock("ann",a)+'</div>';}).join("");
   var bar=document.getElementById("annBar");
   annBarMode="checkin";
   document.getElementById("annBarText").innerHTML="👋 Did you check in? <b>Tap here to check in!</b>";
@@ -1950,19 +2046,45 @@ function renderSimGate(){
 function visCount(arr){var n=0;for(var i=0;i<arr.length;i++)if(!arr[i].hidden)n++;return n;}
 function ackBtn(kind,x){return LEADER?'<button class="ackbtn'+(x.hidden?' un':'')+'" onclick="ackCard(\''+kind+'\',\''+x.id+'\')">'+(x.hidden?'↩ Unhide':'✓ Acknowledge &amp; hide')+'</button>':'';}
 function ackMeta(x){return (x.hidden&&x.ackBy)?'<div class="ackmeta">✓ Acknowledged by '+esc(x.ackBy)+(x.ackT?(' · '+esc(x.ackT)):'')+'</div>':'';}
+function praiseCard(p){return '<div class="item praise'+(p.hidden?' acked':'')+'"><div class="top"><span class="pri">Praise 🎉</span><span class="meta">'+esc(p.t)+'</span></div><p>'+esc(p.body)+'</p><div class="by">— '+esc(p.name)+'</div>'+ackMeta(p)+cmtBlock("praise",p)+ackBtn("praise",p)+'</div>';}
 function renderPraise(){
   var f=document.getElementById("praiseFeed");
-  var list=STATE.praises.filter(function(p){return LEADER||!p.hidden;});
-  f.innerHTML=list.length?list.map(function(p){return '<div class="item praise'+(p.hidden?' acked':'')+'"><div class="top"><span class="pri">Praise 🎉</span><span class="meta">'+esc(p.t)+'</span></div><p>'+esc(p.body)+'</p><div class="by">— '+esc(p.name)+'</div>'+ackMeta(p)+ackBtn("praise",p)+'</div>';}).join(""):'<div class="empty">Be the first to celebrate something! 🎉</div>';
+  var open=STATE.praises.filter(function(p){return !p.hidden;}),acked=STATE.praises.filter(function(p){return p.hidden;});
+  var html=open.length?open.map(praiseCard).join(""):'<div class="empty">Be the first to celebrate something! 🎉</div>';
+  if(acked.length)html+='<details class="ackedwrap"><summary>✓ Acknowledged ('+acked.length+')</summary>'+acked.map(praiseCard).join("")+'</details>';
+  f.innerHTML=html;
 }
+function issueCard(x){return '<div class="item '+x.priority+(x.hidden?' acked':'')+'"><div class="top"><span class="pri">'+({low:"Low",med:"Attention",urgent:"Urgent"}[x.priority]||"Note")+'</span><span class="meta">'+esc(x.t)+'</span></div><h4>'+esc(x.title)+'</h4><p>'+esc(x.body)+'</p><div class="by">— '+esc(x.by)+'</div>'+ackMeta(x)+cmtBlock("feedback",x)+ackBtn("feedback",x)+'</div>';}
 function renderIssues(){
   var f=document.getElementById("issueFeed");
-  var list=STATE.feedback.filter(function(x){return LEADER||!x.hidden;});
-  f.innerHTML=list.length?list.map(function(x){return '<div class="item '+x.priority+(x.hidden?' acked':'')+'"><div class="top"><span class="pri">'+({low:"Low",med:"Attention",urgent:"Urgent"}[x.priority]||"Note")+'</span><span class="meta">'+esc(x.t)+'</span></div><h4>'+esc(x.title)+'</h4><p>'+esc(x.body)+'</p><div class="by">— '+esc(x.by)+'</div>'+ackMeta(x)+ackBtn("feedback",x)+'</div>';}).join(""):'<div class="empty">No open issues. Smooth sailing. ⛵</div>';
+  var open=STATE.feedback.filter(function(x){return !x.hidden;}),acked=STATE.feedback.filter(function(x){return x.hidden;});
+  var html=open.length?open.map(issueCard).join(""):'<div class="empty">No open issues. Smooth sailing. ⛵</div>';
+  if(acked.length)html+='<details class="ackedwrap"><summary>✓ Acknowledged ('+acked.length+')</summary>'+acked.map(issueCard).join("")+'</details>';
+  f.innerHTML=html;
+}
+function cmtBlock(kind,x){
+  var cs=Array.isArray(x.comments)?x.comments:[];
+  var html='<div class="cmts">'+cs.map(function(c){return '<div class="cmt"><b>'+esc(c.name)+'</b><span class="ct2">'+esc(c.t)+'</span><p>'+esc(c.text)+'</p></div>';}).join("");
+  html+='<button class="cmtbtn" onclick="cmtOpen(this)">💬 Comment'+(cs.length?' ('+cs.length+')':'')+'</button>';
+  html+='<div class="cmtform"><input class="cn" maxlength="40" placeholder="Your name" value="'+esc(MY.name||"")+'"/><textarea class="ct" rows="2" maxlength="500" placeholder="Write a comment…"></textarea><button onclick="cmtPost(this,\''+kind+'\',\''+x.id+'\')">Post</button></div></div>';
+  return html;
+}
+function cmtOpen(btn){var f=btn.parentNode.querySelector(".cmtform");if(f)f.classList.toggle("show");}
+function cmtPost(btn,kind,id){
+  var f=btn.parentNode,name=f.querySelector(".cn").value.trim()||"Volunteer",text=f.querySelector(".ct").value.trim();
+  if(!text){f.querySelector(".ct").focus();return;}
+  MY.name=name;
+  var c={name:name,text:text,t:nowLabel()};
+  doAction("addComment",{kind:kind,id:id,name:name,text:text,t:c.t},function(){
+    var arr=kind==="praise"?STATE.praises:(kind==="ann"?STATE.announcements:STATE.feedback);
+    var it=arr.filter(function(x){return x.id===id;})[0];
+    if(it){it.comments=Array.isArray(it.comments)?it.comments:[];it.comments.push(c);}
+  });
 }
 function ackCard(kind,id){
   if(!LEADER){askPin(function(){ackCard(kind,id);});return;}
-  var by=(MY.initials||MY.name||"Leader").toString().trim()||"Leader";
+  var by=(MY.initials||"").trim().toUpperCase();
+  if(!by){by=(prompt("Your initials to acknowledge:")||"").trim().toUpperCase();if(!by)return;MY.initials=by;try{localStorage.setItem("k2c_init",by);}catch(_){}syncInits("__ack__");}
   doAction("ackCard",{kind:kind,id:id,by:by,t:nowLabel()},function(){
     var arr=kind==="praise"?STATE.praises:STATE.feedback,it=arr.filter(function(x){return x.id===id;})[0];
     if(it){var hide=!it.hidden;it.hidden=hide;it.ackBy=hide?by:"";it.ackT=hide?nowLabel():"";}
@@ -1974,7 +2096,38 @@ function renderRoster(){
   var r=document.getElementById("ciRoster");
   r.innerHTML=list.length?list.slice().reverse().map(function(c){return '<div class="listrow"><span class="av">'+esc((c.name||"?").trim().charAt(0).toUpperCase())+'</span><span class="nm">'+esc(c.name)+'<small>'+esc(c.team||"Volunteer")+'</small></span><span class="tm">'+esc(c.t)+'</span></div>';}).join(""):'<div class="empty">No one checked in yet. Tap "Check me in" above. 🙋</div>';
 }
-function renderCount(){document.getElementById("countBig").textContent=STATE.count;}
+function renderCount(){renderCountFast();}
+function defaultRadiosLocal(){var a=[];for(var i=1;i<=10;i++)a.push({n:i,out:null,in:null});return a;}
+function renderRadios(){
+  var mt=document.getElementById("radioMount");if(!mt)return;
+  var list=(STATE.radios&&STATE.radios.length===10)?STATE.radios:defaultRadiosLocal();
+  mt.innerHTML=list.map(function(r){
+    var isOut=r.out&&!r.in;
+    var st=isOut?('Out: <b>'+esc(r.out.by)+'</b> · '+esc(r.out.t)):(r.in?('Returned by <b>'+esc(r.in.by)+'</b> · '+esc(r.in.t)):'In the case');
+    var btn=isOut?'<button class="ci" onclick="radioTap('+r.n+')">↩ Return</button>':'<button class="co" onclick="radioTap('+r.n+')">Check out</button>';
+    return '<div class="radio-row'+(isOut?' out':'')+'"><span class="rn">📻 #'+r.n+'</span><span class="rs">'+st+'</span>'+btn+'</div>';
+  }).join("");
+  var out=list.filter(function(r){return r.out&&!r.in;}).length;
+  var pill=document.getElementById("crewRadioPill");if(pill){pill.textContent=out;pill.style.display=out?"flex":"none";}
+}
+function radioTap(n){
+  var init=(MY.initials||"").trim().toUpperCase();
+  if(!init){var bar=document.getElementById("idbar-rad");if(bar){bar.classList.add("err");bar.classList.add("nudge");setTimeout(function(){bar.classList.remove("nudge");},500);}var f=document.getElementById("initRad");if(f)f.focus();toast("✍️ Put in your initials first");return;}
+  vibr(12);
+  doActionLight("radioToggle",{n:n,by:init,t:nowLabel()},function(){
+    if(!(STATE.radios&&STATE.radios.length===10))STATE.radios=defaultRadiosLocal();
+    var r=STATE.radios[n-1],stamp={by:init,t:nowLabel()};
+    if(r.out&&!r.in)r.in=stamp;else{r.out=stamp;r.in=null;}
+  },function(){renderRadios();renderDashRadios();});
+}
+function radioLate(){var ctx=setupTimingContext("sat");return ctx.phase==="after"||(ctx.phase==="live"&&ctx.now>1050);}
+function renderDashRadios(){
+  var el=document.getElementById("dRadioList"),nv=document.getElementById("dRadios");if(!el)return;
+  var out=(STATE.radios||[]).filter(function(r){return r.out&&!r.in;});
+  if(nv)nv.textContent=out.length;
+  var late=radioLate();
+  el.innerHTML=out.length?out.map(function(r){return '<div class="tallyrow"><span>📻 Radio '+r.n+' — <b>'+esc(r.out.by)+'</b> since '+esc(r.out.t)+'</span>'+(late?'<b style="color:#B3261E">⚠️ still out</b>':'')+'</div>';}).join(""):'<p class="hint">All radios are in. 📻</p>';
+}
 function renderFunding(){var f=STATE.funding||{};var p=document.getElementById("fundPctLbl"),b=document.getElementById("fundBar"),n=document.getElementById("fundNeedLbl");if(p)p.textContent="~"+(f.pct!=null?f.pct:64)+"%";if(b)b.style.width=(f.pct!=null?f.pct:64)+"%";if(n&&f.needed)n.textContent=f.needed;
   var fp=document.getElementById("fundPctEdit"),fn=document.getElementById("fundNeedEdit");
   if(fp&&document.activeElement!==fp)fp.value=(f.pct!=null?f.pct:64);
@@ -1995,8 +2148,9 @@ function renderDashboard(){
   var ev=STATE.event||{},en=document.getElementById("evName"),ed=document.getElementById("evDate");
   if(document.activeElement!==en)en.value=ev.name||"";
   if(document.activeElement!==ed)ed.value=ev.date||"";
+  renderTallyBreak();renderDashRadios();
 }
-function renderDynamic(){refreshChecklists();renderAnnouncements();renderAnnGate();renderSimGate();renderPraise();renderIssues();renderRoster();renderCount();renderEvent();renderFunding();renderDashboard();updateBadges();if(!ioEditing)renderIOList();}
+function renderDynamic(){refreshChecklists();renderAnnouncements();renderAnnGate();renderSimGate();renderPraise();renderIssues();renderRoster();renderCount();renderRadios();renderEvent();renderFunding();renderDashboard();updateBadges();if(!ioEditing)renderIOList();}
 function updateBadges(){
   function set(id,n){var e=document.getElementById(id);if(!e)return;e.textContent=n;e.style.display=n?"flex":"none";}
   set("crewCheckinPill",STATE.checkins.length);set("crewCountPill",STATE.count);
@@ -2059,10 +2213,10 @@ document.getElementById("dayPinSave").addEventListener("click",function(){
 });
 function pre(id,val){var e=document.getElementById(id);if(e&&!e.value&&val)e.value=val;}
 function prefillNames(){pre("ciName",MY.name);pre("aName",MY.name);pre("pName",MY.name);pre("fName",MY.name);}
-function bindInit(id){var el=document.getElementById(id);if(!el)return;el.addEventListener("input",function(e){MY.initials=e.target.value;syncInits(id);});}
-function syncInits(except){["initSu","initIo"].forEach(function(id){if(id===except)return;var el=document.getElementById(id);if(el&&el.value!==MY.initials)el.value=MY.initials;});}
-bindInit("initSu");bindInit("initIo");
-document.getElementById("ciBtn").addEventListener("click",function(){var name=document.getElementById("ciName").value.trim(),team=document.getElementById("ciTeam").value;if(!name){flash("ciName");return;}if(!document.getElementById("ciAttest").checked){document.getElementById("ciAttestMsg").classList.add("show");document.getElementById("ciAttestRow").classList.add("nudge");setTimeout(function(){document.getElementById("ciAttestRow").classList.remove("nudge");},600);return;}MY.name=name;var rec={id:uid(),name:name,team:team,attested:true,t:nowLabel()};doAction("addCheckin",rec,function(){STATE.checkins.push(rec);});document.getElementById("ciName").value="";document.getElementById("ciAttest").checked=false;document.getElementById("ciAttestMsg").classList.remove("show");document.getElementById("checkinPrompt").style.display="none";prefillNames();});
+function bindInit(id){var el=document.getElementById(id);if(!el)return;el.addEventListener("input",function(e){MY.initials=e.target.value;var b=el.closest(".idbar");if(b)b.classList.remove("err");try{localStorage.setItem("k2c_init",(MY.initials||"").slice(0,4));}catch(_){}syncInits(id);});}
+function syncInits(except){["initSu","initIo","initCt","initRad"].forEach(function(id){if(id===except)return;var el=document.getElementById(id);if(el&&el.value!==MY.initials)el.value=MY.initials;});}
+bindInit("initSu");bindInit("initIo");bindInit("initCt");bindInit("initRad");
+document.getElementById("ciBtn").addEventListener("click",function(){var name=document.getElementById("ciName").value.trim(),team=document.getElementById("ciTeam").value;if(!name){flash("ciName");return;}if(!document.getElementById("ciAttest").checked){document.getElementById("ciAttestMsg").classList.add("show");document.getElementById("ciAttestRow").classList.add("nudge");setTimeout(function(){document.getElementById("ciAttestRow").classList.remove("nudge");},600);return;}MY.name=name;var rec={id:uid(),name:name,team:team,attested:true,t:nowLabel()};doAction("addCheckin",rec,function(){STATE.checkins.push(rec);});document.getElementById("ciName").value="";document.getElementById("ciAttest").checked=false;document.getElementById("ciAttestMsg").classList.remove("show");document.getElementById("checkinPrompt").style.display="none";prefillNames();toast(tourDone()?"✅ Checked in!":"✅ Checked in! New to the app? Take the 2-min App Tour under Resources 🧭");});
 document.getElementById("aBtn").addEventListener("click",function(){if(!LEADER){askPin(function(){});return;}var by=document.getElementById("aName").value.trim()||"Leadership",title=document.getElementById("aTitle").value.trim(),body=document.getElementById("aBody").value.trim(),pri=document.getElementById("aPri").value;if(!title||!body){flash(title?"aBody":"aTitle");return;}MY.name=by;var rec={id:uid(),pri:pri,title:title,body:body,by:by,t:nowLabel()};barDismissed=false;doAction("addAnnouncement",rec,function(){STATE.announcements.unshift(rec);});document.getElementById("aTitle").value="";document.getElementById("aBody").value="";prefillNames();});
 document.getElementById("pBtn").addEventListener("click",function(){var name=document.getElementById("pName").value.trim()||"Anonymous",body=document.getElementById("pBody").value.trim();if(!body){flash("pBody");return;}MY.name=name;var rec={id:uid(),name:name,body:body,t:nowLabel()};doAction("addPraise",rec,function(){STATE.praises.unshift(rec);});document.getElementById("pBody").value="";prefillNames();});
 document.getElementById("fBtn").addEventListener("click",function(){var by=document.getElementById("fName").value.trim()||"Volunteer",title=document.getElementById("fTitle").value.trim(),body=document.getElementById("fBody").value.trim(),priority=document.getElementById("fPri").value;if(!title){flash("fTitle");return;}MY.name=by;var rec={id:uid(),priority:priority,title:title,body:body,by:by,t:nowLabel()};doAction("addFeedback",rec,function(){STATE.feedback.unshift(rec);});document.getElementById("fTitle").value="";document.getElementById("fBody").value="";prefillNames();});
@@ -2070,14 +2224,33 @@ function flash(id){var e=document.getElementById(id);if(e){e.style.borderColor="
 // Attendance counter: apply each tap instantly, then batch a burst of taps into
 // ONE server write. Fewer concurrent read-modify-writes = no lost counts when
 // several phones are counting at once.
-function bumpCount(delta){
-  STATE.count=Math.max(0,(STATE.count||0)+delta);
-  // Fast path: touch only the 3 nodes that show the count. The heavy
-  // renderDashboard/updateBadges work made rapid tapping feel laggy.
+var pendingBy="";
+function renderTallyBreak(){
+  var by=STATE.tallyBy||{};var ks=Object.keys(by).filter(function(k){return by[k]>0;}).sort(function(a,b){return by[b]-by[a];});
+  var html=ks.map(function(k){return '<div class="tallyrow"><span>'+esc(k)+'</span><b>'+by[k]+'</b></div>';}).join("");
+  var cw=document.getElementById("ctBreakWrap"),cb=document.getElementById("ctBreak");
+  if(cw)cw.style.display=ks.length?"block":"none";
+  if(cb)cb.innerHTML=html;
+  var dt=document.getElementById("dTally");if(dt)dt.innerHTML=html||'<p class="hint">No counts logged yet.</p>';
+}
+function renderCountFast(){
   document.getElementById("countBig").textContent=STATE.count;
   var p=document.getElementById("crewCountPill");if(p){p.textContent=STATE.count;p.style.display=STATE.count?"flex":"none";}
   var h=document.getElementById("dHeads");if(h)h.textContent=STATE.count;
+  var init=(MY.initials||"").trim().toUpperCase();
+  var mn=document.getElementById("ctMine");
+  if(mn){mn.style.display=init?"block":"none";if(init)mn.innerHTML="Your tally (<b>"+esc(init)+"</b>): <b>"+((STATE.tallyBy||{})[init]||0)+"</b>";}
+  renderTallyBreak();
+}
+function bumpCount(delta){
+  var init=(MY.initials||"").trim().toUpperCase();
+  if(!init){var bar=document.getElementById("idbar-ct");if(bar){bar.classList.add("err");bar.classList.add("nudge");setTimeout(function(){bar.classList.remove("nudge");},500);}var f=document.getElementById("initCt");if(f)f.focus();toast("✍️ Put in your initials first — the count is logged per person");return;}
+  vibr(12);
+  STATE.count=Math.max(0,(STATE.count||0)+delta);
+  STATE.tallyBy=STATE.tallyBy||{};STATE.tallyBy[init]=Math.max(0,(STATE.tallyBy[init]||0)+delta);
+  renderCountFast();
   if(!LIVE)return;
+  pendingBy=init;
   pendingCount+=delta;
   if(countFlushT)clearTimeout(countFlushT);
   countFlushT=setTimeout(flushCount,350);
@@ -2088,7 +2261,7 @@ function flushCount(){
   if(!LIVE||pendingCount===0)return;
   var d=pendingCount;pendingCount=0;
   inflight++;
-  apiPost("bump",{delta:d,dev:DEV}).then(function(s){
+  apiPost("tallyAdd",{delta:d,dev:DEV,by:pendingBy,t:nowLabel()}).then(function(s){
     if(--inflight===0&&settled()){STATE=normalize(s);renderDynamic();}
   }).catch(function(){inflight=Math.max(0,inflight-1);LIVE=false;updateSync();renderDynamic();});
 }
@@ -2114,22 +2287,30 @@ document.getElementById("csvBtn").addEventListener("click",function(){
   var rows=[["Section","Name / item","Detail","Time / status"]];
   (STATE.checkins||[]).forEach(function(c){rows.push(["Check-in",c.name||"",c.team||"",c.t||""]);});
   rows.push(["Head count","Attendees",String(STATE.count||0),""]);
-  (STATE.feedback||[]).forEach(function(f){rows.push(["Issue",f.who||f.name||"",f.txt||f.text||f.msg||"",f.t||""]);});
-  (STATE.praises||[]).forEach(function(p){rows.push(["Praise",p.who||p.name||"",p.txt||p.text||p.msg||"",p.t||""]);});
-  (STATE.announcements||[]).forEach(function(a){rows.push(["Announcement",a.who||a.name||"",a.txt||a.text||a.msg||"",a.t||""]);});
+  Object.keys(STATE.tallyBy||{}).forEach(function(k){rows.push(["Head count by",k,String(STATE.tallyBy[k]||0),""]);});
+  (STATE.radios||[]).forEach(function(r){if(r.out)rows.push(["Radio","#"+r.n,"out: "+(r.out.by||"")+" "+(r.out.t||"")+(r.in?(" · returned: "+r.in.by+" "+r.in.t):" — STILL OUT"),""]);});
+  (STATE.feedback||[]).forEach(function(f){rows.push(["Issue",f.by||"",(f.title||"")+(f.body?(" — "+f.body):"")+(f.hidden?(" (acked by "+(f.ackBy||"?")+")"):""),f.t||""]);(f.comments||[]).forEach(function(c){rows.push(["Issue comment",c.name||"",c.text||"",c.t||""]);});});
+  (STATE.praises||[]).forEach(function(p){rows.push(["Praise",p.name||"",(p.body||"")+(p.hidden?" (acked)":""),p.t||""]);(p.comments||[]).forEach(function(c){rows.push(["Praise comment",c.name||"",c.text||"",c.t||""]);});});
+  (STATE.announcements||[]).forEach(function(a){rows.push(["Announcement",a.by||"",(a.title||"")+(a.body?(" — "+a.body):""),a.t||""]);(a.comments||[]).forEach(function(c){rows.push(["Announcement comment",c.name||"",c.text||"",c.t||""]);});});
   Object.keys(STATE.checklist||{}).forEach(function(k){var r=STATE.checklist[k]||{};rows.push(["Checklist",k,"done by "+(r.by||"?"),r.t||""]);});
   var csv=rows.map(function(r){return r.map(csvCell).join(",");}).join("\r\n");
   var blob=new Blob(["\ufeff"+csv],{type:"text/csv"});
   var a=document.createElement("a");a.href=URL.createObjectURL(blob);
-  a.download="k2c-day-report-v1.2.0-"+new Date().toISOString().slice(0,10)+".csv";
+  a.download="k2c-day-report-v1.3.0-"+new Date().toISOString().slice(0,10)+".csv";
   document.body.appendChild(a);a.click();a.remove();
 });
-document.getElementById("resetBtn").addEventListener("click",function(){if(confirm("Reset event data (checklists, check-ins, head count, issues, praise, announcements)? Keeps event name, Day PIN & Tech I/O roster; clears patch checkmarks. This can't be undone.")){doAction("reset",{},function(){var ev=STATE.event,dp=STATE.dayPin,io=ioListClearProgress(STATE.ioList);STATE={checklist:{},announcements:[],checkins:[],feedback:[],praises:[],count:0,event:ev,dayPin:dp,ioList:io};});}});
+document.getElementById("resetBtn").addEventListener("click",function(){
+  var pw=prompt("🔐 Reset password?");
+  if(pw==null)return;
+  if((pw||"").trim().toLowerCase()!=="kingdom"){alert("Wrong reset password.");return;}
+  if(!confirm("Reset event data (checklists, check-ins, head count, radios, praise, announcements)? ISSUES ARE KEPT. Keeps event name, Day PIN & Tech I/O roster; clears patch checkmarks. This can't be undone."))return;
+  doAction("reset",{},function(){var ev=STATE.event,fb=STATE.feedback,fu=STATE.funding,pr=STATE.prompter,dps=STATE.dayPinSet,io=ioListClearProgress(STATE.ioList);STATE=normalize({checklist:{},announcements:[],checkins:[],feedback:fb,praises:[],count:0,event:ev,ioList:io,dayPinSet:dps,funding:fu,prompter:pr});});
+});
 document.addEventListener("click",function(e){var row=e.target.closest(".chk");if(row)toggleCheck(row.getAttribute("data-id"));});
 document.getElementById("annBarX").addEventListener("click",function(e){e.stopPropagation();barDismissed=true;document.getElementById("annBar").classList.remove("show");});
 var annBarMode="checkin";
 document.getElementById("annBar").addEventListener("click",function(){show(annBarMode==="checkin"?"checkin":"announcements");});
-var PARENT={dashboard:"crew",checkin:"guides",count:"crew",setup:"crew",techio:"crew",announcements:"board",praise:"board",issue:"board",leaders:"guides",graphics:"guides",donate:"guides",playbook:"guides",handbook:"guides"};
+var PARENT={dashboard:"crew",checkin:"guides",count:"crew",setup:"crew",techio:"crew",announcements:"board",praise:"board",issue:"board",leaders:"guides",graphics:"guides",donate:"guides",playbook:"guides",handbook:"guides",tour:"guides",radios:"crew"};
 function show(id){
   if(id==="dashboard"&&!LEADER){askPin(function(){show("dashboard");});}
   var pages=document.querySelectorAll(".page");for(var i=0;i<pages.length;i++)pages[i].classList.remove("active");
@@ -2139,6 +2320,8 @@ function show(id){
   if(id==="now")renderSpine();
   if(id==="dashboard"){applyLeaderUI();renderDashboard();}
   if(id==="announcements"||id==="issue"){seenAnn=STATE.announcements.length;seenIssue=visCount(STATE.feedback);updateBadges();}
+  if(id==="tour")tourSeen();
+  if(id==="radios")renderRadios();
 }
 function goSchedule(){show("now");setTimeout(function(){var a=document.getElementById("scheduleAnchor");if(a)a.scrollIntoView({behavior:"smooth"});},80);}
 var tabsEls=document.querySelectorAll(".tab");for(var ti=0;ti<tabsEls.length;ti++){(function(btn){btn.addEventListener("click",function(){show(btn.getAttribute("data-tab"));});})(tabsEls[ti]);}
@@ -2146,13 +2329,16 @@ var simRange=document.getElementById("simRange");
 simRange.addEventListener("input",function(){if(!LEADER){askPin(function(){});return;}simActive=true;simAnchor=parseInt(simRange.value,10);simEpoch=Date.now();document.getElementById("simNow").textContent="Previewing "+fmt(simAnchor)+" (running)";refreshAll();refreshChecklists();renderDashboard();});
 document.getElementById("simReset").addEventListener("click",function(){simActive=false;document.getElementById("simNow").textContent="Off — using real time";refreshAll();refreshChecklists();renderDashboard();});
 function refreshAll(){renderClock();renderNow();renderSpine();renderStrip();}
+function tourDone(){try{return localStorage.getItem("k2c_tour")==="1";}catch(_){return false;}}
+function tourSeen(){try{localStorage.setItem("k2c_tour","1");}catch(_){}updateTourPrompts();}
+function updateTourPrompts(){var d=tourDone()?"none":"flex";var a=document.getElementById("tourPrompt");if(a)a.style.display=d;var b=document.getElementById("ciTour");if(b)b.style.display=d;}
 function boot(){
   renderIOList();renderLeaders();
   if(LEADERPIN){verifyPin("verifyLeaderPin",LEADERPIN).then(function(res){if(res&&res.ok){LEADER=true;setDayOK();applyLeaderUI();renderDynamic();}else{LEADERPIN="";sessionStorage.removeItem("k2c_lpin");}}).catch(function(){});}
   apiGet().then(function(s){STATE=normalize(s);LIVE=true;finishBoot();}).catch(function(){LIVE=false;STATE=seedDemo();finishBoot();});
 }
 function finishBoot(){
-  updateSync();applyLeaderUI();maybeDayGate();renderDynamic();refreshAll();
+  updateSync();applyLeaderUI();maybeDayGate();renderDynamic();refreshAll();updateTourPrompts();syncInits("__boot__");
   setInterval(function(){renderClock();renderNow();renderStrip();updateDueChips();if(simActive)document.getElementById("simNow").textContent="Previewing "+fmt(Math.floor(nowMinutes()))+" (running)";},1000);
   setInterval(function(){refreshChecklists();renderDashboard();renderSpine();},15000);
   var lastSnap="";
@@ -2266,13 +2452,14 @@ function tpOpen(id){
   document.getElementById("tpApp").classList.add("show");
   document.body.style.overflow="hidden";
   if(!tpTipsSeen){document.getElementById("tpTips").classList.add("show");tpTipsSeen=true;}
-  tpStartCam(tpFacing);tpLoop();
+  tpWakeOn();tpStartCam(tpFacing);tpLoop();
 }
 function tpClose(){
   if(tpRecording)return;
+  tpPracticeMode=false;
   document.getElementById("tpApp").classList.remove("show");
   document.body.style.overflow="";
-  tpVoiceStop();tpStopCam();if(tpRAF){cancelAnimationFrame(tpRAF);tpRAF=null;}
+  tpWakeOff();tpVoiceStop();tpStopCam();if(tpRAF){cancelAnimationFrame(tpRAF);tpRAF=null;}
   renderPrompt();
 }
 document.getElementById("tpBack").addEventListener("click",tpClose);
@@ -2282,10 +2469,34 @@ function tpStartCam(mode){
   navigator.mediaDevices.getUserMedia({video:{facingMode:mode},audio:true}).then(function(st){
     tpStream=st;var v=document.getElementById("tpCam");v.srcObject=st;v.classList.toggle("rear",mode==="environment");
     document.getElementById("tpPerm").style.display="none";
-  }).catch(function(err){
-    var p=document.getElementById("tpPerm");p.style.display="flex";
-    p.textContent="Camera/mic access is blocked. In your browser settings for this site, allow Camera + Microphone, then reload. ("+err.message+")";
-  });
+  }).catch(function(err){tpShowPerm(err);});
+}
+var tpWake=null,tpPracticeMode=false;
+function tpWakeOn(){try{if(navigator.wakeLock&&navigator.wakeLock.request){navigator.wakeLock.request("screen").then(function(w){tpWake=w;}).catch(function(){});}}catch(_){}}
+function tpWakeOff(){try{if(tpWake){tpWake.release().catch(function(){});tpWake=null;}}catch(_){}}
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"&&document.getElementById("tpApp").classList.contains("show"))tpWakeOn();});
+function tpPermSteps(){
+  var ua=navigator.userAgent||"";
+  var isIOS=/iPhone|iPad|iPod/i.test(ua);
+  var isCriOS=/CriOS/i.test(ua);
+  var isAndroid=/Android/i.test(ua);
+  if(isIOS&&isCriOS)return "<b>iPhone · Chrome</b><ol><li>Open the iPhone <b>Settings</b> app</li><li>Scroll down and tap <b>Chrome</b></li><li>Turn ON <b>Camera</b> and <b>Microphone</b></li><li>Come back and tap Try again</li></ol>";
+  if(isIOS)return "<b>iPhone · Safari</b><ol><li>Tap the <b>aA</b> button in the address bar</li><li>Tap <b>Website Settings</b></li><li>Set Camera and Microphone to <b>Allow</b></li><li>Tap Try again below</li></ol>No aA button? iPhone <b>Settings → Apps → Safari → Camera / Microphone → Allow</b>.";
+  if(isAndroid)return "<b>Android</b><ol><li>Tap the <b>🔒</b> (or ⓘ) icon by the address bar</li><li>Tap <b>Permissions</b></li><li>Allow <b>Camera</b> and <b>Microphone</b></li><li>Tap Try again below</li></ol>";
+  return "<b>Computer</b><ol><li>Click the <b>🔒 / camera</b> icon in the address bar</li><li>Set Camera and Microphone to <b>Allow</b></li><li>Click Try again below</li></ol>";
+}
+function tpShowPerm(err){
+  var p=document.getElementById("tpPerm");p.style.display="flex";
+  p.innerHTML='<div style="font-size:34px">🎥🚫</div><div style="font-weight:800;font-size:17px">Camera &amp; mic are blocked</div><div class="pbox">'+tpPermSteps()+'</div><div class="pbtns"><button class="try" onclick="tpStartCam(tpFacing)">↻ Try again</button><button class="prac" onclick="tpPractice()">📖 Practice without camera</button><button class="bk" onclick="tpForceClose()">‹ Back to scripts</button></div><div style="font-size:11px;color:#8b867e">'+esc((err&&err.message)||"")+'</div>';
+}
+function tpPractice(){tpPracticeMode=true;document.getElementById("tpPerm").style.display="none";toast("📖 Practice mode — the prompter works, recording needs the camera");}
+function tpForceClose(){
+  tpPracticeMode=false;
+  document.getElementById("tpPerm").style.display="none";
+  document.getElementById("tpApp").classList.remove("show");
+  document.body.style.overflow="";
+  tpWakeOff();tpVoiceStop();tpStopCam();if(tpRAF){cancelAnimationFrame(tpRAF);tpRAF=null;}
+  renderPrompt();
 }
 function tpStopCam(){if(tpStream){tpStream.getTracks().forEach(function(t){t.stop();});tpStream=null;}}
 document.getElementById("tpFlip").addEventListener("click",function(){if(tpRecording)return;tpFacing=tpFacing==="user"?"environment":"user";tpStartCam(tpFacing);});
@@ -2315,7 +2526,7 @@ function tpFmtTime(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String
 /* v1.2.0 — estimated runtime at current speed (~140 wpm at 1.0×) */
 function tpUpdateEta(){var el=document.getElementById("tpEta");if(!el)return;var w=(tpTextEl.textContent||"").trim().split(/\s+/).filter(Boolean).length;var secs=Math.round(w/(140*tpSpeed)*60);el.textContent="~"+tpFmtTime(secs);}
 function tpStartRec(){
-  if(!tpStream)return;
+  if(!tpStream){if(tpPracticeMode)toast("📖 Practice mode — recording needs the camera");return;}
   tpChunks=[];var mt=tpMime();
   try{tpRecorder=mt?new MediaRecorder(tpStream,{mimeType:mt}):new MediaRecorder(tpStream);}catch(e){tpRecorder=new MediaRecorder(tpStream);}
   tpRecorder.ondataavailable=function(e){if(e.data&&e.data.size>0)tpChunks.push(e.data);};
