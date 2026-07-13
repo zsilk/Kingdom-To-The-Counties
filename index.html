@@ -181,15 +181,28 @@
   .dashjump{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:2px 0 14px}
   .dashjump button{font:600 12.5px/1.1 inherit;padding:9px 6px;border:1px solid var(--line,#e5ded2);border-radius:11px;background:var(--card,#fff);color:var(--ink);cursor:pointer;text-align:center}
   .dashjump button:active{background:var(--ink);color:var(--cream)}
-  /* trailer load list demo (#4) */
+  /* trailer load list (two trailers, 40 bins, load-priority colors) */
   .demoflag{background:rgba(180,120,20,.12);border:1px dashed rgba(180,120,20,.5);color:#7a4a12;border-radius:10px;padding:9px 12px;font-size:13px;line-height:1.4;margin:10px 0}
-  .binrow{background:var(--card,#fff);border:1px solid var(--line,#e5ded2);border-left:6px solid #999;border-radius:12px;padding:11px 13px;margin:9px 0}
-  .binhd{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-  .binno{color:#fff;font-weight:800;font-size:13px;min-width:24px;height:24px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center}
-  .binnm{font-weight:700;display:inline-flex;align-items:center;gap:6px}
-  .binnm .dot{width:11px;height:11px;border-radius:50%;display:inline-block}
-  .bindest{color:var(--muted,#8a8172);font-size:12.5px;margin-left:auto}
-  .binitems{margin:8px 0 0;padding-left:20px;font-size:13.5px;line-height:1.5}
+  .prilegend{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px}
+  .prikey{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:var(--muted)}
+  .prikey i{width:11px;height:11px;border-radius:4px;display:inline-block}
+  .trailerblk{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 13px 15px;margin-bottom:16px}
+  .thead{display:flex;align-items:center;gap:7px;font-size:14px;margin-bottom:11px}
+  .thead .tcount{margin-left:auto;font-size:11.5px;font-weight:700;color:var(--muted)}
+  .bingrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:7px}
+  .binchip{display:flex;align-items:center;gap:6px;border:2px solid #999;border-radius:11px;background:#fff;padding:8px 9px;font-family:var(--sans);font-size:12px;text-align:left;cursor:pointer;color:var(--ink)}
+  .binchip i{width:10px;height:10px;border-radius:50%;flex:none}
+  .binchip b{flex:none;font-size:11.5px;letter-spacing:.4px}
+  .binchip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
+  .binchip:active{transform:scale(.97)}
+  .binno{color:#fff;font-weight:800;font-size:12.5px;padding:3px 8px;border-radius:8px;letter-spacing:.5px}
+  .overrow{display:flex;align-items:flex-start;gap:8px;padding:7px 2px;border-top:1px dashed var(--line);font-size:12.5px}
+  .overrow i{width:10px;height:10px;border-radius:50%;flex:none;margin-top:4px}
+  .overrow div{display:flex;flex-direction:column}
+  .overrow span{color:var(--muted);font-size:11.5px}
+  .binpri{border-left:4px solid #999;background:#f6f2ea;border-radius:8px;padding:8px 11px;font-size:12.5px;margin:8px 0 4px;line-height:1.45}
+  .binlist{margin:4px 0 8px;padding-left:20px;font-size:13.5px;line-height:1.55}
+  .binplace{background:#eef3ea;border-radius:9px;padding:9px 12px;font-size:13px;line-height:1.45;margin-top:4px}
   .ackedwrap{margin-top:14px}
   .ackedwrap summary{cursor:pointer;font-weight:700;font-size:13.5px;color:var(--muted);padding:8px 2px;list-style:none}
   .cmts{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
@@ -516,7 +529,7 @@
 <body>
 <div class="topwrap">
 <header class="topbar">
-  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.5.1</span></span></div>
+  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.5.2</span></span></div>
   <div class="clock"><div class="t" id="clockTime">--:--</div><div class="d" id="clockDate">SATURDAY</div></div>
 </header>
 <div class="nowstrip" id="nowStrip" onclick="goSchedule()">
@@ -557,9 +570,9 @@
     <div class="hub">
       <button class="hubcard slate" onclick="show('count')"><span class="ic">👥</span><span class="tx"><b>Attendance Counter</b><span>Count non-volunteer attendees · syncs live</span></span><span class="pill" id="crewCountPill">0</span></button>
       <button class="hubcard" onclick="show('setup')"><span class="ic">✅</span><span class="tx"><b>Setup Checklist</b><span>Fri build + Sat production</span></span><span class="arr">›</span></button>
-      <button class="hubcard" onclick="show('radios')"><span class="ic">📻</span><span class="tx"><b>Radio Checkout</b><span>10 radios · initials in &amp; out</span></span><span class="pill" id="crewRadioPill">0</span></button>
+      <button class="hubcard" onclick="show('radios')"><span class="ic">📻</span><span class="tx"><b>Radio Checkout</b><span>10 radios · name in &amp; out</span></span><span class="pill" id="crewRadioPill">0</span></button>
       <button class="hubcard slate" onclick="show('techio')"><span class="ic">🎛️</span><span class="tx"><b>Tech I/O List</b><span>32-channel patch · tracks, click, guide</span></span><span class="arr">›</span></button>
-      <button class="hubcard" onclick="show('inventory')"><span class="ic">📦</span><span class="tx"><b>Trailer Load List</b><span>Color-coded bins · loading order · demo</span></span><span class="arr">›</span></button>
+      <button class="hubcard" onclick="show('inventory')"><span class="ic">📦</span><span class="tx"><b>Trailer Load List</b><span>2 trailers · 40 bins · load-priority colors · demo</span></span><span class="arr">›</span></button>
       <button class="hubcard dark" onclick="show('dashboard')"><span class="ic">📊</span><span class="tx"><b style="color:var(--ink)">Leader Dashboard 🔒</b><span>Live progress · leaders only</span></span><span class="arr">›</span></button>
     </div>
   </section>
@@ -598,7 +611,7 @@
       <div class="dashrow"><div class="t"><span>Setup readiness</span><span class="v" id="dSetup">0 / 0 · 0%</span></div><div class="pbar"><i id="dSetupBar"></i></div></div>
       <div class="dashrow"><div class="t"><span>Tech I/O patched</span><span class="v" id="dIo">0 / 0 · 0%</span></div><div class="pbar"><i id="dIoBar"></i></div></div>
       <div class="dashrow"><div class="t"><span>Overdue setup items</span><span class="v" id="dOver">0</span></div></div>
-      <div class="dashrow"><div class="t"><span>👥 Attendees by counter (initials)</span></div><div id="dTally" style="margin-top:6px"><p class="hint">No counts logged yet.</p></div></div>
+      <div class="dashrow"><div class="t"><span>👥 Attendees by counter</span></div><div id="dTally" style="margin-top:6px"><p class="hint">No counts logged yet.</p></div></div>
       <div class="dashrow"><div class="t"><span>📻 Radios out</span><span class="v" id="dRadios">0</span></div><div id="dRadioList" style="margin-top:6px"></div></div>
       <button class="btn ghost" id="csvBtn" style="margin-top:6px">📊 Export day report (CSV)</button>
       <button class="btn ink" id="resetBtn" style="margin-top:6px">♻️ Reset all data for next event</button>
@@ -628,21 +641,22 @@
     <div class="cbtns"><button class="minus" id="countMinus">−1</button><button class="plus" id="countPlus">+1</button></div>
     <p class="hint" id="ctMine" style="display:none"></p>
     <div class="card" id="ctBreakWrap" style="display:none"><h3>👥 Counted by</h3><div id="ctBreak"></div></div>
-    <p class="hint">Put your initials in first — every tap is logged to you, so several people can count at once and leaders see who counted what. Use −1 for corrections. Everyone sees the same live total.</p>
+    <p class="hint">Set your name first — every tap is logged to you, so several people can count at once and leaders see who counted what. Use −1 for corrections. Everyone sees the same live total.</p>
   </section>
   <section class="page" id="page-radios">
     <button class="back" onclick="show('crew')">‹ Specialists</button>
     <p class="eyebrow">Equipment</p><h1 class="title">Radio Checkout</h1>
     <span class="syncpill" id="sp-radios"><span class="d"></span>Demo mode</span>
-    <p class="sub">10 radios. Put in your initials, tap <b>Check out</b> when you grab one, tap <b>Return</b> when you bring it back. 📻</p>
+    <p class="sub">10 radios. Set your name, tap <b>Check out</b> when you grab one, tap <b>Return</b> when you bring it back. 📻</p>
     <div class="namebar" id="namebar-rad"></div>
     <div id="radioMount"></div>
   </section>
   <section class="page" id="page-inventory">
     <button class="back" onclick="show('crew')">‹ Specialists</button>
     <p class="eyebrow">Logistics</p><h1 class="title">Trailer Load List</h1>
-    <div class="demoflag">🧪 <b>Demo / sample layout.</b> This is a starting point to show the color-coded bin system &amp; loading order — real bin contents will be filled in with the logistics team.</div>
-    <p class="sub">Bins are color-coded and numbered in <b>loading order</b> — <b>load last what you need first</b>, so the first bins off the truck are the first ones you use on site.</p>
+    <div class="demoflag">🧪 <b>Demo / sample contents.</b> The two-trailer bin system, IDs and load-priority colors are real — bin contents are placeholders until the logistics team fills them in.</div>
+    <p class="sub">Two trailers, ~40 numbered bins. Colors are <b>load priority</b>: what's needed <b>first on site loads last</b> (rear, by the door). Tap any bin for its contents and where it rides in the trailer.</p>
+    <div class="prilegend" id="priLegend"></div>
     <div id="invMount"></div>
   </section>
   <section class="page" id="page-setup">
@@ -672,7 +686,7 @@
   <section class="page" id="page-techio">
     <button class="back" onclick="show('crew')">‹ Specialists</button>
     <p class="eyebrow">Tech · FOH · Worship</p><h1 class="title">Tech I/O List</h1>
-    <div class="ionote">🎛️ <b>Input / Mic / IEM Pack assignments</b> — Michael Nelson (Tech/FOH).<br>Enter your initials, then tap each input to check it off as it's patched &amp; line-checked — your initials &amp; time are logged on the card.<br>Leaders can <b>Edit list</b> or <b>Reload roster from defaults</b> after entering the PIN.</div>
+    <div class="ionote">🎛️ <b>Input / Mic / IEM Pack assignments</b> — Michael Nelson (Tech/FOH).<br>Set your name, then tap each input to check it off as it's patched &amp; line-checked — your name &amp; time are logged on the card.<br>Leaders can <b>Edit list</b> or <b>Reload roster from defaults</b> after entering the PIN.</div>
     <div class="namebar" id="namebar-io"></div>
     <div id="ioMount"></div>
   </section>
@@ -1507,7 +1521,7 @@
     <p class="eyebrow">Recording Studio</p><h1 class="title">Invite Video Scripts 🎬</h1>
     <span class="syncpill" id="sp-prompter"><span class="d"></span>Demo mode</span>
     <p class="sub">Tap <b>Open</b> to record with the on-screen teleprompter. Every finished video goes to <b>Laura (Marketing)</b> — then mark it ✅ so the team sees it's covered.</p>
-    <div class="tprectips">💛 <b>Why this matters:</b> <i>"How can they believe in the one of whom they have not heard? And how can they hear without someone telling them?"</i> — Romans 10:14. Your voice might be the one someone's been waiting for. A few friendly pointers: find a <b>calm, tidy spot</b> · speak up like you're inviting a friend across the yard · <b>smile</b> — this is good news! · phone at eye level if you can · and let them see <b>Jesus</b> in you. Don't worry about perfect — real beats polished every time. 🎥</div>
+    <div class="tprectips">💛 <b>Why this matters:</b> <i>"How can they believe in the one of whom they have not heard? And how can they hear without someone telling them?"</i> — Romans 10:14. Your voice might be the one someone's been waiting for. A few friendly pointers: find a <b>calm, tidy spot</b> · speak up like you're inviting a friend across the yard · <b>smile</b> — this is good news! · phone at eye level if you can · <b>aim for 30–60 seconds</b> (the sweet spot — the app will nudge you) · and let them see <b>Jesus</b> in you. Don't worry about perfect — real beats polished every time. 🎥</div>
     <div id="tpLock"></div>
     <div class="tpaddbar" id="tpAddBar" style="display:none">
       <button onclick="tpOpenEditor(null)">＋ Add script</button>
@@ -1535,6 +1549,7 @@
         <li><b>Speak up and smile</b> — like inviting a friend across the yard.</li>
         <li>Phone at <b>eye level</b> if you can (prop it on something).</li>
         <li><b>Pace yourself:</b> tap <b>▶ Play</b> to auto-scroll the script, or just <b>drag it with your finger</b> as you talk. Tap the text to pause.</li>
+        <li><b>Keep it 30–60 seconds</b> — short and warm gets watched. I'll give you a gentle heads-up at 30s and again 15s before the minute mark (recording never stops on its own).</li>
         <li>Take two! Nobody nails the first take — that's normal.</li>
       </ul>
       <button onclick="document.getElementById('tpTips').classList.remove('show')">I'm ready — let's roll 🎥</button>
@@ -1588,6 +1603,11 @@
   <div class="row"><button class="cancel" onclick="document.getElementById('tpDoneModal').classList.remove('show')">Not yet</button><button class="ok" onclick="tpConfirmDone()">Confirm ✅</button></div>
 </div></div>
 
+<div class="modal" id="binModal"><div class="sheet">
+  <h3 id="binTitle"></h3>
+  <div id="binBody"></div>
+  <div class="row"><button class="ok" onclick="document.getElementById('binModal').classList.remove('show')">Close</button></div>
+</div></div>
 <div class="modal" id="pinModal"><div class="sheet">
   <h3>Leader access 🔒</h3><p>Enter the leader PIN to unlock checklists & the dashboard.</p>
   <input id="pinInput" inputmode="numeric" maxlength="6" placeholder="••••" />
@@ -1935,8 +1955,7 @@ var lastSyncAt=0,everSynced=false; /* v1.2.0 — sync freshness */
 var remoteDirty=false;
 function settled(){return inflight===0&&pendingCount===0&&!countSending;}
 var API="/.netlify/functions/data";
-var MY={name:"",initials:""};
-try{MY.initials=(localStorage.getItem("k2c_init")||"").slice(0,4);}catch(_){}
+var MY={name:""};
 try{MY.name=(localStorage.getItem("k2c_name")||"").slice(0,40);}catch(_){}
 function nowLabel(){return fmt(nowMinutes());}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
@@ -2378,22 +2397,16 @@ function pre(id,val){var e=document.getElementById(id);if(e&&!e.value&&val)e.val
 function prefillNames(){pre("ciName",MY.name);pre("aName",MY.name);pre("pName",MY.name);pre("fName",MY.name);}
 /* Remember the volunteer's name across reloads so they don't have to retype it
    everywhere (requested by the team). Ignores the placeholder defaults so an
-   anonymous post doesn't overwrite a real saved name. Initials are DERIVED from
-   the name (v1.5.0 — the app never asks for initials anymore); stamps stay
-   compact but the person only ever types their name. */
-function initialsFrom(n){
-  n=(n||"").trim();if(!n)return "";
-  var parts=n.split(/\s+/).filter(Boolean).slice(0,4);
-  if(parts.length===1)return parts[0].slice(0,2).toUpperCase();
-  return parts.map(function(w){return w[0];}).join("").toUpperCase().slice(0,4);
-}
+   anonymous post doesn't overwrite a real saved name. v1.5.2 — the full NAME
+   is the identity everywhere: stamps, tallies, radios and checkmarks show
+   "Zach", never a derived "ZA". */
 function rememberName(n){
   n=(n||"").trim();if(!n||n==="Anonymous"||n==="Volunteer"||n==="Leadership")return;
-  MY.name=n;MY.initials=initialsFrom(n);
-  try{localStorage.setItem("k2c_name",n.slice(0,40));localStorage.setItem("k2c_init",MY.initials);}catch(_){}
+  MY.name=n;
+  try{localStorage.setItem("k2c_name",n.slice(0,40));}catch(_){}
   renderNameBars();prefillNames();
 }
-function myTag(){return (MY.initials||initialsFrom(MY.name)||"").trim().toUpperCase();}
+function myTag(){return (MY.name||"").trim();}
 /* One question, asked once: "what's your name?" — then every tool works. */
 function askName(cb){
   var n=(prompt("What's your name? (so the team sees who did what)",MY.name||"")||"").trim();
@@ -2406,7 +2419,7 @@ function renderNameBars(){
   ["su","io","ct","rad"].forEach(function(k){
     var el=document.getElementById("namebar-"+k);if(!el)return;
     el.innerHTML=MY.name
-      ?'🙋 Working as <b>'+esc(MY.name)+'</b> <span class="tagchip">'+esc(myTag())+'</span><button onclick="askName()">Change</button>'
+      ?'🙋 Working as <b>'+esc(MY.name)+'</b><button onclick="askName()">Change</button>'
       :'✍️ <b>Set your name</b> so your work is credited to you <button onclick="askName()">Set name</button>';
   });
 }
@@ -2495,7 +2508,7 @@ document.getElementById("csvBtn").addEventListener("click",function(){
   var csv=rows.map(function(r){return r.map(csvCell).join(",");}).join("\r\n");
   var blob=new Blob(["\ufeff"+csv],{type:"text/csv"});
   var a=document.createElement("a");a.href=URL.createObjectURL(blob);
-  a.download="k2c-day-report-v1.5.1-"+new Date().toISOString().slice(0,10)+".csv";
+  a.download="k2c-day-report-v1.5.2-"+new Date().toISOString().slice(0,10)+".csv";
   document.body.appendChild(a);a.click();a.remove();
 });
 document.getElementById("resetBtn").addEventListener("click",function(){
@@ -2527,24 +2540,111 @@ function goSchedule(){show("now");setTimeout(function(){var a=document.getElemen
 /* ---- Trailer Load List (demo) ----
    Sample color-coded bin system + loading order. Static demo data for now; a
    later PR can make it leader-editable & synced like the checklist. */
-var LOADPLAN=[
-  {ord:1,color:"#dc2626",name:"Red",dest:"FOH tent",items:["FOH console + iPad","AVB / network cables","Cable covers & gaff tape"]},
-  {ord:2,color:"#ea580c",name:"Orange",dest:"Stage",items:["Mics & clips","Mic stands","DI boxes"]},
-  {ord:3,color:"#ca8a04",name:"Yellow",dest:"Stage / power",items:["Power drops & stringers","Extension cords","Power strips"]},
-  {ord:4,color:"#16a34a",name:"Green",dest:"Site-wide",items:["Tents & canopy tops","Weight bags","Stakes & mallets"]},
-  {ord:5,color:"#2563eb",name:"Blue",dest:"Guest Services",items:["Tables & tablecloths","Chairs","Signage & banners"]},
-  {ord:6,color:"#7c3aed",name:"Purple",dest:"Ambassadors",items:["Lanyards & badges","Booklets & handouts","Prayer cards"]},
-  {ord:7,color:"#334155",name:"Black",dest:"Everywhere",items:["Tool kit","Zip ties & tape","First-aid kit"]}
+/* ---- Trailer Load List (demo contents) ----
+   Two trailers, ~40 numbered bins (prefix-serial, e.g. 002-001), 11 tents +
+   weights as oversize items. Colors are LOAD PRIORITY (repeat across bins):
+   P1 is needed first on site so it loads LAST (rear, by the door); P5 is
+   rarely needed so it loads FIRST (nose). Contents are placeholders for the
+   logistics team; tap a bin for contents + where it rides in the trailer. */
+var LOAD_PRI={
+  1:{c:"#dc2626",n:"P1 · Red",d:"Needed FIRST on site — loads LAST (rear, by the door)"},
+  2:{c:"#ea580c",n:"P2 · Orange",d:"Early setup — loads in the rear half"},
+  3:{c:"#ca8a04",n:"P3 · Yellow",d:"Mid setup — loads mid-trailer"},
+  4:{c:"#16a34a",n:"P4 · Green",d:"Later in the day — loads in the front half"},
+  5:{c:"#2563eb",n:"P5 · Blue",d:"Rarely needed — loads FIRST (nose)"}
+};
+/* bins: [serial, priority, title, [contents], "placement in trailer"] */
+var TRAILERS=[
+ {prefix:"001",icon:"🔧",name:"Trailer 001 · Tech / Worship (+ band & FOH tents)",bins:[
+  [1,1,"FOH console + iPad",["StudioLive console","iPad + mount","Console power kit","Dust cover"],"Rear, curb side, floor — strap to the rail. Last on, first off."],
+  [2,1,"Stage box & AVB cables",["Papa V stage box","AVB cables ×4","Ethernet drum ×2"],"Rear, driver side, floor — beside 001-001."],
+  [3,1,"Show computers & routing",["Playback laptop","Backup iPad","Routing interfaces","Starlink kit"],"Rear, curb side, shelf 1 — padded shelf, never stack on top."],
+  [4,2,"Power stringers & drops",["Stage drops ×4","120v stringers","Spider boxes ×2"],"Rear third, driver side, floor."],
+  [5,2,"Extension cords & strips",["25ft cords ×8","50ft cords ×6","Power strips ×10"],"Rear third, driver side, stacked on 001-004."],
+  [6,2,"Cable covers & mats",["5-channel covers ×6","Walk-over mats","Cover connectors"],"Rear third, center aisle floor — heavy, keep low."],
+  [7,2,"Generator accessories",["Fuel cans (empty)","Grounding rods","Gen power tails"],"Rear third, curb side, floor — vent caps up."],
+  [8,3,"Mics & clips",["Vocal mics ×8","Instrument mics ×6","Clips & windscreens"],"Middle, curb side, shelf 2 — padded bin."],
+  [9,3,"Mic stands",["Tall booms ×8","Short booms ×4","Round bases ×4"],"Middle, floor, laid flat under shelf 2."],
+  [10,3,"DI boxes & sub snakes",["Passive DI ×6","Active DI ×4","8-ch sub snakes ×3"],"Middle, driver side, shelf 1."],
+  [11,3,"IEM packs & antennas",["IEM packs ×10 (red Packout)","Antenna combiner","Paddles + coax"],"Middle, curb side, shelf 1 — keep with 001-012."],
+  [12,3,"Batteries & chargers",["Black Fujitsu AA ×60","Chargers ×4","9v backups"],"Middle, curb side, shelf 1 — next to IEM packs."],
+  [13,3,"Drum hardware",["Kick pedal & clamps","Cymbal felts & wingnuts","Drum keys & spares"],"Middle, driver side, floor — under the riser panels."],
+  [14,3,"XLR cables — long",["50ft XLR ×12","75ft XLR ×4"],"Middle, center floor — coiled in bin, heavy."],
+  [15,3,"XLR cables — short",["15ft XLR ×16","25ft XLR ×12"],"Middle, stacked on 001-014."],
+  [16,4,"Stage banners & skirting",["Stage skirt panels","Podium banner","Bungee ties"],"Front half, driver side, shelf 2."],
+  [17,4,"Rain kits & covers",["Console rain covers","Speaker ponchos","Clear tarps ×4"],"Front half, curb side, shelf 2 — grab fast if skies turn."],
+  [18,4,"Tech tool kit",["Drill + bits","Multimeter","Soldering kit","Spare connectors"],"Front half, driver side, shelf 1."],
+  [19,5,"Spare cables & adapters",["Adapters (all types)","Spare NL4","Couplers & turnarounds"],"Nose, shelf 1 — only opened when something breaks."],
+  [20,5,"Manuals & spares",["Console manual","Spare fuses","Backup SD cards","Zip bags"],"Nose, shelf 2 — lightest bin, top of the nose stack."]
+ ],oversize:[
+  ["Band tent A (heavy — 4-person lift)",1,"Rear floor, curb side — FIRST off, goes up first."],
+  ["Band tent B (heavy — 4-person lift)",1,"Rear floor, driver side — with tent A."],
+  ["FOH tent (heavy)",1,"Rear floor, center — right behind the band tents."],
+  ["Prayer tent",3,"Middle floor, on top of truss bags."],
+  ["Trusses — THE Tower",2,"Full-length floor run, driver side wall — load before all rear bins."],
+  ["Drum riser panels",3,"Middle, flat against curb-side wall."],
+  ["FOH speakers & subs (cases)",2,"Rear-middle floor, center — wheel brakes ON."],
+  ["Weight bags ×8 (~50 lb each)",2,"Floor, distributed over the axles — NEVER above shelf height."]
+ ]},
+ {prefix:"002",icon:"📦",name:"Trailer 002 · Logistics / Guest Services / Ambassadors",bins:[
+  [1,1,"Check-in & registration kit",["Clipboards & pens","Volunteer rosters","Day-PIN cards","Table signs"],"Rear, curb side, shelf 1 — first bin off the truck."],
+  [2,1,"Site signage & arrows",["Directional arrows","Parking signs","Entrance banner","Sign stakes"],"Rear, driver side, floor."],
+  [3,1,"Cones & flagging",["Traffic cones ×24","Flagging tape","Cone toppers"],"Rear, center floor — heavy, keep low."],
+  [4,1,"Safety vests & crowd control",["Hi-vis vests ×20","Crowd rope","Carabiners"],"Rear, curb side, shelf 2."],
+  [5,1,"Radios & chargers",["Radios ×10","Gang charger","Spare batteries","Checkout sheet"],"Rear, curb side, shelf 1 — beside 002-001."],
+  [6,2,"First-aid kits",["Main first-aid kit","AED (if assigned)","Ice packs","Incident forms"],"Rear, driver side, shelf 1 — RED CROSS label facing out."],
+  [7,2,"Water & cups",["Water jugs ×6","Cup sleeves","Ladles & lids"],"Rear third, floor — heavy, over the axles."],
+  [8,2,"Coolers & ice gear",["Coolers ×4 (nested)","Ice scoops","Drain plugs"],"Rear third, floor beside 002-007."],
+  [9,3,"Tablecloths & clips",["Branded cloths ×12","Clips ×40","Weights for corners"],"Middle, curb side, shelf 2."],
+  [10,3,"Lanyards & badges",["Volunteer lanyards ×60","Leader badges","Blank badges + marker"],"Middle, curb side, shelf 1."],
+  [11,3,"Playbooks & booklets",["Ambassador Playbooks ×30","Counselor Booklets ×30"],"Middle, driver side, shelf 1 — keep dry."],
+  [12,3,"Prayer & response cards",["Prayer cards ×500","Response cards ×500","Card stands"],"Middle, driver side, shelf 1 — with 002-011."],
+  [13,3,"Gift bags — Bibles",["Bibles ×100","Bag inserts"],"Middle, floor — heavy, split across two bins if over 40 lb."],
+  [14,3,"Gift bags — CDs & crosses",["Worship CDs ×100","Hand crosses ×100","Gift bags (flat)"],"Middle, floor beside 002-013."],
+  [15,4,"Kids' activity supplies",["Coloring sheets & crayons","Stickers","Bubbles"],"Front half, curb side, shelf 2."],
+  [16,4,"Trash & cleanup",["Trash bags (contractor)","Gloves","Grabbers ×4","Zip ties"],"Front half, driver side, floor."],
+  [17,4,"Logistics tool kit",["Hammer & stakes puller","Duct/gaff tape","Utility knives","Zip ties"],"Front half, driver side, shelf 1."],
+  [18,4,"Office box",["Markers & sharpies","Printer paper & printouts","Stapler, scissors, tape"],"Front half, curb side, shelf 1."],
+  [19,5,"Spare tarps & bungees",["Tarps ×6","Bungee assortment","Paracord"],"Nose, floor."],
+  [20,5,"Lost & found + misc",["Lost & found tub (empty)","Spare hats/ponchos","Misc overflow"],"Nose, shelf 1 — lightest, top of the nose stack."]
+ ],oversize:[
+  ["Guest Services tent ×2 (heavy)",1,"Rear floor — FIRST off with the signage bins."],
+  ["Ambassador tent ×2 (heavy)",1,"Rear floor, behind Guest Services tents."],
+  ["Logistics tent",4,"Front-middle floor — set up later, stays staged."],
+  ["Green room tent",4,"Front-middle floor, with the logistics tent."],
+  ["Kids' tent",3,"Middle floor."],
+  ["Folding tables ×10",2,"On edge along the driver-side wall, strapped."],
+  ["Folding chairs (racks)",2,"Curb-side wall, wheel brakes ON."],
+  ["Weight bags ×12 (~50 lb each)",2,"Floor, distributed over the axles — NEVER above shelf height."]
+ ]}
 ];
+function binId(prefix,n){return prefix+"-"+String(n).padStart(3,"0");}
 function renderInventory(){
+  var lg=document.getElementById("priLegend");
+  if(lg)lg.innerHTML=[1,2,3,4,5].map(function(p){var pr=LOAD_PRI[p];return '<span class="prikey"><i style="background:'+pr.c+'"></i>'+pr.n.split(" · ")[0]+'</span>';}).join("");
   var m=document.getElementById("invMount");if(!m)return;
-  m.innerHTML=LOADPLAN.map(function(b){
-    return '<div class="binrow" style="border-left-color:'+b.color+'">'
-      +'<div class="binhd"><span class="binno" style="background:'+b.color+'">'+b.ord+'</span>'
-      +'<span class="binnm"><span class="dot" style="background:'+b.color+'"></span>'+esc(b.name)+' bin</span>'
-      +'<span class="bindest">→ '+esc(b.dest)+'</span></div>'
-      +'<ul class="binitems">'+b.items.map(function(it){return '<li>'+esc(it)+'</li>';}).join("")+'</ul></div>';
+  m.innerHTML=TRAILERS.map(function(tr,ti){
+    var chips=tr.bins.map(function(b,bi){
+      var pr=LOAD_PRI[b[1]];
+      return '<button class="binchip" style="border-color:'+pr.c+'" onclick="binOpen('+ti+','+bi+')"><i style="background:'+pr.c+'"></i><b>'+binId(tr.prefix,b[0])+'</b><span>'+esc(b[2])+'</span></button>';
+    }).join("");
+    var over=tr.oversize.map(function(o){
+      var pr=LOAD_PRI[o[1]];
+      return '<div class="overrow"><i style="background:'+pr.c+'"></i><div><b>'+esc(o[0])+'</b><span>'+esc(o[2])+'</span></div></div>';
+    }).join("");
+    return '<div class="trailerblk"><div class="thead">'+tr.icon+' <b>'+esc(tr.name)+'</b><span class="tcount">'+tr.bins.length+' bins</span></div>'
+      +'<div class="bingrid">'+chips+'</div>'
+      +'<div class="seclabel" style="margin-top:10px">⛺ Oversize — tents, tables &amp; weights</div>'+over+'</div>';
   }).join("");
+}
+function binOpen(ti,bi){
+  var tr=TRAILERS[ti],b=tr.bins[bi],pr=LOAD_PRI[b[1]];
+  document.getElementById("binTitle").innerHTML='<span class="binno" style="background:'+pr.c+'">'+binId(tr.prefix,b[0])+'</span> '+esc(b[2]);
+  document.getElementById("binBody").innerHTML=
+    '<div class="binpri" style="border-left-color:'+pr.c+'"><b>'+pr.n+'</b> — '+esc(pr.d)+'</div>'
+    +'<div class="seclabel">📋 Contents (sample)</div><ul class="binlist">'+b[3].map(function(it){return '<li>'+esc(it)+'</li>';}).join("")+'</ul>'
+    +'<div class="seclabel">🚚 Where it goes in the trailer</div><div class="binplace">📍 '+esc(b[4])+'</div>';
+  document.getElementById("binModal").classList.add("show");
 }
 var tabsEls=document.querySelectorAll(".tab");for(var ti=0;ti<tabsEls.length;ti++){(function(btn){btn.addEventListener("click",function(){show(btn.getAttribute("data-tab"));});})(tabsEls[ti]);}
 var simRange=document.getElementById("simRange");
@@ -2835,10 +2935,18 @@ function tpStartRec(){
     document.getElementById("tpPost").classList.add("show");
   };
   tpRecorder.start(1000);
-  tpRecording=true;tpSecs=0;document.getElementById("tpRecTime").textContent="00:00";
+  tpRecording=true;tpSecs=0;var tEl=document.getElementById("tpRecTime");tEl.textContent="00:00";tEl.style.color="";
   document.getElementById("tpRecInd").classList.add("show");
   document.getElementById("tpRecBtn").classList.add("recording");
-  tpTimer=setInterval(function(){tpSecs++;document.getElementById("tpRecTime").textContent=tpFmtTime(tpSecs);if(tpSecs===180)alert("⏱ 3 minutes — long takes make huge files on phones. Consider wrapping up or splitting into two takes.");},1000);
+  /* Gentle pacing nudges: 30–60s is the sweet spot. Never stops the take —
+     just toasts + a color shift on the timer if the presenter runs long. */
+  tpTimer=setInterval(function(){
+    tpSecs++;var tEl=document.getElementById("tpRecTime");tEl.textContent=tpFmtTime(tpSecs);
+    if(tpSecs===30){vibr(30);toast("⏱ 30 seconds — you're in the sweet spot. Start heading for the close.");}
+    else if(tpSecs===45){vibr(30);tEl.style.color="#f6c344";toast("⏱ 15 seconds to the 60s mark — time to wrap up.");}
+    else if(tpSecs===60){vibr([40,60,40]);tEl.style.color="#ff6b5e";toast("⏱ 60 seconds — finish your thought and land it. Still recording 🎥");}
+    else if(tpSecs===180){toast("⏱ 3 minutes — long takes make huge files on phones. Consider a fresh, shorter take.");}
+  },1000);
   if(!tpPlaying)tpSetPlaying(true);
 }
 function tpStopRec(){
@@ -2878,7 +2986,7 @@ function tpConfirmDone(){
   var nm=document.getElementById("tpInitials").value.trim();
   if(!nm){flash("tpInitials");return;}
   rememberName(nm);
-  var init=initialsFrom(nm)||nm.toUpperCase().slice(0,4);
+  var init=nm;
   var d=new Date(),date=(d.getMonth()+1)+"/"+d.getDate();
   var id=tpCurId;
   doAction("promptDone",{id:id,initials:init,date:date},function(){var s=tpById(id);if(s)s.done={initials:init,date:date};});

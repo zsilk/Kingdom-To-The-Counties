@@ -1,11 +1,11 @@
-/* K2C Ambassador Companion — service worker (v25 · app v1.5.1)
+/* K2C Ambassador Companion — service worker (v26 · app v1.5.2)
  Strategy: NETWORK-FIRST for everything, cache as fallback.
  When online, behavior is byte-for-byte identical to having no SW —
  fresh code always wins, so a deploy can never be masked by stale cache.
  When the field signal drops, the last good copy of the shell, fonts,
  images and starter scripts keeps loading. API calls (/.netlify/*) are
  never intercepted: live sync simply fails over to demo/offline handling. */
-var CACHE = "k2c-v25";
+var CACHE = "k2c-v26";
 var PRECACHE = [
  "./",
  "index.html",

@@ -71,7 +71,7 @@ function normIssue(x){
   by: str(x.by || "Volunteer", 40),
   t: str(x.t, 12),
   hidden: !!x.hidden,
-  ackBy: str(x.ackBy, 8),
+  ackBy: str(x.ackBy, 40),
   ackT: str(x.ackT, 12),
   comments: normComments(x.comments)
  };
@@ -84,7 +84,7 @@ function normPraiseItem(x){
   body: str(x.body, 2000),
   t: str(x.t, 12),
   hidden: !!x.hidden,
-  ackBy: str(x.ackBy, 8),
+  ackBy: str(x.ackBy, 40),
   ackT: str(x.ackT, 12),
   comments: normComments(x.comments)
  };
@@ -154,7 +154,7 @@ export function normPrompter(p){
  assignee: (sc.assignee || "").toString().slice(0, 30),
  body: (sc.body || "").toString().slice(0, 20000),
  done: sc.done && sc.done.initials
- ? { initials:(sc.done.initials||"").toString().slice(0,4), date:(sc.done.date||"").toString().slice(0,12) }
+ ? { initials:(sc.done.initials||"").toString().slice(0,40), date:(sc.done.date||"").toString().slice(0,12) }
  : null
  })).slice(0, 200) };
 }
@@ -175,7 +175,7 @@ function mergeStarterScripts(p){
 
 /* ---- radios ---- */
 function defaultRadios(){ const a = []; for(let i = 1; i <= 10; i++) a.push({ n:i, out:null, in:null }); return a; }
-function normStamp(x){ if(!x || !x.by) return null; return { by:(x.by || "").toString().toUpperCase().slice(0, 4), t:(x.t || "").toString().slice(0, 12) }; }
+function normStamp(x){ if(!x || !x.by) return null; return { by:(x.by || "").toString().slice(0, 40), t:(x.t || "").toString().slice(0, 12) }; }
 function normRadios(r){
  const src = (r && Array.isArray(r.list)) ? r.list : [];
  const out = defaultRadios();
@@ -319,7 +319,7 @@ function compactTally(value){
  if(Array.isArray(value)){
  for(const e of value){
  const d = Number(e && e.delta) || 0;
- const k = ((e && e.by) || "?").toString().toUpperCase().slice(0, 4) || "?";
+ const k = ((e && e.by) || "?").toString().slice(0, 40) || "?";
  out.total += d; out.by[k] = (out.by[k] || 0) + d;
  }
  }else if(value && typeof value === "object"){
@@ -472,7 +472,7 @@ export default async (req, context) => {
  if(action === "tallyAdd"){
  const key = tallyKey(payload.dev);
  const tally = compactTally(await s.get(key, { type:"json" }));
- const by = (payload.by || "?").toString().toUpperCase().slice(0, 4) || "?";
+ const by = (payload.by || "?").toString().slice(0, 40) || "?";
  const delta = Number(payload.delta) || 0;
  const beforeTotal = tally.total, beforeBy = tally.by[by] || 0;
  tally.total = Math.max(0, tally.total + delta);
@@ -492,7 +492,7 @@ export default async (req, context) => {
  const id = payload.id;
  if(id){
  if(core.checklist[id]) delete core.checklist[id];
- else core.checklist[id] = { by: payload.by || "", t: payload.t || "", dm: (payload.dm ?? null) };
+ else core.checklist[id] = { by: str(payload.by, 40), t: str(payload.t, 12), dm: (payload.dm ?? null) };
  }
  return core;
  });
@@ -541,7 +541,7 @@ export default async (req, context) => {
  const n = Number(payload.n);
  if(!(n >= 1 && n <= 10)) return undefined;
  const r = rad.list[n-1];
- const stamp = { by:(payload.by || "?").toString().toUpperCase().slice(0, 4), t:(payload.t || "").toString().slice(0, 12) };
+ const stamp = { by:(payload.by || "?").toString().slice(0, 40), t:(payload.t || "").toString().slice(0, 12) };
  if(r.out && !r.in){ r.in = stamp; } // returning it
  else { r.out = stamp; r.in = null; } // checking it out
  return rad;
@@ -567,7 +567,7 @@ export default async (req, context) => {
  if(!it) return undefined;
  const hide = !it.hidden;
  it.hidden = hide;
- it.ackBy = hide ? str(payload.by, 8) : "";
+ it.ackBy = hide ? str(payload.by, 40) : "";
  it.ackT = hide ? str(payload.t, 12) : "";
  return core;
  });
@@ -621,7 +621,7 @@ export default async (req, context) => {
  await compareAndSwap(s, "prompter", normPrompter, p => {
  const it = p.scripts.find(x => x.id === payload.id);
  if(!it) return undefined;
- it.done = { initials:(payload.initials||"").toString().toUpperCase().slice(0,4), date:(payload.date||"").toString().slice(0,12) };
+ it.done = { initials:(payload.initials||"").toString().slice(0,40), date:(payload.date||"").toString().slice(0,12) };
  return p;
  }, () => ({ scripts: [] }));
  break;
