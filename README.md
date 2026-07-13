@@ -33,7 +33,7 @@ something actually changed), so updates show up for everyone within a few
 seconds. No accounts, no separate database to set up — Netlify enables Blobs
 automatically on deploy.
 
-## Security & data model (v18)
+## Security & data model (v20)
 
 - **Leader PIN is verified server-side** on every privileged action (checklists,
   announcements, event/day-PIN/funding settings, reset, script editing). Rotate
@@ -42,10 +42,23 @@ automatically on deploy.
 - **The Day PIN is never sent to clients.** The API only reports whether one is
   set; entered PINs are verified server-side.
 - **Storage is split by domain** (`core`, `checkins`, `io`, `prompter`, plus one
-  `count-<device>` shard per phone) so concurrent writes can't clobber each
-  other. The attendance counter sums per-device shards — two people counting at
-  once can never erase each other's taps. Old single-blob data migrates
-  automatically on first read.
+  `count-<device>` / `tally-<device>` shard per phone) so concurrent writes can't
+  clobber each other. Old single-blob data migrates automatically on first read.
+- **Shared blobs use compare-and-swap.** Every read-modify-write on `core` and
+  friends re-reads the current value + etag and writes only-if-unchanged,
+  retrying on a conflict. Two leaders toggling different checkmarks at the same
+  instant both stick (the pre-v20 last-write-wins was the cause of checkmarks
+  that "only occasionally" saved).
+- **The head count is O(1) to read.** Taps still land in per-phone shards (never
+  lost), but a cached `count-agg` blob is kept in sync incrementally, so a `GET`
+  reads one blob instead of listing + fetching every device shard. It rebuilds
+  itself from the shards whenever it goes missing, so it can't be wrong for long.
+- **Polls are cheap.** `GET` returns a weak `ETag`; clients send `If-None-Match`
+  and get a bodyless `304` (and skip re-rendering) whenever nothing changed.
+- **User-submitted content is normalized server-side** — feedback, praise,
+  announcements, check-ins and comments have their fields whitelisted, lengths
+  capped, and `priority`/`pri` validated against a fixed set. Clients can't
+  inject markup through a priority class or pre-set a report as acknowledged.
 - **`sw.js`** is a network-first service worker: online behavior is identical to
   having no cache (fresh deploys always win), but if the field signal drops the
   app shell, fonts, and images still load.

@@ -8,33 +8,112 @@ const DEFAULT_DAY_PIN = "0711";
 const LEADER_PIN = () => process.env.LEADER_PIN || "2026";
 
 /* ---------------- storage layout ----------------
- v19 (app v1.3.0) — split-by-domain blobs so concurrent writes never clobber:
- core     — checklist, announcements, feedback (issues + comments), praises,
-            event, dayPin, funding
- checkins — check-in list
- io       — Tech I/O roster + patch progress
- prompter — Recording Studio scripts
- radios   — 10-radio checkout board (initials + times)
- count-  — LEGACY numeric counter shard per phone (still summed, still works)
- tally-  — NEW per-phone append-only tally log [{by,delta,t}] — the total AND
-            a per-initials breakdown are computed by summing every entry, so
-            multiple counters can tap at once and nothing is ever lost.
+ v20 (app v1.4.0) — split-by-domain blobs + compare-and-swap writes:
+ core      — checklist, announcements, feedback (issues + comments), praises,
+             event, dayPin, funding
+ checkins  — check-in list
+ io        — Tech I/O roster + patch progress
+ prompter  — Recording Studio scripts
+ radios    — 10-radio checkout board (initials + times)
+ count-    — LEGACY numeric counter shard per phone (still summed, still works)
+ tally-    — per-phone tally summary {total, by:{initials:n}} — the source of
+             truth for the head count; a phone only ever writes its own shard.
+ count-agg — CACHED {total, by} aggregate of every count-/tally- shard so a GET
+             is one read instead of listing + fetching ~50 shards. Maintained
+             incrementally on each tap and rebuilt from the shards whenever it
+             is missing, so it is self-healing and can never be authoritative-
+             wrong (the shards are).
+ Every shared blob is now written through compareAndSwap(): read the current
+ value + its etag, apply the change, write only-if-unchanged, and retry on a
+ conflict. Two leaders toggling different checkmarks at the same instant can no
+ longer clobber each other (the pre-CAS "last write wins" was the bug behind
+ checkmarks that "only occasionally stuck").
  Old single-blob data migrates automatically on first read. */
 
 const EMPTY_CORE = { checklist:{}, announcements:[], feedback:[], praises:[], event:{name:"",date:""}, dayPin:DEFAULT_DAY_PIN, funding:{pct:64, needed:"$60,000"} };
+
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const str = (v, n) => (v == null ? "" : v.toString()).slice(0, n);
 
 function ioListClearProgress(list){
  if(!Array.isArray(list) || !list.length) return list;
  return list.map(p => ({ ...p, rows: (p.rows || []).map(r => ({ ...r, done:false, by:"", t:"" })) }));
 }
 
+/* ---- user-submitted content is normalized server-side: fields are
+   whitelisted, lengths capped, and priority/pri validated against a fixed set.
+   This is authoritative — the client is never trusted to have escaped anything
+   or to leave `hidden`/`ackBy` alone. Applied both when a new item is stored
+   AND on every read, so any pre-existing junk is neutralized too. ---- */
+const ISSUE_PRIOS = new Set(["low","med","urgent"]);
+const ANN_PRIOS = new Set(["urgent","heads","info"]);
+
+function normComments(list){
+ if(!Array.isArray(list)) return [];
+ return list.map(c => ({
+  name: str((c && c.name) || "Volunteer", 40),
+  text: str(c && c.text, 500),
+  t: str(c && c.t, 12)
+ })).slice(-100);
+}
+function normIssue(x){
+ x = x || {};
+ return {
+  id: str(x.id, 40) || uid(),
+  priority: ISSUE_PRIOS.has(x.priority) ? x.priority : "med",
+  title: str(x.title, 140),
+  body: str(x.body, 2000),
+  by: str(x.by || "Volunteer", 40),
+  t: str(x.t, 12),
+  hidden: !!x.hidden,
+  ackBy: str(x.ackBy, 8),
+  ackT: str(x.ackT, 12),
+  comments: normComments(x.comments)
+ };
+}
+function normPraiseItem(x){
+ x = x || {};
+ return {
+  id: str(x.id, 40) || uid(),
+  name: str(x.name || "Anonymous", 40),
+  body: str(x.body, 2000),
+  t: str(x.t, 12),
+  hidden: !!x.hidden,
+  ackBy: str(x.ackBy, 8),
+  ackT: str(x.ackT, 12),
+  comments: normComments(x.comments)
+ };
+}
+function normAnn(x){
+ x = x || {};
+ return {
+  id: str(x.id, 40) || uid(),
+  pri: ANN_PRIOS.has(x.pri) ? x.pri : "info",
+  title: str(x.title, 140),
+  body: str(x.body, 2000),
+  by: str(x.by, 60),
+  t: str(x.t, 12),
+  comments: normComments(x.comments)
+ };
+}
+function normCheckin(x){
+ x = x || {};
+ return {
+  id: str(x.id, 40) || uid(),
+  name: str(x.name, 40),
+  team: str(x.team, 40),
+  attested: !!x.attested,
+  t: str(x.t, 12)
+ };
+}
+
 export function normCore(c){
  c = c || {};
  return {
  checklist: c.checklist || {},
- announcements: c.announcements || [],
- feedback: c.feedback || [],
- praises: c.praises || [],
+ announcements: Array.isArray(c.announcements) ? c.announcements.map(normAnn).slice(0, 200) : [],
+ feedback: Array.isArray(c.feedback) ? c.feedback.map(normIssue).slice(0, 500) : [],
+ praises: Array.isArray(c.praises) ? c.praises.map(normPraiseItem).slice(0, 500) : [],
  event: c.event || { name:"", date:"" },
  // One-time migration: retire the old 0627 Day PIN in favor of 0711.
  dayPin: (typeof c.dayPin === "string" && c.dayPin !== "0627") ? c.dayPin : DEFAULT_DAY_PIN,
@@ -71,6 +150,8 @@ function normRadios(r){
  }
  return { list: out };
 }
+const normCheckins = v => Array.isArray(v) ? v.map(normCheckin).slice(-2000) : [];
+const normIO = v => ({ list: (v && Array.isArray(v.list)) ? v.list : [] });
 
 const LEADER_ACTIONS = new Set([
  "toggleCheck","addAnnouncement","ackCard","setEvent","setIOList","setDayPin",
@@ -85,6 +166,37 @@ function tallyKey(id){
  id = (id || "anon").toString().replace(/[^a-z0-9_-]/gi, "").slice(0, 24) || "anon";
  return "tally-" + id;
 }
+
+/* ---------------- compare-and-swap ----------------
+ Read a blob with its etag, let `mutate` produce the next value, then write
+ only-if-the-etag-still-matches (or only-if-new when the blob is absent). On a
+ conflict (someone else wrote first) we re-read and re-apply. `mutate` MUST be a
+ pure function of the freshly-read value — that is what makes concurrent writers
+ safe. Returning undefined from `mutate` means "no change, don't write".
+ Between retries we sleep a jittered, growing backoff so a burst of writers on
+ the same blob de-synchronizes instead of thundering in lockstep. */
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const backoff = attempt => sleep(Math.floor(Math.random() * 25) + attempt * 4);
+
+async function compareAndSwap(s, key, normalize, mutate, fallback){
+ for(let attempt = 0; attempt < 30; attempt++){
+  if(attempt) await backoff(attempt);
+  let res = null;
+  try { res = await s.getWithMetadata(key, { type:"json" }); } catch(_) { res = null; }
+  const exists = !!(res && res.data != null);
+  let base = exists ? res.data : (typeof fallback === "function" ? await fallback() : (fallback ?? null));
+  if(normalize) base = normalize(base);
+  const next = mutate(base);
+  if(next === undefined) return base; // caller signalled no-op
+  const opts = exists ? { onlyIfMatch: res.etag } : { onlyIfNew: true };
+  let w;
+  try { w = await s.setJSON(key, next, opts); } catch(_) { w = { modified:false }; }
+  if(w && w.modified) return next;
+ }
+ throw new Error("write conflict: " + key);
+}
+const legacyState = s => async () => (await s.get("state", { type:"json" })) || {};
+const casCore = (s, mutate) => compareAndSwap(s, "core", normCore, mutate, legacyState(s));
 
 async function readAll(s){
  const [core, checkins, io, prompter, radios] = await Promise.all([
@@ -101,7 +213,7 @@ async function migrateIfNeeded(s, parts){
  if(parts.core) return parts; // already on split layout
  const old = await s.get("state", { type:"json" });
  const core = normCore(old || {});
- const checkins = (old && old.checkins) || [];
+ const checkins = normCheckins((old && old.checkins) || []);
  const io = { list: (old && old.ioList) || [] };
  const prompter = normPrompter(old && old.prompter);
  await Promise.all([
@@ -115,6 +227,7 @@ async function migrateIfNeeded(s, parts){
  return { core, checkins, io, prompter, radios: parts.radios || null };
 }
 
+/* ---- head count aggregation ---- */
 async function sumCounts(s){
  let total = 0;
  const { blobs } = await s.list({ prefix: "count-" });
@@ -124,7 +237,6 @@ async function sumCounts(s){
  }));
  return Math.max(0, total);
 }
-
 async function sumTally(s){
  let total = 0; const by = {};
  const { blobs } = await s.list({ prefix: "tally-" });
@@ -157,19 +269,56 @@ function compactTally(value){
  return out;
 }
 
+/* Authoritative rebuild of the head count from every shard (legacy + tally). */
+async function rebuildAgg(s){
+ const [cnt, tally] = await Promise.all([sumCounts(s), sumTally(s)]);
+ return { total: Math.max(0, cnt + tally.total), by: tally.by };
+}
+/* Fast read: use the cached aggregate; rebuild + seed it if it is missing. */
+async function readAgg(s){
+ let agg = await s.get("count-agg", { type:"json" });
+ if(!agg || typeof agg.total !== "number" || !agg.by || typeof agg.by !== "object"){
+  agg = await rebuildAgg(s);
+  await s.setJSON("count-agg", agg).catch(() => {});
+ }
+ return agg;
+}
+/* Apply an already-persisted shard delta to the cached aggregate under CAS.
+   If it drifts or we can't win the race, we delete it so the next read rebuilds
+   from the shards (which are the source of truth) — never wrong for long. */
+async function bumpAgg(s, effTotal, effBy){
+ for(let attempt = 0; attempt < 20; attempt++){
+  if(attempt) await backoff(attempt);
+  let res = null;
+  try { res = await s.getWithMetadata("count-agg", { type:"json" }); } catch(_) { res = null; }
+  if(!(res && res.data && typeof res.data.total === "number")){
+   // No cache yet — seed it from the shards (which already include this tap).
+   const fresh = await rebuildAgg(s);
+   let w; try { w = await s.setJSON("count-agg", fresh, { onlyIfNew:true }); } catch(_) { w = { modified:false }; }
+   if(w && w.modified) return;
+   continue; // someone else seeded it; loop to apply our delta on top
+  }
+  const agg = { total: Math.max(0, (Number(res.data.total) || 0) + (effTotal || 0)), by: { ...res.data.by } };
+  if(effBy) for(const k of Object.keys(effBy)) agg.by[k] = Math.max(0, (Number(agg.by[k]) || 0) + effBy[k]);
+  let w; try { w = await s.setJSON("count-agg", agg, { onlyIfMatch: res.etag }); } catch(_) { w = { modified:false }; }
+  if(w && w.modified) return;
+ }
+ await s.delete("count-agg").catch(() => {}); // give up cleanly → next read rebuilds
+}
+
 async function assemble(s){
  let parts = await readAll(s);
  parts = await migrateIfNeeded(s, parts);
  const core = normCore(parts.core);
- const [cnt, tally] = await Promise.all([sumCounts(s), sumTally(s)]);
+ const agg = await readAgg(s);
  return {
  checklist: core.checklist,
  announcements: core.announcements,
- checkins: Array.isArray(parts.checkins) ? parts.checkins : [],
+ checkins: normCheckins(parts.checkins),
  feedback: core.feedback,
  praises: core.praises,
- count: Math.max(0, cnt + tally.total),
- tallyBy: tally.by,
+ count: Math.max(0, agg.total),
+ tallyBy: agg.by || {},
  radios: normRadios(parts.radios).list,
  event: core.event,
  ioList: (parts.io && Array.isArray(parts.io.list)) ? parts.io.list : [],
@@ -179,6 +328,13 @@ async function assemble(s){
  };
 }
 
+/* djb2-xor hash → weak ETag for cheap "did anything change?" polling. */
+function hash(strv){
+ let h = 5381;
+ for(let i = 0; i < strv.length; i++) h = (((h << 5) + h) ^ strv.charCodeAt(i)) >>> 0;
+ return h.toString(36);
+}
+
 const json = (obj, status=200) => new Response(JSON.stringify(obj), {
  status, headers: { "Content-Type":"application/json", "Cache-Control":"no-store" }
 });
@@ -186,7 +342,15 @@ const json = (obj, status=200) => new Response(JSON.stringify(obj), {
 export default async (req) => {
  const s = getStore(STORE, { consistency: "strong" });
 
- if(req.method === "GET") return json(await assemble(s));
+ if(req.method === "GET"){
+  const body = JSON.stringify(await assemble(s));
+  const etag = 'W/"' + hash(body) + '"';
+  // Unchanged since the client last saw it? Skip the payload AND the re-render.
+  if(req.headers.get("if-none-match") === etag){
+   return new Response(null, { status:304, headers:{ "ETag":etag, "Cache-Control":"no-store" } });
+  }
+  return new Response(body, { status:200, headers:{ "Content-Type":"application/json", "Cache-Control":"no-store", "ETag":etag } });
+ }
 
  if(req.method === "POST"){
  let body = {};
@@ -215,143 +379,163 @@ export default async (req) => {
  if(action === "bump"){
  const key = devKey(payload.dev);
  const cur = (await s.get(key, { type:"json" })) || 0;
- await s.setJSON(key, (typeof cur === "number" ? cur : 0) + (Number(payload.delta) || 0));
+ const before = (typeof cur === "number" ? cur : 0);
+ const after = before + (Number(payload.delta) || 0);
+ await s.setJSON(key, after);
+ await bumpAgg(s, after - before, null);
  return json({ ok:true });
  }
 
- /* ---- v1.3.0 tally: append-only per-phone log with initials ----
- Every tap is {by, delta, t}. Undo = a negative entry. Nothing is
- overwritten, so simultaneous counters can never erase each other,
- and the leader dashboard can break the total down per initials. */
+ /* ---- v1.3.0 tally: per-phone summary {total, by}. A phone only writes its
+    own shard (and the client serializes its own taps), so simultaneous
+    counters can never erase each other. We then fold the *effective* delta
+    (after clamping at 0) into the cached aggregate so GET stays O(1). ---- */
  if(action === "tallyAdd"){
  const key = tallyKey(payload.dev);
  const tally = compactTally(await s.get(key, { type:"json" }));
  const by = (payload.by || "?").toString().toUpperCase().slice(0, 4) || "?";
  const delta = Number(payload.delta) || 0;
+ const beforeTotal = tally.total, beforeBy = tally.by[by] || 0;
  tally.total = Math.max(0, tally.total + delta);
  tally.by[by] = Math.max(0, (tally.by[by] || 0) + delta);
  await s.setJSON(key, tally);
+ await bumpAgg(s, tally.total - beforeTotal, { [by]: tally.by[by] - beforeBy });
  return json({ ok:true });
  }
 
- /* ---- everything else touches exactly one blob ---- */
- let parts = await readAll(s);
- parts = await migrateIfNeeded(s, parts);
- const core = normCore(parts.core);
- const checkins = Array.isArray(parts.checkins) ? parts.checkins : [];
- const io = (parts.io && Array.isArray(parts.io.list)) ? parts.io : { list: [] };
- const prompter = normPrompter(parts.prompter);
+ /* ---- everything else touches exactly one blob, via compare-and-swap ---- */
+ // Ensure the split blobs exist (first-run migration off the old single blob).
+ await migrateIfNeeded(s, await readAll(s));
 
  switch(action){
- case "toggleCheck": {
+ case "toggleCheck":
+ await casCore(s, core => {
  const id = payload.id;
  if(id){
  if(core.checklist[id]) delete core.checklist[id];
  else core.checklist[id] = { by: payload.by || "", t: payload.t || "", dm: (payload.dm ?? null) };
  }
- await s.setJSON("core", core); break;
- }
- case "addCheckin": checkins.push(payload); await s.setJSON("checkins", checkins); break;
- case "addAnnouncement": core.announcements.unshift(payload); await s.setJSON("core", core); break;
- case "addPraise": core.praises.unshift(payload); await s.setJSON("core", core); break;
- case "addFeedback": core.feedback.unshift(payload); await s.setJSON("core", core); break;
- case "addComment": {
+ return core;
+ });
+ break;
+ case "addCheckin":
+ await compareAndSwap(s, "checkins", normCheckins, list => { list.push(normCheckin(payload)); return list.slice(-2000); }, () => []);
+ break;
+ case "addAnnouncement":
+ await casCore(s, core => { core.announcements.unshift(normAnn(payload)); core.announcements = core.announcements.slice(0, 200); return core; });
+ break;
+ case "addPraise":
+ await casCore(s, core => {
+ const it = normPraiseItem(payload); it.hidden = false; it.ackBy = ""; it.ackT = ""; it.comments = [];
+ core.praises.unshift(it); core.praises = core.praises.slice(0, 500); return core;
+ });
+ break;
+ case "addFeedback":
+ await casCore(s, core => {
+ const it = normIssue(payload); it.hidden = false; it.ackBy = ""; it.ackT = ""; it.comments = [];
+ core.feedback.unshift(it); core.feedback = core.feedback.slice(0, 500); return core;
+ });
+ break;
+ case "addComment":
+ await casCore(s, core => {
  const arr = payload.kind === "praise" ? core.praises : (payload.kind === "ann" ? core.announcements : core.feedback);
  const it = arr.find(x => x.id === payload.id);
- if(it){
+ if(!it) return undefined; // nothing to update — skip the write
  it.comments = Array.isArray(it.comments) ? it.comments : [];
- it.comments.push({
- name: (payload.name || "Volunteer").toString().slice(0, 40),
- text: (payload.text || "").toString().slice(0, 500),
- t: (payload.t || "").toString().slice(0, 12)
- });
+ it.comments.push({ name: str(payload.name || "Volunteer", 40), text: str(payload.text, 500), t: str(payload.t, 12) });
  it.comments = it.comments.slice(-100);
- }
- await s.setJSON("core", core); break;
- }
- case "radioToggle": {
- const rad = normRadios(parts.radios);
+ return core;
+ });
+ break;
+ case "radioToggle":
+ await compareAndSwap(s, "radios", normRadios, rad => {
  const n = Number(payload.n);
- if(n >= 1 && n <= 10){
+ if(!(n >= 1 && n <= 10)) return undefined;
  const r = rad.list[n-1];
  const stamp = { by:(payload.by || "?").toString().toUpperCase().slice(0, 4), t:(payload.t || "").toString().slice(0, 12) };
  if(r.out && !r.in){ r.in = stamp; } // returning it
  else { r.out = stamp; r.in = null; } // checking it out
- await s.setJSON("radios", rad);
- }
+ return rad;
+ }, () => ({ list: defaultRadios() }));
  break;
- }
- case "setEvent": core.event = { name: payload.name || "", date: payload.date || "" }; await s.setJSON("core", core); break;
- case "setIOList": if(Array.isArray(payload.list)){ io.list = payload.list; await s.setJSON("io", io); } break;
- case "setDayPin": core.dayPin = (payload.pin || "").toString().trim().slice(0, 10); await s.setJSON("core", core); break;
- case "setFunding": core.funding = { pct: clampPct(payload.pct), needed: (payload.needed || "").toString().slice(0, 30) || core.funding.needed }; await s.setJSON("core", core); break;
- case "ackCard": {
+ case "setEvent":
+ await casCore(s, core => { core.event = { name: payload.name || "", date: payload.date || "" }; return core; });
+ break;
+ case "setIOList":
+ if(!Array.isArray(payload.list)) break;
+ await compareAndSwap(s, "io", normIO, io => { io.list = payload.list; return io; }, () => ({ list: [] }));
+ break;
+ case "setDayPin":
+ await casCore(s, core => { core.dayPin = (payload.pin || "").toString().trim().slice(0, 10); return core; });
+ break;
+ case "setFunding":
+ await casCore(s, core => { core.funding = { pct: clampPct(payload.pct), needed: (payload.needed || "").toString().slice(0, 30) || core.funding.needed }; return core; });
+ break;
+ case "ackCard":
+ await casCore(s, core => {
  const arr = payload.kind === "praise" ? core.praises : core.feedback;
  const it = arr.find(x => x.id === payload.id);
- if(it){
+ if(!it) return undefined;
  const hide = !it.hidden;
  it.hidden = hide;
- it.ackBy = hide ? (payload.by || "") : "";
- it.ackT = hide ? (payload.t || "") : "";
- }
- await s.setJSON("core", core); break;
- }
+ it.ackBy = hide ? str(payload.by, 8) : "";
+ it.ackT = hide ? str(payload.t, 12) : "";
+ return core;
+ });
+ break;
  case "reset": {
  /* v1.3.0 — ISSUES SURVIVE THE RESET (open + acknowledged), per leadership.
- Clears checklists, check-ins, counts (legacy + tally), praises,
- announcements & radios. Keeps event info, Day PIN, funding, I/O roster
- (progress cleared) and the Recording Studio scripts. */
- const fresh = { ...EMPTY_CORE, event: core.event, dayPin: core.dayPin, funding: core.funding, feedback: core.feedback };
- io.list = ioListClearProgress(io.list);
+    Clears checklists, check-ins, counts (legacy + tally), praises,
+    announcements & radios. Keeps event info, Day PIN, funding, I/O roster
+    (progress cleared) and the Recording Studio scripts. */
+ await casCore(s, core => ({ ...EMPTY_CORE, event: core.event, dayPin: core.dayPin, funding: core.funding, feedback: core.feedback }));
+ await compareAndSwap(s, "io", normIO, io => { io.list = ioListClearProgress(io.list); return io; }, () => ({ list: [] }));
  const [c1, c2] = await Promise.all([ s.list({ prefix: "count-" }), s.list({ prefix: "tally-" }) ]);
  const doomed = [ ...((c1 && c1.blobs) || []), ...((c2 && c2.blobs) || []) ];
  await Promise.all([
- s.setJSON("core", fresh),
  s.setJSON("checkins", []),
- s.setJSON("io", io),
  s.setJSON("radios", { list: defaultRadios() }),
+ s.setJSON("count-agg", { total:0, by:{} }),
  ...doomed.map(b => s.delete(b.key))
  ]);
  break;
  }
  /* ---- Recording Studio ---- */
  case "promptSeed":
- if(!prompter.scripts.length && Array.isArray(payload.scripts)){
- await s.setJSON("prompter", normPrompter({ scripts: payload.scripts }));
- }
+ if(Array.isArray(payload.scripts))
+ await compareAndSwap(s, "prompter", normPrompter, p => p.scripts.length ? undefined : normPrompter({ scripts: payload.scripts }), () => ({ scripts: [] }));
  break;
  case "promptAdd":
- if(payload.script && payload.script.id){
- prompter.scripts.push(normPrompter({ scripts:[payload.script] }).scripts[0]);
- await s.setJSON("prompter", prompter);
- }
+ if(payload.script && payload.script.id)
+ await compareAndSwap(s, "prompter", normPrompter, p => { p.scripts.push(normPrompter({ scripts:[payload.script] }).scripts[0]); return p; }, () => ({ scripts: [] }));
  break;
- case "promptEdit": {
- const i = prompter.scripts.findIndex(x => x.id === payload.id);
- if(i >= 0){
- const merged = { ...prompter.scripts[i], ...(payload.patch || {}), id: payload.id };
- prompter.scripts[i] = normPrompter({ scripts:[merged] }).scripts[0];
- await s.setJSON("prompter", prompter);
- }
+ case "promptEdit":
+ await compareAndSwap(s, "prompter", normPrompter, p => {
+ const i = p.scripts.findIndex(x => x.id === payload.id);
+ if(i < 0) return undefined;
+ p.scripts[i] = normPrompter({ scripts:[{ ...p.scripts[i], ...(payload.patch || {}), id: payload.id }] }).scripts[0];
+ return p;
+ }, () => ({ scripts: [] }));
  break;
- }
  case "promptDelete":
- prompter.scripts = prompter.scripts.filter(x => x.id !== payload.id);
- await s.setJSON("prompter", prompter);
+ await compareAndSwap(s, "prompter", normPrompter, p => { p.scripts = p.scripts.filter(x => x.id !== payload.id); return p; }, () => ({ scripts: [] }));
  break;
- case "promptDone": {
- const it = prompter.scripts.find(x => x.id === payload.id);
- if(it){
+ case "promptDone":
+ await compareAndSwap(s, "prompter", normPrompter, p => {
+ const it = p.scripts.find(x => x.id === payload.id);
+ if(!it) return undefined;
  it.done = { initials:(payload.initials||"").toString().toUpperCase().slice(0,4), date:(payload.date||"").toString().slice(0,12) };
- await s.setJSON("prompter", prompter);
- }
+ return p;
+ }, () => ({ scripts: [] }));
  break;
- }
- case "promptUndone": {
- const it = prompter.scripts.find(x => x.id === payload.id);
- if(it){ it.done = null; await s.setJSON("prompter", prompter); }
+ case "promptUndone":
+ await compareAndSwap(s, "prompter", normPrompter, p => {
+ const it = p.scripts.find(x => x.id === payload.id);
+ if(!it) return undefined;
+ it.done = null;
+ return p;
+ }, () => ({ scripts: [] }));
  break;
- }
  default: return json({ error:"unknown action" }, 400);
  }
  /* The browser already applied the change optimistically. Do not rebuild and

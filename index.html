@@ -473,7 +473,7 @@
 <body>
 <div class="topwrap">
 <header class="topbar">
-  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.3.0</span></span></div>
+  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.4.0</span></span></div>
   <div class="clock"><div class="t" id="clockTime">--:--</div><div class="d" id="clockDate">SATURDAY</div></div>
 </header>
 <div class="nowstrip" id="nowStrip" onclick="goSchedule()">
@@ -1883,7 +1883,16 @@ function doActionLight(action,payload,localApply,rerender){
   apiPost(action,payload).then(function(st){inflight=Math.max(0,inflight-1);if(settled()){reconcileResponse(st);renderDynamic();}})
   .catch(function(){inflight=Math.max(0,inflight-1);LIVE=false;updateSync();renderDynamic();});
 }
-function apiGet(){return fetch(API,{method:"GET"}).then(function(r){if(!r.ok)throw 0;return r.json();});}
+var lastEtag="";
+function apiGet(){
+  var h={};if(lastEtag)h["If-None-Match"]=lastEtag;
+  return fetch(API,{method:"GET",headers:h}).then(function(r){
+    if(r.status===304)return {__nomod:true};   // nothing changed since our last poll
+    if(!r.ok)throw 0;
+    var et=r.headers.get("ETag");if(et)lastEtag=et;
+    return r.json();
+  });
+}
 var LEADERPIN=sessionStorage.getItem("k2c_lpin")||"";
 function apiPost(a,p){return fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:a,payload:p,pin:LEADERPIN})}).then(function(r){if(r.status===403){LEADER=false;LEADERPIN="";sessionStorage.removeItem("k2c_lpin");applyLeaderUI();renderDynamic();alert("Leader PIN check failed — tap a 🔒 to unlock again.");throw 403;}if(!r.ok)throw 0;return r.json();});}
 function verifyPin(action,pin){return fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:action,pin:pin})}).then(function(r){if(r.status===403)return null;if(!r.ok)throw 0;return r.json();});}
@@ -2035,7 +2044,7 @@ function toggleCheck(id){
 function renderAnnouncements(){
   var f=document.getElementById("annFeed");
   var pin='<div class="item heads" onclick="show(\'checkin\')" style="cursor:pointer"><div class="top"><span class="pri">Check-in</span><span class="meta">Pinned</span></div><h4>👋 Did you check in?</h4><p>Tap here to check yourself in for today\'s event — please do this before you serve.</p><div class="by">— Kingdom to the Counties</div></div>';
-  f.innerHTML=pin+STATE.announcements.map(function(a){return '<div class="item '+a.pri+'"><div class="top"><span class="pri">'+({urgent:"Urgent",heads:"Heads-up",info:"Info"}[a.pri]||"Info")+'</span><span class="meta">'+esc(a.t)+'</span></div><h4>'+esc(a.title)+'</h4><p>'+esc(a.body)+'</p><div class="by">— '+esc(a.by)+'</div>'+cmtBlock("ann",a)+'</div>';}).join("");
+  f.innerHTML=pin+STATE.announcements.map(function(a){var acls=({urgent:"urgent",heads:"heads",info:"info"}[a.pri]||"info");return '<div class="item '+acls+'"><div class="top"><span class="pri">'+({urgent:"Urgent",heads:"Heads-up",info:"Info"}[a.pri]||"Info")+'</span><span class="meta">'+esc(a.t)+'</span></div><h4>'+esc(a.title)+'</h4><p>'+esc(a.body)+'</p><div class="by">— '+esc(a.by)+'</div>'+cmtBlock("ann",a)+'</div>';}).join("");
   var bar=document.getElementById("annBar");
   annBarMode="checkin";
   document.getElementById("annBarText").innerHTML="👋 Did you check in? <b>Tap here to check in!</b>";
@@ -2064,7 +2073,7 @@ function renderPraise(){
   if(acked.length)html+='<details class="ackedwrap"><summary>✓ Acknowledged ('+acked.length+')</summary>'+acked.map(praiseCard).join("")+'</details>';
   f.innerHTML=html;
 }
-function issueCard(x){return '<div class="item '+x.priority+(x.hidden?' acked':'')+'"><div class="top"><span class="pri">'+({low:"Low",med:"Attention",urgent:"Urgent"}[x.priority]||"Note")+'</span><span class="meta">'+esc(x.t)+'</span></div><h4>'+esc(x.title)+'</h4><p>'+esc(x.body)+'</p><div class="by">— '+esc(x.by)+'</div>'+ackMeta(x)+cmtBlock("feedback",x)+ackBtn("feedback",x)+'</div>';}
+function issueCard(x){var pcls=({low:"low",med:"med",urgent:"urgent"}[x.priority]||"med");return '<div class="item '+pcls+(x.hidden?' acked':'')+'"><div class="top"><span class="pri">'+({low:"Low",med:"Attention",urgent:"Urgent"}[x.priority]||"Note")+'</span><span class="meta">'+esc(x.t)+'</span></div><h4>'+esc(x.title)+'</h4><p>'+esc(x.body)+'</p><div class="by">— '+esc(x.by)+'</div>'+ackMeta(x)+cmtBlock("feedback",x)+ackBtn("feedback",x)+'</div>';}
 function renderIssues(){
   var f=document.getElementById("issueFeed");
   var open=STATE.feedback.filter(function(x){return !x.hidden;}),acked=STATE.feedback.filter(function(x){return x.hidden;});
@@ -2228,8 +2237,8 @@ function syncInits(except){["initSu","initIo","initCt","initRad"].forEach(functi
 bindInit("initSu");bindInit("initIo");bindInit("initCt");bindInit("initRad");
 document.getElementById("ciBtn").addEventListener("click",function(){var name=document.getElementById("ciName").value.trim(),team=document.getElementById("ciTeam").value;if(!name){flash("ciName");return;}if(!document.getElementById("ciAttest").checked){document.getElementById("ciAttestMsg").classList.add("show");document.getElementById("ciAttestRow").classList.add("nudge");setTimeout(function(){document.getElementById("ciAttestRow").classList.remove("nudge");},600);return;}MY.name=name;var rec={id:uid(),name:name,team:team,attested:true,t:nowLabel()};doAction("addCheckin",rec,function(){STATE.checkins.push(rec);});document.getElementById("ciName").value="";document.getElementById("ciAttest").checked=false;document.getElementById("ciAttestMsg").classList.remove("show");document.getElementById("checkinPrompt").style.display="none";prefillNames();toast(tourDone()?"✅ Checked in!":"✅ Checked in! New to the app? Take the 2-min App Tour under Resources 🧭");});
 document.getElementById("aBtn").addEventListener("click",function(){if(!LEADER){askPin(function(){});return;}var by=document.getElementById("aName").value.trim()||"Leadership",title=document.getElementById("aTitle").value.trim(),body=document.getElementById("aBody").value.trim(),pri=document.getElementById("aPri").value;if(!title||!body){flash(title?"aBody":"aTitle");return;}MY.name=by;var rec={id:uid(),pri:pri,title:title,body:body,by:by,t:nowLabel()};barDismissed=false;doAction("addAnnouncement",rec,function(){STATE.announcements.unshift(rec);});document.getElementById("aTitle").value="";document.getElementById("aBody").value="";prefillNames();});
-document.getElementById("pBtn").addEventListener("click",function(){var name=document.getElementById("pName").value.trim()||"Anonymous",body=document.getElementById("pBody").value.trim();if(!body){flash("pBody");return;}MY.name=name;var rec={id:uid(),name:name,body:body,t:nowLabel()};doAction("addPraise",rec,function(){STATE.praises.unshift(rec);});document.getElementById("pBody").value="";prefillNames();});
-document.getElementById("fBtn").addEventListener("click",function(){var by=document.getElementById("fName").value.trim()||"Volunteer",title=document.getElementById("fTitle").value.trim(),body=document.getElementById("fBody").value.trim(),priority=document.getElementById("fPri").value;if(!title){flash("fTitle");return;}MY.name=by;var rec={id:uid(),priority:priority,title:title,body:body,by:by,t:nowLabel()};doAction("addFeedback",rec,function(){STATE.feedback.unshift(rec);});document.getElementById("fTitle").value="";document.getElementById("fBody").value="";prefillNames();});
+document.getElementById("pBtn").addEventListener("click",function(){var name=document.getElementById("pName").value.trim()||"Anonymous",body=document.getElementById("pBody").value.trim();if(!body){flash("pBody");return;}MY.name=name;var rec={id:uid(),name:name,body:body,t:nowLabel()};doAction("addPraise",rec,function(){STATE.praises.unshift(rec);});document.getElementById("pBody").value="";prefillNames();toast("🎉 Praise posted!");});
+document.getElementById("fBtn").addEventListener("click",function(){var by=document.getElementById("fName").value.trim()||"Volunteer",title=document.getElementById("fTitle").value.trim(),body=document.getElementById("fBody").value.trim(),priority=document.getElementById("fPri").value;if(!title){flash("fTitle");return;}MY.name=by;var rec={id:uid(),priority:priority,title:title,body:body,by:by,t:nowLabel()};doAction("addFeedback",rec,function(){STATE.feedback.unshift(rec);});document.getElementById("fTitle").value="";document.getElementById("fBody").value="";prefillNames();toast("✅ Sent to leadership");});
 function flash(id){var e=document.getElementById(id);if(e){e.style.borderColor="#B86239";e.focus();setTimeout(function(){e.style.borderColor="";},1200);}}
 // Attendance counter: apply each tap instantly, then batch a burst of taps into
 // ONE server write. Fewer concurrent read-modify-writes = no lost counts when
@@ -2309,7 +2318,7 @@ document.getElementById("csvBtn").addEventListener("click",function(){
   var csv=rows.map(function(r){return r.map(csvCell).join(",");}).join("\r\n");
   var blob=new Blob(["\ufeff"+csv],{type:"text/csv"});
   var a=document.createElement("a");a.href=URL.createObjectURL(blob);
-  a.download="k2c-day-report-v1.3.0-"+new Date().toISOString().slice(0,10)+".csv";
+  a.download="k2c-day-report-v1.4.0-"+new Date().toISOString().slice(0,10)+".csv";
   document.body.appendChild(a);a.click();a.remove();
 });
 document.getElementById("resetBtn").addEventListener("click",function(){
@@ -2367,6 +2376,7 @@ function finishBoot(){
       apiGet().then(function(s){
         if(settled()){
           lastSyncAt=Date.now();everSynced=true;if(!LIVE){LIVE=true;updateSync();}
+          if(s&&s.__nomod)return;   // 304 — skip re-serialize and re-render entirely
           var snap=JSON.stringify(s),changed=snap!==lastSnap;lastSnap=snap;STATE=normalize(s);maybeDayGate();
           if(changed){if(userEditing())remoteDirty=true;else renderDynamic();}
         }
