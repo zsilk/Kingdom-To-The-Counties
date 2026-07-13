@@ -473,7 +473,7 @@
 <body>
 <div class="topwrap">
 <header class="topbar">
-  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.4.0</span></span></div>
+  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.4.1</span></span></div>
   <div class="clock"><div class="t" id="clockTime">--:--</div><div class="d" id="clockDate">SATURDAY</div></div>
 </header>
 <div class="nowstrip" id="nowStrip" onclick="goSchedule()">
@@ -2085,7 +2085,7 @@ function cmtBlock(kind,x){
   var cs=Array.isArray(x.comments)?x.comments:[];
   var html='<div class="cmts">'+cs.map(function(c){return '<div class="cmt"><b>'+esc(c.name)+'</b><span class="ct2">'+esc(c.t)+'</span><p>'+esc(c.text)+'</p></div>';}).join("");
   html+='<button class="cmtbtn" onclick="cmtOpen(this)">💬 Comment'+(cs.length?' ('+cs.length+')':'')+'</button>';
-  html+='<div class="cmtform"><input class="cn" maxlength="40" placeholder="Your name" value="'+esc(MY.name||"")+'"/><textarea class="ct" rows="2" maxlength="500" placeholder="Write a comment…"></textarea><button onclick="cmtPost(this,\''+kind+'\',\''+x.id+'\')">Post</button></div></div>';
+  html+='<div class="cmtform" data-kind="'+kind+'" data-id="'+esc(x.id)+'"><input class="cn" maxlength="40" placeholder="Your name" value="'+esc(MY.name||"")+'"/><textarea class="ct" rows="2" maxlength="500" placeholder="Write a comment…"></textarea><button onclick="cmtPost(this,\''+kind+'\',\''+x.id+'\')">Post</button></div></div>';
   return html;
 }
 function cmtOpen(btn){var f=btn.parentNode.querySelector(".cmtform");if(f)f.classList.toggle("show");}
@@ -2094,11 +2094,15 @@ function cmtPost(btn,kind,id){
   if(!text){f.querySelector(".ct").focus();return;}
   MY.name=name;
   var c={name:name,text:text,t:nowLabel()};
+  // Clear + collapse BEFORE the optimistic re-render so the just-sent draft
+  // isn't restored back into the box (see snapshot/restoreComments).
+  var ct=f.querySelector(".ct");if(ct)ct.value="";f.classList.remove("show");
   doAction("addComment",{kind:kind,id:id,name:name,text:text,t:c.t},function(){
     var arr=kind==="praise"?STATE.praises:(kind==="ann"?STATE.announcements:STATE.feedback);
     var it=arr.filter(function(x){return x.id===id;})[0];
     if(it){it.comments=Array.isArray(it.comments)?it.comments:[];it.comments.push(c);}
   });
+  toast("💬 Comment added");
 }
 function ackCard(kind,id){
   if(!LEADER){askPin(function(){ackCard(kind,id);});return;}
@@ -2169,7 +2173,42 @@ function renderDashboard(){
   if(document.activeElement!==ed)ed.value=ev.date||"";
   renderTallyBreak();renderDashRadios();
 }
-function renderDynamic(){refreshChecklists();renderAnnouncements();renderAnnGate();renderSimGate();renderPraise();renderIssues();renderRoster();renderCount();renderRadios();renderEvent();renderFunding();renderDashboard();updateBadges();if(!ioEditing)renderIOList();}
+/* A comment form's open/draft state lives only in the DOM, so any wholesale
+   innerHTML rebuild (a background sync, a head-count tick, someone else's edit)
+   used to wipe a half-typed comment out from under the user. snapshotComments()
+   captures every open-or-in-progress comment form keyed by its card, and
+   restoreComments() puts the open state, name, draft text, focus and caret back
+   after the rebuild — so live updates flow underneath without disturbing what
+   the user is typing. */
+function snapshotComments(){
+  var out=[],ae=document.activeElement,forms=document.querySelectorAll(".cmtform");
+  for(var i=0;i<forms.length;i++){
+    var f=forms[i],cn=f.querySelector(".cn"),ct=f.querySelector(".ct");
+    var open=f.classList.contains("show"),text=ct?ct.value:"",name=cn?cn.value:"";
+    var hasFocus=!!(ae&&f.contains(ae));
+    if(!open&&!text&&!hasFocus)continue;
+    var focused=ae===cn?"cn":(ae===ct?"ct":null),selS=0,selE=0;
+    try{if(focused==="cn"){selS=cn.selectionStart;selE=cn.selectionEnd;}else if(focused==="ct"){selS=ct.selectionStart;selE=ct.selectionEnd;}}catch(_){}
+    out.push({key:(f.getAttribute("data-kind")||"")+"|"+(f.getAttribute("data-id")||""),open:open,name:name,text:text,focused:focused,selS:selS,selE:selE});
+  }
+  return out;
+}
+function restoreComments(snaps){
+  if(!snaps||!snaps.length)return;
+  var map={};for(var i=0;i<snaps.length;i++)map[snaps[i].key]=snaps[i];
+  var forms=document.querySelectorAll(".cmtform");
+  for(var j=0;j<forms.length;j++){
+    var f=forms[j],s=map[(f.getAttribute("data-kind")||"")+"|"+(f.getAttribute("data-id")||"")];
+    if(!s)continue;
+    if(s.open)f.classList.add("show");
+    var cn=f.querySelector(".cn"),ct=f.querySelector(".ct");
+    if(cn&&s.name)cn.value=s.name;
+    if(ct)ct.value=s.text;
+    if(s.focused==="cn"&&cn){cn.focus();try{cn.setSelectionRange(s.selS,s.selE);}catch(_){}}
+    else if(s.focused==="ct"&&ct){ct.focus();try{ct.setSelectionRange(s.selS,s.selE);}catch(_){}}
+  }
+}
+function renderDynamic(){var _cs=snapshotComments();refreshChecklists();renderAnnouncements();renderAnnGate();renderSimGate();renderPraise();renderIssues();renderRoster();renderCount();renderRadios();renderEvent();renderFunding();renderDashboard();updateBadges();if(!ioEditing)renderIOList();restoreComments(_cs);}
 function updateBadges(){
   function set(id,n){var e=document.getElementById(id);if(!e)return;e.textContent=n;e.style.display=n?"flex":"none";}
   set("crewCheckinPill",STATE.checkins.length);set("crewCountPill",STATE.count);
@@ -2318,7 +2357,7 @@ document.getElementById("csvBtn").addEventListener("click",function(){
   var csv=rows.map(function(r){return r.map(csvCell).join(",");}).join("\r\n");
   var blob=new Blob(["\ufeff"+csv],{type:"text/csv"});
   var a=document.createElement("a");a.href=URL.createObjectURL(blob);
-  a.download="k2c-day-report-v1.4.0-"+new Date().toISOString().slice(0,10)+".csv";
+  a.download="k2c-day-report-v1.4.1-"+new Date().toISOString().slice(0,10)+".csv";
   document.body.appendChild(a);a.click();a.remove();
 });
 document.getElementById("resetBtn").addEventListener("click",function(){
