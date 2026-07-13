@@ -484,11 +484,13 @@ export default async (req) => {
  });
  break;
  case "reset": {
- /* v1.3.0 — ISSUES SURVIVE THE RESET (open + acknowledged), per leadership.
-    Clears checklists, check-ins, counts (legacy + tally), praises,
-    announcements & radios. Keeps event info, Day PIN, funding, I/O roster
-    (progress cleared) and the Recording Studio scripts. */
- await casCore(s, core => ({ ...EMPTY_CORE, event: core.event, dayPin: core.dayPin, funding: core.funding, feedback: core.feedback }));
+ /* ISSUES AND PRAISES SURVIVE THE RESET, per leadership — the praise wall is
+    a lasting testimony record, not a day-scoped list (this also fixes reports
+    of praise "disappearing" / being un-postable after an end-of-day reset).
+    Clears checklists, check-ins, counts (legacy + tally), announcements &
+    radios. Keeps event info, Day PIN, funding, I/O roster (progress cleared),
+    the Recording Studio scripts, issues and praises. */
+ await casCore(s, core => ({ ...EMPTY_CORE, event: core.event, dayPin: core.dayPin, funding: core.funding, feedback: core.feedback, praises: core.praises }));
  await compareAndSwap(s, "io", normIO, io => { io.list = ioListClearProgress(io.list); return io; }, () => ({ list: [] }));
  const [c1, c2] = await Promise.all([ s.list({ prefix: "count-" }), s.list({ prefix: "tally-" }) ]);
  const doomed = [ ...((c1 && c1.blobs) || []), ...((c2 && c2.blobs) || []) ];

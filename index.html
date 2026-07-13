@@ -473,7 +473,7 @@
 <body>
 <div class="topwrap">
 <header class="topbar">
-  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.4.1</span></span></div>
+  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.4.2</span></span></div>
   <div class="clock"><div class="t" id="clockTime">--:--</div><div class="d" id="clockDate">SATURDAY</div></div>
 </header>
 <div class="nowstrip" id="nowStrip" onclick="goSchedule()">
@@ -1859,6 +1859,7 @@ function settled(){return inflight===0&&pendingCount===0&&!countSending;}
 var API="/.netlify/functions/data";
 var MY={name:"",initials:""};
 try{MY.initials=(localStorage.getItem("k2c_init")||"").slice(0,4);}catch(_){}
+try{MY.name=(localStorage.getItem("k2c_name")||"").slice(0,40);}catch(_){}
 function nowLabel(){return fmt(nowMinutes());}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 function esc(s){return(s||"").replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
@@ -2092,7 +2093,7 @@ function cmtOpen(btn){var f=btn.parentNode.querySelector(".cmtform");if(f)f.clas
 function cmtPost(btn,kind,id){
   var f=btn.parentNode,name=f.querySelector(".cn").value.trim()||"Volunteer",text=f.querySelector(".ct").value.trim();
   if(!text){f.querySelector(".ct").focus();return;}
-  MY.name=name;
+  rememberName(name);
   var c={name:name,text:text,t:nowLabel()};
   // Clear + collapse BEFORE the optimistic re-render so the just-sent draft
   // isn't restored back into the box (see snapshot/restoreComments).
@@ -2271,13 +2272,17 @@ document.getElementById("dayPinSave").addEventListener("click",function(){
 });
 function pre(id,val){var e=document.getElementById(id);if(e&&!e.value&&val)e.value=val;}
 function prefillNames(){pre("ciName",MY.name);pre("aName",MY.name);pre("pName",MY.name);pre("fName",MY.name);}
+/* Remember the volunteer's name across reloads so they don't have to retype it
+   everywhere (requested by the team). Ignores the placeholder defaults so an
+   anonymous post doesn't overwrite a real saved name. */
+function rememberName(n){n=(n||"").trim();if(!n||n==="Anonymous"||n==="Volunteer"||n==="Leadership")return;MY.name=n;try{localStorage.setItem("k2c_name",n.slice(0,40));}catch(_){}}
 function bindInit(id){var el=document.getElementById(id);if(!el)return;el.addEventListener("input",function(e){MY.initials=e.target.value;var b=el.closest(".idbar");if(b)b.classList.remove("err");try{localStorage.setItem("k2c_init",(MY.initials||"").slice(0,4));}catch(_){}syncInits(id);});}
 function syncInits(except){["initSu","initIo","initCt","initRad"].forEach(function(id){if(id===except)return;var el=document.getElementById(id);if(el&&el.value!==MY.initials)el.value=MY.initials;});}
 bindInit("initSu");bindInit("initIo");bindInit("initCt");bindInit("initRad");
-document.getElementById("ciBtn").addEventListener("click",function(){var name=document.getElementById("ciName").value.trim(),team=document.getElementById("ciTeam").value;if(!name){flash("ciName");return;}if(!document.getElementById("ciAttest").checked){document.getElementById("ciAttestMsg").classList.add("show");document.getElementById("ciAttestRow").classList.add("nudge");setTimeout(function(){document.getElementById("ciAttestRow").classList.remove("nudge");},600);return;}MY.name=name;var rec={id:uid(),name:name,team:team,attested:true,t:nowLabel()};doAction("addCheckin",rec,function(){STATE.checkins.push(rec);});document.getElementById("ciName").value="";document.getElementById("ciAttest").checked=false;document.getElementById("ciAttestMsg").classList.remove("show");document.getElementById("checkinPrompt").style.display="none";prefillNames();toast(tourDone()?"✅ Checked in!":"✅ Checked in! New to the app? Take the 2-min App Tour under Resources 🧭");});
-document.getElementById("aBtn").addEventListener("click",function(){if(!LEADER){askPin(function(){});return;}var by=document.getElementById("aName").value.trim()||"Leadership",title=document.getElementById("aTitle").value.trim(),body=document.getElementById("aBody").value.trim(),pri=document.getElementById("aPri").value;if(!title||!body){flash(title?"aBody":"aTitle");return;}MY.name=by;var rec={id:uid(),pri:pri,title:title,body:body,by:by,t:nowLabel()};barDismissed=false;doAction("addAnnouncement",rec,function(){STATE.announcements.unshift(rec);});document.getElementById("aTitle").value="";document.getElementById("aBody").value="";prefillNames();});
-document.getElementById("pBtn").addEventListener("click",function(){var name=document.getElementById("pName").value.trim()||"Anonymous",body=document.getElementById("pBody").value.trim();if(!body){flash("pBody");return;}MY.name=name;var rec={id:uid(),name:name,body:body,t:nowLabel()};doAction("addPraise",rec,function(){STATE.praises.unshift(rec);});document.getElementById("pBody").value="";prefillNames();toast("🎉 Praise posted!");});
-document.getElementById("fBtn").addEventListener("click",function(){var by=document.getElementById("fName").value.trim()||"Volunteer",title=document.getElementById("fTitle").value.trim(),body=document.getElementById("fBody").value.trim(),priority=document.getElementById("fPri").value;if(!title){flash("fTitle");return;}MY.name=by;var rec={id:uid(),priority:priority,title:title,body:body,by:by,t:nowLabel()};doAction("addFeedback",rec,function(){STATE.feedback.unshift(rec);});document.getElementById("fTitle").value="";document.getElementById("fBody").value="";prefillNames();toast("✅ Sent to leadership");});
+document.getElementById("ciBtn").addEventListener("click",function(){var name=document.getElementById("ciName").value.trim(),team=document.getElementById("ciTeam").value;if(!name){flash("ciName");return;}if(!document.getElementById("ciAttest").checked){document.getElementById("ciAttestMsg").classList.add("show");document.getElementById("ciAttestRow").classList.add("nudge");setTimeout(function(){document.getElementById("ciAttestRow").classList.remove("nudge");},600);return;}rememberName(name);var rec={id:uid(),name:name,team:team,attested:true,t:nowLabel()};doAction("addCheckin",rec,function(){STATE.checkins.push(rec);});document.getElementById("ciName").value="";document.getElementById("ciAttest").checked=false;document.getElementById("ciAttestMsg").classList.remove("show");document.getElementById("checkinPrompt").style.display="none";prefillNames();toast(tourDone()?"✅ Checked in!":"✅ Checked in! New to the app? Take the 2-min App Tour under Resources 🧭");});
+document.getElementById("aBtn").addEventListener("click",function(){if(!LEADER){askPin(function(){});return;}var by=document.getElementById("aName").value.trim()||"Leadership",title=document.getElementById("aTitle").value.trim(),body=document.getElementById("aBody").value.trim(),pri=document.getElementById("aPri").value;if(!title||!body){flash(title?"aBody":"aTitle");return;}rememberName(by);var rec={id:uid(),pri:pri,title:title,body:body,by:by,t:nowLabel()};barDismissed=false;doAction("addAnnouncement",rec,function(){STATE.announcements.unshift(rec);});document.getElementById("aTitle").value="";document.getElementById("aBody").value="";prefillNames();});
+document.getElementById("pBtn").addEventListener("click",function(){var name=document.getElementById("pName").value.trim()||"Anonymous",body=document.getElementById("pBody").value.trim();if(!body){flash("pBody");return;}rememberName(name);var rec={id:uid(),name:name,body:body,t:nowLabel()};doAction("addPraise",rec,function(){STATE.praises.unshift(rec);});document.getElementById("pBody").value="";prefillNames();toast("🎉 Praise posted!");});
+document.getElementById("fBtn").addEventListener("click",function(){var by=document.getElementById("fName").value.trim()||"Volunteer",title=document.getElementById("fTitle").value.trim(),body=document.getElementById("fBody").value.trim(),priority=document.getElementById("fPri").value;if(!title){flash("fTitle");return;}rememberName(by);var rec={id:uid(),priority:priority,title:title,body:body,by:by,t:nowLabel()};doAction("addFeedback",rec,function(){STATE.feedback.unshift(rec);});document.getElementById("fTitle").value="";document.getElementById("fBody").value="";prefillNames();toast("✅ Sent to leadership");});
 function flash(id){var e=document.getElementById(id);if(e){e.style.borderColor="#B86239";e.focus();setTimeout(function(){e.style.borderColor="";},1200);}}
 // Attendance counter: apply each tap instantly, then batch a burst of taps into
 // ONE server write. Fewer concurrent read-modify-writes = no lost counts when
@@ -2357,7 +2362,7 @@ document.getElementById("csvBtn").addEventListener("click",function(){
   var csv=rows.map(function(r){return r.map(csvCell).join(",");}).join("\r\n");
   var blob=new Blob(["\ufeff"+csv],{type:"text/csv"});
   var a=document.createElement("a");a.href=URL.createObjectURL(blob);
-  a.download="k2c-day-report-v1.4.1-"+new Date().toISOString().slice(0,10)+".csv";
+  a.download="k2c-day-report-v1.4.2-"+new Date().toISOString().slice(0,10)+".csv";
   document.body.appendChild(a);a.click();a.remove();
 });
 document.getElementById("resetBtn").addEventListener("click",function(){
