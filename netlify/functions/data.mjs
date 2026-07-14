@@ -20,6 +20,11 @@ const LEADER_PIN = () => process.env.LEADER_PIN || "2026";
  io        — Tech I/O roster + patch progress
  prompter  — Recording Studio scripts
  radios    — 10-radio checkout board (initials + times)
+ captures  — Ambassador Quick Capture contact records (text fields only)
+ capmedia- — one blob per capture holding its photo/audio as a data URL,
+             fetched on demand by leaders (never included in the GET payload,
+             so polling stays light and contact PII isn't broadcast to every
+             phone — only a count is)
  count-    — LEGACY numeric counter shard per phone (still summed, still works)
  tally-    — LEGACY per-phone delta-built tally {total, by} (still summed)
  tal2-     — v1.6.0 per-phone ABSOLUTE tally {total, by:{name:n}}. The phone
@@ -107,6 +112,32 @@ function normAnn(x){
   comments: normComments(x.comments)
  };
 }
+/* ---- Ambassador Quick Capture ----
+   A capture is one street encounter: name + contact + notes, optionally with a
+   photo of a filled-out contact card or a voice memo. Text fields live in the
+   `captures` list; media lives in its own capmedia-<id> blob (data URL). */
+const CAPTURE_LANES = new Set(["photo","audio","text"]);
+const CAPTURE_MEDIA_MAX = 5 * 1024 * 1024; // ~5 MB data URL (post-compression photos & <3 min voice notes fit easily)
+function normCapture(x){
+ x = x || {};
+ return {
+  id: str(x.id, 40) || uid(),
+  lane: CAPTURE_LANES.has(x.lane) ? x.lane : "text",
+  name: str(x.name, 80),
+  phone: str(x.phone, 40),
+  email: str(x.email, 80),
+  county: str(x.county, 60),
+  notes: str(x.notes, 4000),
+  by: str(x.by || "Ambassador", 40),
+  t: str(x.t, 12),
+  d: str(x.d, 10),
+  hasMedia: !!x.hasMedia,
+  mediaKind: x.mediaKind === "photo" || x.mediaKind === "audio" ? x.mediaKind : ""
+ };
+}
+const normCaptures = v => Array.isArray(v) ? v.map(normCapture).slice(-1000) : [];
+const capMediaKey = id => "capmedia-" + (id || "").toString().replace(/[^a-z0-9_-]/gi, "").slice(0, 40);
+
 function normCheckin(x){
  x = x || {};
  return {
@@ -224,7 +255,8 @@ const pinBlockedResp = () => json({ error:"too many wrong PIN attempts — wait 
 
 const LEADER_ACTIONS = new Set([
  "toggleCheck","setChecklistNote","addAnnouncement","ackCard","setEvent","setIOList","setDayPin",
- "setFunding","reset","promptSeed","promptAdd","promptEdit","promptDelete"
+ "setFunding","reset","promptSeed","promptAdd","promptEdit","promptDelete",
+ "capturesList","captureMedia","captureDelete"
 ]);
 
 function devKey(id){
@@ -389,7 +421,7 @@ async function assemble(s){
  let parts = await readAll(s);
  parts = await migrateIfNeeded(s, parts);
  const core = normCore(parts.core);
- const [agg, tallyEpoch] = await Promise.all([ readAgg(s), readEpoch(s) ]);
+ const [agg, tallyEpoch, capturesRaw] = await Promise.all([ readAgg(s), readEpoch(s), s.get("captures", { type:"json" }) ]);
  // Self-seeding script board: fill in any missing starter scripts (no-op
  // write when nothing is missing, so the usual GET stays read-only).
  const prompter = await compareAndSwap(s, "prompter", normPrompter,
@@ -409,7 +441,10 @@ async function assemble(s){
  ioList: (parts.io && Array.isArray(parts.io.list)) ? parts.io.list : [],
  dayPinSet: !!core.dayPin, // the PIN itself is never sent to clients
  funding: core.funding,
- prompter: prompter
+ prompter: prompter,
+ // Quick Capture records hold seekers' contact info, so the shared payload
+ // only carries the count; leaders pull the list with the capturesList action.
+ captureCount: normCaptures(capturesRaw).length
  };
 }
 
@@ -631,7 +666,10 @@ export default async (req, context) => {
     of praise "disappearing" / being un-postable after an end-of-day reset).
     Clears checklists, check-ins, counts (legacy + tally), announcements &
     radios. Keeps event info, Day PIN, funding, I/O roster (progress cleared),
-    the Recording Studio scripts, issues and praises. */
+    the Recording Studio scripts, issues and praises. Quick Captures also
+    SURVIVE the reset — they are seekers' contact info headed for the CRM,
+    never day-scoped throwaway data (leaders delete them individually once
+    they're in Planning Center). */
  await casCore(s, core => ({ ...EMPTY_CORE, event: core.event, dayPin: core.dayPin, funding: core.funding, feedback: core.feedback, praises: core.praises }));
  await compareAndSwap(s, "io", normIO, io => { io.list = ioListClearProgress(io.list); return io; }, () => ({ list: [] }));
  const [c1, c2, c3] = await Promise.all([ s.list({ prefix: "count-" }), s.list({ prefix: "tally-" }), s.list({ prefix: "tal2-" }) ]);
@@ -687,6 +725,39 @@ export default async (req, context) => {
  it.done = null;
  return p;
  }, () => ({ scripts: [] }));
+ break;
+ /* ---- Ambassador Quick Capture ---- */
+ case "captureAdd": {
+ // Open to everyone behind the Day PIN (like check-ins) — capture must be
+ // frictionless on the street. Media lands in its own blob first so a
+ // record never points at media that failed to store.
+ const rec = normCapture(payload);
+ const media = payload.media || null;
+ if(media && typeof media.dataUrl === "string" && media.dataUrl.startsWith("data:") && media.dataUrl.length <= CAPTURE_MEDIA_MAX){
+ rec.hasMedia = true;
+ rec.mediaKind = media.kind === "photo" ? "photo" : "audio";
+ await s.set(capMediaKey(rec.id), media.dataUrl);
+ } else { rec.hasMedia = false; rec.mediaKind = ""; }
+ await compareAndSwap(s, "captures", normCaptures, list => {
+ if(list.some(c => c.id === rec.id)) return undefined; // idempotent retry
+ list.push(rec);
+ return list.slice(-1000);
+ }, () => []);
+ break;
+ }
+ case "capturesList":
+ return json({ captures: normCaptures(await s.get("captures", { type:"json" })) });
+ case "captureMedia": {
+ const dataUrl = await s.get(capMediaKey(payload.id));
+ return json({ id: str(payload.id, 40), dataUrl: (typeof dataUrl === "string" && dataUrl.startsWith("data:")) ? dataUrl : "" });
+ }
+ case "captureDelete":
+ await compareAndSwap(s, "captures", normCaptures, list => {
+ const id = str(payload.id, 40);
+ if(!list.some(c => c.id === id)) return undefined;
+ return list.filter(c => c.id !== id);
+ }, () => []);
+ await s.delete(capMediaKey(payload.id)).catch(() => {});
  break;
  default: return json({ error:"unknown action" }, 400);
  }

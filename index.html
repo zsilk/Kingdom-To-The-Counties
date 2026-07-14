@@ -336,6 +336,47 @@
   .tprectips{background:#efe7da;border-radius:14px;padding:13px 14px;margin-bottom:14px;font-size:12.5px;color:#5a4d3b;line-height:1.55}
   .tprectips b{color:var(--wine)}
 
+  /* ===== Ambassador Quick Capture (v1.7.0) ===== */
+  .caplanes{display:flex;gap:8px;margin-bottom:14px}
+  .caplanes button{flex:1;border:2px solid var(--line);background:var(--card);border-radius:14px;padding:12px 6px;cursor:pointer;text-align:center;color:var(--muted);line-height:1.2}
+  .caplanes button .ic{display:block;font-size:22px;margin-bottom:4px}
+  .caplanes button .lb{font-weight:800;font-size:12px}
+  .caplanes button.on{border-color:var(--rust);background:#fdf3ec;color:var(--ink)}
+  .capmin{display:flex;gap:9px;align-items:flex-start;background:#f4e6dc;border:1px solid #e3c4ad;border-radius:13px;padding:11px 13px;margin-bottom:13px;font-size:12.5px;color:#6e4426;line-height:1.5}
+  .capmin b{color:var(--wine)}
+  .capshot{width:100%;border:2px dashed var(--slate);border-radius:14px;background:var(--card);padding:22px 12px;text-align:center;font-weight:800;font-size:15px;color:var(--wine);cursor:pointer;margin-bottom:10px}
+  .capshot small{display:block;font-weight:600;font-size:11.5px;color:var(--muted);margin-top:4px}
+  .cappreview{position:relative;margin-bottom:10px}
+  .cappreview img{width:100%;border-radius:14px;border:1px solid var(--line);display:block}
+  .cappreview .redo{position:absolute;top:8px;right:8px;background:rgba(43,42,40,.82);color:#fff;border:none;border-radius:10px;padding:7px 11px;font-weight:700;font-size:12px;cursor:pointer}
+  .caprec{display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:10px}
+  .caprecbtn{flex:none;width:62px;height:62px;border-radius:50%;border:2px solid rgba(107,46,52,.35);background:var(--wine);cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .caprecbtn::before{content:"";width:22px;height:22px;border-radius:50%;background:var(--cream);transition:all .15s}
+  .caprecbtn.rec::before{border-radius:5px;background:#e5484d;animation:tpPulse 1s infinite}
+  .caprec .rt{flex:1;min-width:0}
+  .caprec .rt b{display:block;font-size:14px}
+  .caprec .rt span{font-size:12px;color:var(--muted)}
+  .caprec .tm{font-variant-numeric:tabular-nums;font-weight:800;font-size:16px;color:var(--wine)}
+  .caprec audio{width:100%;margin-top:8px}
+  .caplog{margin-top:6px}
+  .caplog .listrow .st{flex:none;font-size:10.5px;font-weight:800;letter-spacing:.4px;padding:3px 8px;border-radius:99px}
+  .caplog .listrow .st.sent{background:#dfeee0;color:var(--good)}
+  .caplog .listrow .st.wait{background:#f4e6dc;color:var(--warn)}
+  .caprow{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--rust);border-radius:12px;padding:11px 13px;margin-bottom:8px;font-size:13px}
+  .caprow .hd{display:flex;align-items:baseline;gap:8px}
+  .caprow .hd b{font-size:14px}
+  .caprow .hd .ln{margin-left:auto;flex:none;font-size:11px;color:var(--muted)}
+  .caprow .ct{color:var(--wine);font-weight:700;margin-top:2px;word-break:break-word}
+  .caprow .nt{color:#403d38;margin-top:4px;white-space:pre-wrap}
+  .caprow .by2{color:var(--muted);font-size:11.5px;margin-top:5px}
+  .caprow .acts2{display:flex;gap:7px;margin-top:8px}
+  .caprow .acts2 button{border:1px solid var(--line);background:var(--cream);border-radius:9px;padding:7px 11px;font-weight:700;font-size:12px;cursor:pointer}
+  .caprow .acts2 button.del{color:var(--bad)}
+  #capMediaBody img{max-width:100%;border-radius:12px;display:block}
+  #capMediaBody audio{width:100%}
+  #capRemindList{margin:8px 0 4px;padding-left:4px;list-style:none}
+  #capRemindList li{margin-bottom:6px;font-size:14px}
+
   /* ===== Recording Studio — full-screen teleprompter overlay (dark) ===== */
   #tpApp{position:fixed;inset:0;background:#000;display:none;z-index:200}
   #tpApp.show{display:block}
@@ -618,7 +659,7 @@
 <body>
 <div class="topwrap">
 <header class="topbar">
-  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.6.1</span></span></div>
+  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.7.0</span></span></div>
   <div class="clock"><div class="t" id="clockTime">--:--</div><div class="d" id="clockDate">SATURDAY</div></div>
 </header>
 <div class="nowstrip" id="nowStrip" onclick="goSchedule()">
@@ -640,6 +681,7 @@
       <div class="countdown" id="nowCountdown"></div>
     </div>
     <div class="next" id="nextCard"><div class="lbl">Up Next</div><h3 id="nextName">—</h3><div class="when" id="nextWhen"></div></div>
+    <div class="checkinprompt"><span>📇 Met someone on the field? Capture their info before you lose it.</span><button onclick="show('capture')">Quick Capture</button></div>
     <div class="checkinprompt" id="tourPrompt" style="display:none"><span>🧭 First time in the app?</span><button onclick="guideStart()">Take the tour</button></div>
     <details class="preview"><summary>🎚️ Leader preview — scrub the day to test it</summary>
       <div id="simLock"></div>
@@ -821,6 +863,41 @@
       <p class="hint">Real emergency (medical / safety)? Find a leader or call 911 in person first — then log it here.</p></div>
     <div id="issueFeed"></div>
   </section>
+  <section class="page" id="page-capture">
+    <button class="back" onclick="show('guides')">‹ Ambassador Resources</button>
+    <p class="eyebrow">Ambassadors</p><h1 class="title">Quick Capture 📇</h1>
+    <span class="syncpill" id="sp-capture"><span class="d"></span>Demo mode</span>
+    <p class="sub">Met someone? Capture the encounter in seconds — snap their card, record a voice note, or type it — then get back out there. Every capture goes to leadership for follow-up (headed for Planning Center).</p>
+    <div class="capmin">🎯<span><b>Be detailed — capture everything you can.</b> At the very least the follow-up team needs their <b>name</b>, their <b>phone or email</b>, and <b>notes on the encounter</b> (what happened, what they need prayer for, next step). Ten extra seconds now saves the follow-up team an hour later.</span></div>
+    <div class="caplanes" id="capLanes">
+      <button data-lane="photo" onclick="capSetLane('photo')"><span class="ic">📷</span><span class="lb">Card Photo</span></button>
+      <button data-lane="audio" onclick="capSetLane('audio')"><span class="ic">🎙️</span><span class="lb">Voice Note</span></button>
+      <button data-lane="text" class="on" onclick="capSetLane('text')"><span class="ic">⌨️</span><span class="lb">Type It</span></button>
+    </div>
+    <div class="form">
+      <div id="capPhotoWrap" style="display:none">
+        <input type="file" id="capPhotoInput" accept="image/*" capture="environment" style="display:none" />
+        <button class="capshot" id="capShotBtn" onclick="document.getElementById('capPhotoInput').click()">📷 Snap the contact card<small>Fill the frame · good light · make sure the writing is readable</small></button>
+        <div class="cappreview" id="capPhotoPrev" style="display:none"><img id="capPhotoImg" alt="Contact card photo" /><button class="redo" onclick="capPhotoRetake()">↺ Retake</button></div>
+      </div>
+      <div id="capAudioWrap" style="display:none">
+        <div class="caprec">
+          <button class="caprecbtn" id="capRecBtn" onclick="capRecTap()" aria-label="Record voice note"></button>
+          <div class="rt"><b id="capRecLbl">Tap to record</b><span>Say their <b>name</b>, <b>phone or email</b>, and the story of the encounter.</span><audio id="capAudioPrev" controls style="display:none"></audio></div>
+          <span class="tm" id="capRecTime">00:00</span>
+        </div>
+      </div>
+      <div class="ttl" id="capFieldsTtl">Their info</div>
+      <input id="capName" maxlength="80" placeholder="Their name" autocomplete="off" />
+      <div class="twocol"><input id="capPhone" maxlength="40" inputmode="tel" placeholder="Phone" autocomplete="off" /><input id="capEmail" maxlength="80" inputmode="email" placeholder="Email" autocomplete="off" /></div>
+      <select id="capCounty"></select>
+      <textarea id="capNotes" rows="4" maxlength="4000" placeholder="Notes on the encounter — what happened, prayer needs, decision made, next step…"></textarea>
+      <button class="btn rust" id="capSubmit" onclick="capSubmit()">📤 Capture &amp; move on</button>
+      <p class="hint" id="capLaneHint"></p>
+    </div>
+    <div class="caplog" id="capMineWrap" style="display:none"><div class="ttl" style="font-family:var(--serif);font-weight:600;font-size:16px;margin:2px 0 8px">📱 Captured from this phone</div><div id="capMineMount"></div></div>
+    <div id="capLeaderWrap" style="margin-top:18px"></div>
+  </section>
   <section class="page" id="page-leaders">
     <button class="back" onclick="show('guides')">‹ Ambassador Resources</button>
     <p class="eyebrow">Who to reach</p><h1 class="title">Leader Contacts</h1>
@@ -866,6 +943,7 @@
   <section class="page" id="page-guides">
     <p class="eyebrow">Reference</p><h1 class="title">Ambassador Resources</h1><p class="sub">Guides, check-in, contacts & graphics.</p>
     <div class="hub">
+      <button class="hubcard wine" onclick="show('capture')"><span class="ic">📇</span><span class="tx"><b>Quick Capture</b><span>Met someone? Card photo, voice note, or type it</span></span><span class="pill" id="capPill">0</span></button>
       <button class="hubcard wine" onclick="show('tour')"><span class="ic">🧭</span><span class="tx"><b>App Tour</b><span>New here? 2-minute walkthrough</span></span><span class="arr">›</span></button>
       <button class="hubcard" onclick="show('checkin')"><span class="ic">🙋</span><span class="tx"><b>Volunteer Check-In</b><span>Tap in when you arrive</span></span><span class="pill" id="crewCheckinPill">0</span></button>
       <button class="hubcard" onclick="show('playbook')"><span class="ic">📘</span><span class="tx"><b>Ambassador Playbook</b><span>Your role, the 3 T's, altar call</span></span><span class="arr">›</span></button>
@@ -897,15 +975,16 @@
     <button class="btn rust" style="margin-bottom:14px" onclick="guideStart()">▶ Start the guided tour — I'll walk you around</button>
     <div class="tourstop"><span class="tn">1</span><div><h3>🏠 Event Day</h3><p>The home tab. It follows the clock all day — it shows what's happening <b>Now</b>, what's <b>Next</b>, and the full order of events. No refreshing needed.</p><button onclick="show('now')">See Event Day ›</button></div></div>
     <div class="tourstop"><span class="tn">2</span><div><h3>🙋 Check yourself in</h3><p>Do this first when you arrive. It tells leadership you're on the field and puts you on the day's roster.</p><button onclick="show('checkin')">Check in ›</button></div></div>
-    <div class="tourstop"><span class="tn">3</span><div><h3>📣 Post</h3><p>Three boards: <b>Praise Wall</b> (celebrate God moments), <b>Report an Issue</b> (flag problems to leadership fast), and <b>Announcements</b> from leaders. You can comment on any post.</p><button onclick="show('board')">Open Post ›</button></div></div>
-    <div class="tourstop"><span class="tn">4</span><div><h3>🧰 Specialists</h3><p>Work tools: the live <b>Attendance Counter</b> (every tap is logged to your name), the <b>Setup Checklist</b>, <b>Radio Checkout</b>, and the Tech I/O list.</p><button onclick="show('crew')">Open Specialists ›</button></div></div>
-    <div class="tourstop"><span class="tn">5</span><div><h3>🎬 Recording Studio</h3><p>Pick your county's script and record an invite video with the built-in teleprompter. Then send it to Laura (Marketing).</p><button onclick="show('prompter')">Open the studio ›</button></div></div>
-    <div class="tourstop"><span class="tn">6</span><div><h3>📘 Resources</h3><p>The Ambassador Playbook, Counselor Booklet, leader contacts, shareable graphics, and ways to give — all under Ambassador Resources.</p><button onclick="show('guides')">Open Resources ›</button></div></div>
-    <div class="tourstop"><span class="tn">7</span><div><h3>📶 Good to know</h3><p>The app syncs live across everyone's phones — and if the field signal drops, it keeps working and catches up when you're back. Set your name once and every checkmark, count and radio is credited to you automatically.</p><button onclick="show('now')">🎉 Done — go to Event Day</button></div></div>
+    <div class="tourstop"><span class="tn">3</span><div><h3>📇 Quick Capture</h3><p>Met someone on the street? Snap their contact card, record a voice note, or type it in — <b>name, contact info, and notes at minimum</b> — then submit and move on. Leadership follows up.</p><button onclick="show('capture')">Open Quick Capture ›</button></div></div>
+    <div class="tourstop"><span class="tn">4</span><div><h3>📣 Post</h3><p>Three boards: <b>Praise Wall</b> (celebrate God moments), <b>Report an Issue</b> (flag problems to leadership fast), and <b>Announcements</b> from leaders. You can comment on any post.</p><button onclick="show('board')">Open Post ›</button></div></div>
+    <div class="tourstop"><span class="tn">5</span><div><h3>🧰 Specialists</h3><p>Work tools: the live <b>Attendance Counter</b> (every tap is logged to your name), the <b>Setup Checklist</b>, <b>Radio Checkout</b>, and the Tech I/O list.</p><button onclick="show('crew')">Open Specialists ›</button></div></div>
+    <div class="tourstop"><span class="tn">6</span><div><h3>🎬 Recording Studio</h3><p>Pick your county's script and record an invite video with the built-in teleprompter. Then send it to Laura (Marketing).</p><button onclick="show('prompter')">Open the studio ›</button></div></div>
+    <div class="tourstop"><span class="tn">7</span><div><h3>📘 Resources</h3><p>The Ambassador Playbook, Counselor Booklet, leader contacts, shareable graphics, and ways to give — all under Ambassador Resources.</p><button onclick="show('guides')">Open Resources ›</button></div></div>
+    <div class="tourstop"><span class="tn">8</span><div><h3>📶 Good to know</h3><p>The app syncs live across everyone's phones — and if the field signal drops, it keeps working and catches up when you're back. Set your name once and every checkmark, count and radio is credited to you automatically.</p><button onclick="show('now')">🎉 Done — go to Event Day</button></div></div>
   </section>
   <section class="page" id="page-playbook">
     <button class="back" onclick="show('guides')">‹ Resources</button>
-    <p class="eyebrow">Ambassador</p><h1 class="title">Playbook</h1><span class="draft">Your full field guide · V2</span>
+    <p class="eyebrow">Ambassador</p><h1 class="title">Playbook</h1><span class="draft">Your full field guide · V3.2</span>
     <button class="printbtn" onclick="printDoc('playbook')">🖨️ Print / Save as PDF</button>
     <style>/* ===== Ambassador Playbook (scoped + app-themed) ===== */
 #page-playbook .pb{--ink-soft:var(--muted);--paper:var(--card);--canvas:var(--cream);--canvas-soft:var(--cream);--rust-deep:var(--rust);--rust-glow:var(--rust);--burgundy:var(--wine);--burgundy-deep:var(--wine);--display:var(--serif);--body:var(--sans);--scripture:var(--serif);background:transparent;color:var(--ink);font-family:var(--sans);}
@@ -1082,8 +1161,13 @@
         <p><em>You cannot give what you do not have.</em> To bring the presence of God to someone else, you need to have been in His presence yourself. The field will test you. Come ready.</p>
 
         <h4>🛠️ Friday Setup Day (Optional)</h4>
-        <p>Optional setup runs <strong>9:00 AM – 5:00 PM the day before</strong> every Saturday event. Friday focuses on Technology &amp; Logistics — sound, FOH, parking plans, band area, crane logistics, and senior leadership planning.</p>
-        <div class="callout note">Friday is <strong>completely optional</strong> for Ambassadors. Want to serve Friday (or your lead needs you)? Coordinate directly. <strong>All personnel are required for Saturday morning setup.</strong></div>
+        <p>Optional setup runs <strong>12:00 PM – 5:00 PM the day before</strong> every Saturday event (arrive by noon — work starts 12:30 sharp). Friday focuses on Technology &amp; Logistics — unloading, tents, power, FOH, system tuning, the Jesus Rig build, and senior leadership planning.</p>
+        <div class="row head"><span>Time</span><span>Friday phases</span></div>
+        <div class="row"><div class="t">12:00<small>30 min</small></div><div class="d"><strong>Arrival</strong>Crew arrives, radios checked out, tent locations &amp; crane spot plotted per the Site Layout.</div></div>
+        <div class="row"><div class="t">12:30<small>2 hrs</small></div><div class="d"><strong>Phases 1 &amp; 2 — Unloading + Power Up</strong>Trusses, tents &amp; kits unloaded and built (Band tents → FOH → Guest Services → Ambassadors); generators, Starlink, FOH wiring, ARK, drum kit, wireless. <strong>Phase 4:</strong> Jesus Rig truss + pipe square assembled and left on the ground.</div></div>
+        <div class="row"><div class="t">2:30<small>1¾ hrs</small></div><div class="d"><strong>Phase 3 — System Tuning</strong>Line checks, blast &amp; balance, dBL readings at the property boundary, mics rung out, drums balanced. Logistics shifts to cable covers &amp; speaker moves.</div></div>
+        <div class="row"><div class="t">4:15<small>45 min</small></div><div class="d"><strong>Phase 6 — Shut Down (all hands)</strong>Scenes saved, speakers stored, tent walls fastened, everything rainproofed, trailers locked, generators off, radios returned, security protocol in place.</div></div>
+        <div class="callout note">Friday is <strong>completely optional</strong> for Ambassadors. Want to serve Friday (or your lead needs you)? Coordinate directly. The full phase-by-phase list lives in <strong>Specialists → Setup Checklist → Friday</strong>. <strong>All personnel are required for Saturday morning setup.</strong></div>
       </div>
     </details>
   </section>
@@ -1117,12 +1201,12 @@
       <div class="body">
         <h4>🌅 Saturday Morning Setup · 8 AM – 1 PM</h4>
         <div class="row head"><span>Time</span><span>What's happening</span></div>
-        <div class="row"><div class="t">8:00<small>30 min</small></div><div class="d"><strong>Leadership only — early call</strong>FOH/PA live, set Guest Services / Command Post, leaders check radios. Leadership briefing &amp; prayer.</div></div>
+        <div class="row"><div class="t">8:00<small>30 min</small></div><div class="d"><strong>Leadership only — Phase 7 · Open Up (8:00–8:30)</strong>Radios out, generators on, speakers &amp; ARK reconnected, FOH + host mic live and unmuted for the huddle, Guest Services / Command Post set. Leadership briefing &amp; prayer.</div></div>
         <div class="row"><div class="t">9:00<small>30 min</small></div><div class="d"><strong>All volunteers — general call</strong>Arrival, orientation, staff tags, fellowship. Connect with your team or pray quietly. Get your heart ready before the huddle.</div></div>
         <div class="row"><div class="t">9:30<small>30 min</small></div><div class="d"><strong>All-team huddle</strong>Exhortation &amp; prayer. Personal and corporate confession and repentance. Come clean. Confess. Repent. Receive grace. Then go. Also: Safety Brief / EAP (Kyle).</div></div>
-        <div class="row"><div class="t">10:00<small>2 hrs</small></div><div class="d"><strong>General setup</strong>Leads brief &amp; deploy. <strong>Ambassadors:</strong> group meeting with Jeff &amp; Rich — strategy, roles, assist depts. Logistics/GS: tents, coolers, signage, parking, crane zone, lunch. Tech/Worship: setup, soundcheck, rehearsal. Marketing: morning content.</div></div>
-        <div class="row"><div class="t">11:00<small>—</small></div><div class="d"><strong>Crane arrives — Tech only</strong>Jesus Rig must be raised and wind-tied by 12:00 PM latest. Non-crane volunteers stay outside the safety area.</div></div>
-        <div class="row"><div class="t">12:00<small>15 min</small></div><div class="d"><strong>Program run-through (ALL)</strong>Primary microphone. Logistics setting up the lunch line.</div></div>
+        <div class="row"><div class="t">10:00<small>2 hrs</small></div><div class="d"><strong>General setup — Phase 8a · Worship Set Up (10:00–12:00)</strong>Leads brief &amp; deploy. <strong>Ambassadors:</strong> group meeting with Jeff &amp; Rich — strategy, roles, assist depts. Logistics/GS: tents set up inside, coolers &amp; ice, signage, parking flow, vests, crane zone, lunch. Tech/Worship: personal gear, gain staging, IEM &amp; FOH mixes, transitions. Marketing: morning content.</div></div>
+        <div class="row"><div class="t">11:00<small>1 hr</small></div><div class="d"><strong>Phase 8b · Crane Rigging (11:00–12:00)</strong>Crane guided to its spot; prebuilt rig hoisted, JESUS banners &amp; pipe square attached, guy lines on. The rig is raised to final height <strong>only on Zach / Marketing's order</strong>, then wind-tied &amp; flown by 12:00 PM latest. Non-crane volunteers stay outside the safety area.</div></div>
+        <div class="row"><div class="t">12:00<small>15 min</small></div><div class="d"><strong>Phase 9 · Fit &amp; Finish + program run-through (ALL)</strong>Stage cleared, cables managed, fresh batteries in every mic &amp; pack (black Fujitsu only), recording armed, prayer over the venue — while the run-through happens on the primary microphone. Logistics setting up the lunch line.</div></div>
         <div class="row"><div class="t">12:15<small>45 min</small></div><div class="d"><strong>Lunch &amp; rest (ALL)</strong>Pizza, water, soda. $5 donation suggested, not required. Pack a lunch if pizza won't work for you. Avoid leaving the venue — prevents parking issues &amp; missed announcements.</div></div>
         <div class="row"><div class="t">1:00<small>—</small></div><div class="d"><strong>Doors open to public</strong>Setup complete, parking team in position.</div></div>
 
@@ -1690,11 +1774,14 @@
 <!-- Script editor (leaders) -->
 <div class="modal" id="tpEditor"><div class="sheet" id="tpEdSheet">
   <h3 id="tpEdTitle">Edit script ✏️</h3>
-  <p style="font-size:12px;color:var(--muted);margin:2px 0 10px">Highlight words in the script, then tap B / I / U. Saves live for the whole team.</p>
-  <input id="tpEdEvent" placeholder="Event (e.g. Sullivan County — Aug 1 · Venue)" maxlength="60" />
+  <p style="font-size:12px;color:var(--muted);margin:2px 0 10px">Pick the county, then (optionally) start from one of the <b>10 templates</b> — everything stays fully editable. Highlight words, then tap B / I / U. Saves live for the whole team.</p>
+  <select id="tpEdEvent" onchange="tpEdEventChange()"></select>
+  <input id="tpEdEventOther" placeholder="Custom event (e.g. Sullivan County — Aug 1 · Venue)" maxlength="60" style="display:none" />
+  <select id="tpEdTpl" onchange="tpApplyTpl()"></select>
   <input id="tpEdName" placeholder="Script title (e.g. Script A — Come As You Are)" maxlength="80" />
   <input id="tpEdDue" type="date" />
-  <input id="tpEdWho" placeholder="Assignee (who's filming it?)" maxlength="30" />
+  <select id="tpEdWho" onchange="tpEdWhoChange()"></select>
+  <input id="tpEdWhoOther" placeholder="Assignee name (not on the leader list)" maxlength="30" style="display:none" />
   <div id="tpFmt"><button onclick="tpFmt('bold')"><b>B</b></button><button onclick="tpFmt('italic')"><i>I</i></button><button onclick="tpFmt('underline')"><u>U</u></button></div>
   <div id="tpEdBody" contenteditable="true"></div>
   <button id="tpEdDel" style="display:none" onclick="tpDelete()">🗑 Delete this script</button>
@@ -1708,6 +1795,20 @@
   <div class="row"><button class="cancel" onclick="document.getElementById('tpDoneModal').classList.remove('show')">Not yet</button><button class="ok" onclick="tpConfirmDone()">Confirm ✅</button></div>
 </div></div>
 
+<!-- Quick Capture: minimum-info reminder popup -->
+<div class="modal" id="capRemindModal"><div class="sheet">
+  <h3>⛔ Hold up — one quick check</h3>
+  <p id="capRemindIntro" style="margin:6px 0 2px;font-size:13.5px"></p>
+  <ul id="capRemindList"></ul>
+  <p class="hint" id="capRemindNote" style="margin:2px 2px 12px"></p>
+  <div class="row"><button class="cancel" onclick="document.getElementById('capRemindModal').classList.remove('show')">✍️ Add details</button><button class="ok" id="capRemindGo">Submit anyway ➤</button></div>
+</div></div>
+<!-- Quick Capture: leader media viewer -->
+<div class="modal" id="capMediaModal"><div class="sheet">
+  <h3 id="capMediaTitle">Capture media</h3>
+  <div id="capMediaBody"><p class="hint">Loading…</p></div>
+  <div class="row"><button class="ok" onclick="document.getElementById('capMediaModal').classList.remove('show')">Close</button></div>
+</div></div>
 <div class="modal" id="binModal"><div class="sheet">
   <h3 id="binTitle"></h3>
   <div id="binBody"></div>
@@ -2068,7 +2169,7 @@ try{MY.name=(localStorage.getItem("k2c_name")||"").slice(0,40);}catch(_){}
 function nowLabel(){return fmt(nowMinutes());}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 function esc(s){return(s||"").replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
-function normalize(s){return{checklist:s.checklist||{},notes:s.notes||{},announcements:s.announcements||[],checkins:s.checkins||[],feedback:s.feedback||[],praises:s.praises||[],count:s.count||0,event:s.event||{name:"",date:""},ioList:s.ioList||[],dayPinSet:!!s.dayPinSet,funding:s.funding||{pct:64,needed:"$60,000"},tallyBy:s.tallyBy||{},radios:Array.isArray(s.radios)?s.radios:[],prompter:(s.prompter&&Array.isArray(s.prompter.scripts))?s.prompter:{scripts:[]}};}
+function normalize(s){return{checklist:s.checklist||{},notes:s.notes||{},announcements:s.announcements||[],checkins:s.checkins||[],feedback:s.feedback||[],praises:s.praises||[],count:s.count||0,event:s.event||{name:"",date:""},ioList:s.ioList||[],dayPinSet:!!s.dayPinSet,funding:s.funding||{pct:64,needed:"$60,000"},tallyBy:s.tallyBy||{},radios:Array.isArray(s.radios)?s.radios:[],prompter:(s.prompter&&Array.isArray(s.prompter.scripts))?s.prompter:{scripts:[]},captureCount:s.captureCount||0};}
 function toast(msg){var el=document.getElementById("toastEl");if(!el){el=document.createElement("div");el.id="toastEl";el.className="toast";document.body.appendChild(el);}el.textContent=msg;el.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(function(){el.classList.remove("show");},2600);}
 function vibr(ms){try{if(navigator.vibrate)navigator.vibrate(ms);}catch(_){}}
 function hasFullState(s){return !!(s&&("checklist" in s||"announcements" in s||"count" in s));}
@@ -2456,6 +2557,7 @@ function renderDynamic(){var _cs=snapshotComments();refreshChecklists();renderAn
 function updateBadges(){
   function set(id,n){var e=document.getElementById(id);if(!e)return;e.textContent=n;e.style.display=n?"flex":"none";}
   set("crewCheckinPill",STATE.checkins.length);set("crewCountPill",STATE.count);
+  set("capPill",(STATE.captureCount||0)+(typeof capQueue==="function"?capQueue().length:0));
   set("boardAnnPill",STATE.announcements.length);set("boardPraisePill",visCount(STATE.praises));set("boardIssuePill",visCount(STATE.feedback));
   var u=Math.max(0,(STATE.announcements.length-seenAnn)+(visCount(STATE.feedback)-seenIssue));
   var b=document.getElementById("boardBadge");b.textContent=u;b.style.display=u?"flex":"none";
@@ -2680,7 +2782,7 @@ document.getElementById("csvBtn").addEventListener("click",function(){
   var csv=rows.map(function(r){return r.map(csvCell).join(",");}).join("\r\n");
   var blob=new Blob(["\ufeff"+csv],{type:"text/csv"});
   var a=document.createElement("a");a.href=URL.createObjectURL(blob);
-  a.download="k2c-day-report-v1.6.1-"+new Date().toISOString().slice(0,10)+".csv";
+  a.download="k2c-day-report-v1.7.0-"+new Date().toISOString().slice(0,10)+".csv";
   document.body.appendChild(a);a.click();a.remove();
 });
 document.getElementById("resetBtn").addEventListener("click",function(){
@@ -2694,7 +2796,7 @@ document.addEventListener("click",function(e){var row=e.target.closest(".chk");i
 document.getElementById("annBarX").addEventListener("click",function(e){e.stopPropagation();barDismissed=true;document.getElementById("annBar").classList.remove("show");});
 var annBarMode="checkin";
 document.getElementById("annBar").addEventListener("click",function(){show(annBarMode==="checkin"?"checkin":"announcements");});
-var PARENT={dashboard:"crew",checkin:"guides",count:"crew",setup:"crew",techio:"crew",inventory:"crew",announcements:"board",praise:"board",issue:"board",leaders:"guides",graphics:"guides",donate:"guides",playbook:"guides",handbook:"guides",tour:"guides",radios:"crew",shareapp:"guides"};
+var PARENT={dashboard:"crew",checkin:"guides",count:"crew",setup:"crew",techio:"crew",inventory:"crew",announcements:"board",praise:"board",issue:"board",leaders:"guides",graphics:"guides",donate:"guides",playbook:"guides",handbook:"guides",tour:"guides",radios:"crew",shareapp:"guides",capture:"guides"};
 function show(id){
   if(id==="dashboard"&&!LEADER){askPin(function(){show("dashboard");});}
   var pages=document.querySelectorAll(".page");for(var i=0;i<pages.length;i++)pages[i].classList.remove("active");
@@ -2708,6 +2810,7 @@ function show(id){
   if(id==="radios")renderRadios();
   if(id==="inventory")renderInventory();
   if(id==="shareapp")renderShareQR();
+  if(id==="capture"&&typeof renderCapture==="function")renderCapture();
 }
 /* v1.6.1 — Share-this-app QR (drawn locally from the current URL, works offline) */
 function appShareUrl(){return location.origin+location.pathname.replace(/index\.html$/,"");}
@@ -2977,6 +3080,320 @@ boot();
 if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}
 </script>
 <script>
+/* ================= Shared county roster (v1.7.0) =================
+   One source of truth for every county dropdown (Quick Capture + the
+   Recording Studio script editor) and for the 10 script templates.
+   `event` strings match data/scripts.json exactly so board grouping holds. */
+var COUNTIES=[
+  {key:"sullivan",  county:"Sullivan County",  event:"Sullivan County — Jun 13 · Monadnock Park",         dateLong:"Saturday, June 13th",    dateShort:"June 13th",     venue:"Monadnock Park",              town:"Claremont", the:false, vshort:"Monadnock Park"},
+  {key:"grafton",   county:"Grafton County",   event:"Grafton County — Jun 27 · Loon Mountain Resort",    dateLong:"Saturday, June 27th",    dateShort:"June 27th",     venue:"Loon Mountain Resort",        town:"Lincoln",   the:false, vshort:"Loon Mountain"},
+  {key:"strafford", county:"Strafford County", event:"Strafford County — Jul 11 · Rochester Fairgrounds", dateLong:"Saturday, July 11th",    dateShort:"July 11th",     venue:"Rochester Fairgrounds",       town:"",          the:true,  vshort:"Rochester Fairgrounds"},
+  {key:"carroll",   county:"Carroll County",   event:"Carroll County — Jul 25 · King Pine Ski Area",      dateLong:"Saturday, July 25th",    dateShort:"July 25th",     venue:"King Pine Ski Area",          town:"Madison",   the:false, vshort:"King Pine"},
+  {key:"cheshire",  county:"Cheshire County",  event:"Cheshire County — Aug 15 · Cheshire Fair",          dateLong:"Saturday, August 15th",  dateShort:"August 15th",   venue:"Cheshire Fair",               town:"Swanzey",   the:true,  vshort:"Cheshire Fair"},
+  {key:"belknap",   county:"Belknap County",   event:"Belknap County — Aug 22 · Belknap 4-H Fairgrounds", dateLong:"Saturday, August 22nd",  dateShort:"August 22nd",   venue:"Belknap County 4-H Fairgrounds",town:"Belmont", the:true,  vshort:"Belknap 4-H Fairgrounds"},
+  {key:"coos",      county:"Coös County",      event:"Coös County — Sep 5 · Gorham Town Common",          dateLong:"Saturday, September 5th",dateShort:"September 5th", venue:"Gorham Town Common",          town:"",          the:true,  vshort:"Gorham Town Common"},
+  {key:"rockingham",county:"Rockingham County",event:"Rockingham County — Oct 10 · Star Speedway",        dateLong:"Saturday, October 10th", dateShort:"October 10th",  venue:"Star Speedway",               town:"Epping",    the:false, vshort:"Star Speedway"}
+];
+function countyPlace(c){return (c.the?"the ":"")+c.venue+(c.town?(" in "+c.town):"");}
+
+/* ================= Ambassador Quick Capture (v1.7.0) =================
+   Three frictionless lanes for street encounters — 📷 photo of a filled-out
+   contact card, 🎙️ voice note, ⌨️ typed — with pop-up reminders that the
+   follow-up team needs, at minimum: NAME + CONTACT INFO + ENCOUNTER NOTES.
+   Captures sync to leadership (headed for Planning Center Online later);
+   when the field signal drops they queue on the phone and auto-send. */
+var capLaneCur="text",capPhotoData=null,capAudioData=null;
+var CAP_HINTS={
+  photo:"Snap the filled-out card, add anything the card doesn't show (especially notes on the conversation), then submit.",
+  audio:"Talk like you're leaving a voicemail for the follow-up team — their name, phone or email, and what happened. Add typed details too if you have a minute.",
+  text:"Type it in — their name, a phone or email, and notes on the encounter are the minimum."
+};
+function capSetLane(l){
+  capLaneCur=l;
+  var btns=document.querySelectorAll("#capLanes button");
+  for(var i=0;i<btns.length;i++)btns[i].classList.toggle("on",btns[i].getAttribute("data-lane")===l);
+  document.getElementById("capPhotoWrap").style.display=l==="photo"?"block":"none";
+  document.getElementById("capAudioWrap").style.display=l==="audio"?"block":"none";
+  document.getElementById("capLaneHint").textContent=CAP_HINTS[l]||"";
+  document.getElementById("capFieldsTtl").textContent=l==="text"?"Their info":("Their info — add what the "+(l==="photo"?"card":"recording")+" doesn't cover");
+}
+/* ---- photo lane: downscale to a phone-friendly JPEG data URL ---- */
+function capShrink(file,cb){
+  var url=URL.createObjectURL(file),img=new Image();
+  img.onload=function(){
+    try{
+      var MAX=1400,w=img.naturalWidth,h=img.naturalHeight,sc=Math.min(1,MAX/Math.max(w,h));
+      var c=document.createElement("canvas");c.width=Math.max(1,Math.round(w*sc));c.height=Math.max(1,Math.round(h*sc));
+      c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+      URL.revokeObjectURL(url);cb(c.toDataURL("image/jpeg",0.72));
+    }catch(e){URL.revokeObjectURL(url);cb(null);}
+  };
+  img.onerror=function(){URL.revokeObjectURL(url);cb(null);};
+  img.src=url;
+}
+document.getElementById("capPhotoInput").addEventListener("change",function(){
+  var f=this.files&&this.files[0];this.value="";
+  if(!f)return;
+  toast("📷 Processing photo…");
+  capShrink(f,function(dataUrl){
+    if(!dataUrl){toast("Couldn't read that photo — try again");return;}
+    capPhotoData=dataUrl;
+    document.getElementById("capPhotoImg").src=dataUrl;
+    document.getElementById("capPhotoPrev").style.display="block";
+    document.getElementById("capShotBtn").style.display="none";
+    toast("📷 Got it — check the writing is readable, then add notes & submit");
+  });
+});
+function capPhotoRetake(){
+  capPhotoData=null;
+  document.getElementById("capPhotoPrev").style.display="none";
+  document.getElementById("capShotBtn").style.display="block";
+  document.getElementById("capPhotoInput").click();
+}
+/* ---- audio lane: MediaRecorder voice note ---- */
+var capRecOn=false,capRecorder=null,capChunks=[],capSecs=0,capTimer=null,capStream=null,capRecCoached=false;
+function capAudioMime(){var o=["audio/mp4","audio/webm;codecs=opus","audio/webm","audio/ogg;codecs=opus"];for(var i=0;i<o.length;i++){if(window.MediaRecorder&&MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(o[i]))return o[i];}return "";}
+function capRecTap(){
+  if(capRecOn){capRecStop();return;}
+  if(!window.MediaRecorder||!navigator.mediaDevices){toast("🎙️ Recording isn't supported in this browser — use Type It instead");return;}
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(st){
+    capStream=st;capChunks=[];capAudioData=null;
+    document.getElementById("capAudioPrev").style.display="none";
+    var mt=capAudioMime();
+    try{capRecorder=mt?new MediaRecorder(st,{mimeType:mt}):new MediaRecorder(st);}catch(e){capRecorder=new MediaRecorder(st);}
+    capRecorder.ondataavailable=function(e){if(e.data&&e.data.size>0)capChunks.push(e.data);};
+    capRecorder.onstop=function(){
+      var blob=new Blob(capChunks,{type:capRecorder.mimeType||"audio/webm"});
+      var rd=new FileReader();
+      rd.onload=function(){
+        capAudioData=rd.result;
+        var au=document.getElementById("capAudioPrev");au.src=capAudioData;au.style.display="block";
+        document.getElementById("capRecLbl").textContent="Recorded — listen back, or tap to redo";
+      };
+      rd.readAsDataURL(blob);
+      if(capStream){capStream.getTracks().forEach(function(t){t.stop();});capStream=null;}
+    };
+    capRecorder.start(1000);
+    capRecOn=true;capSecs=0;
+    document.getElementById("capRecBtn").classList.add("rec");
+    document.getElementById("capRecLbl").textContent="Recording — tap to stop";
+    document.getElementById("capRecTime").textContent="00:00";
+    if(!capRecCoached){capRecCoached=true;toast("🎙️ Say their NAME, their PHONE or EMAIL, and what happened");}
+    capTimer=setInterval(function(){
+      capSecs++;document.getElementById("capRecTime").textContent=tpFmtTime(capSecs);
+      if(capSecs===60)toast("⏱ 1 minute — remember name + contact info, then wrap it up");
+      if(capSecs>=180){toast("⏱ 3 minutes — stopping here so it can send from the field");capRecStop();}
+    },1000);
+    vibr(15);
+  }).catch(function(){toast("🎙️ Mic is blocked — allow the microphone in your browser, or use Type It");});
+}
+function capRecStop(){
+  if(capRecorder&&capRecorder.state!=="inactive")capRecorder.stop();
+  capRecOn=false;clearInterval(capTimer);
+  document.getElementById("capRecBtn").classList.remove("rec");
+  vibr(15);
+}
+/* ---- county dropdown ---- */
+function capFillCounty(){
+  var sel=document.getElementById("capCounty");if(!sel||sel.options.length)return;
+  sel.innerHTML='<option value="">Which county are you in?…</option>'+COUNTIES.map(function(c){return '<option>'+esc(c.county)+'</option>';}).join("")+'<option>Other / not sure</option>';
+  var evn=((STATE.event&&STATE.event.name)||"").toLowerCase();
+  if(evn)COUNTIES.forEach(function(c){var first=c.county.split(" ")[0].toLowerCase();if(evn.indexOf(first)>=0||(c.key==="coos"&&evn.indexOf("coos")>=0))sel.value=c.county;});
+}
+/* ---- minimum-info pop-up reminder ---- */
+function capMissing(){
+  var name=document.getElementById("capName").value.trim(),
+      phone=document.getElementById("capPhone").value.trim(),
+      email=document.getElementById("capEmail").value.trim(),
+      notes=document.getElementById("capNotes").value.trim();
+  var miss=[];
+  if(!name)miss.push("👤 Their name");
+  if(!phone&&!email)miss.push("📞 A phone number or an email");
+  if(!notes)miss.push("📝 Notes on the encounter");
+  return miss;
+}
+var capRemindGoFn=null;
+function capRemind(miss,onAnyway){
+  document.getElementById("capRemindIntro").textContent=
+    capLaneCur==="photo"?"Before this goes out — the follow-up team needs these. If the card photo clearly shows them, you're covered:":
+    capLaneCur==="audio"?"Before this goes out — the follow-up team needs these. If you said them out loud in the recording, you're covered:":
+    "The follow-up team can't reach this person yet — please add:";
+  document.getElementById("capRemindList").innerHTML=miss.map(function(m){return "<li>"+esc(m)+"</li>";}).join("");
+  document.getElementById("capRemindNote").textContent="At the very least every capture needs their name, contact info, and notes on the encounter — the more detail, the better the follow-up.";
+  var go=document.getElementById("capRemindGo");
+  capRemindGoFn=onAnyway||null;
+  go.style.display=onAnyway?"block":"none";
+  document.getElementById("capRemindModal").classList.add("show");
+}
+document.getElementById("capRemindGo").addEventListener("click",function(){
+  document.getElementById("capRemindModal").classList.remove("show");
+  if(capRemindGoFn){var f=capRemindGoFn;capRemindGoFn=null;f();}
+});
+/* ---- submit / offline queue ---- */
+function capSubmit(){
+  if(capLaneCur==="photo"&&!capPhotoData){toast("📷 Snap the card first");return;}
+  if(capLaneCur==="audio"&&capRecOn){toast("⏹ Tap the button to stop recording first");return;}
+  if(capLaneCur==="audio"&&!capAudioData){toast("🎙️ Record the voice note first");return;}
+  var miss=capMissing();
+  if(miss.length){
+    if(capLaneCur==="text"){
+      capRemind(miss,null);
+      flash(!document.getElementById("capName").value.trim()?"capName":(!document.getElementById("capPhone").value.trim()&&!document.getElementById("capEmail").value.trim())?"capPhone":"capNotes");
+    }else{
+      capRemind(miss,capDoSend); // card/recording may already cover it — their call
+    }
+    return;
+  }
+  capDoSend();
+}
+function capDoSend(){
+  var rec={
+    id:uid(),lane:capLaneCur,
+    name:document.getElementById("capName").value.trim(),
+    phone:document.getElementById("capPhone").value.trim(),
+    email:document.getElementById("capEmail").value.trim(),
+    county:document.getElementById("capCounty").value,
+    notes:document.getElementById("capNotes").value.trim(),
+    by:myTag()||"Ambassador",t:nowLabel(),d:dateKey(new Date())
+  };
+  var media=capLaneCur==="photo"&&capPhotoData?{kind:"photo",dataUrl:capPhotoData}
+           :capLaneCur==="audio"&&capAudioData?{kind:"audio",dataUrl:capAudioData}:null;
+  var payload=Object.assign({},rec,{media:media});
+  capLogAdd(rec,"wait");
+  capFormReset();vibr(20);
+  if(LIVE){
+    apiPost("captureAdd",payload).then(function(){
+      capLogMark(rec.id,"sent");STATE.captureCount=(STATE.captureCount||0)+1;updateBadges();renderCapMine();
+      toast("✅ Captured & sent — go find the next one!");
+    }).catch(function(){capEnqueue(payload);toast("📡 Signal dropped — saved on this phone, it'll send automatically");renderCapMine();});
+  }else{
+    capEnqueue(payload);toast("📡 Offline — saved on this phone, it'll send when you're back online");renderCapMine();
+  }
+}
+function capFormReset(){
+  ["capName","capPhone","capEmail","capNotes"].forEach(function(id){document.getElementById(id).value="";});
+  capPhotoData=null;capAudioData=null;
+  document.getElementById("capPhotoPrev").style.display="none";
+  document.getElementById("capShotBtn").style.display="block";
+  var au=document.getElementById("capAudioPrev");au.style.display="none";au.removeAttribute("src");
+  document.getElementById("capRecLbl").textContent="Tap to record";
+  document.getElementById("capRecTime").textContent="00:00";
+}
+function capQueue(){try{return JSON.parse(localStorage.getItem("k2c_capq")||"[]")||[];}catch(_){return [];}}
+function capQueueSet(q){try{localStorage.setItem("k2c_capq",JSON.stringify(q));return true;}catch(_){return false;}}
+function capEnqueue(p){
+  var q=capQueue();q.push(p);
+  if(capQueueSet(q))return;
+  // localStorage quota — media is the heavy part. Queue the text (never lose
+  // the contact) and be honest that the media couldn't be kept offline.
+  if(p.media){
+    var kind=p.media.kind==="photo"?"card photo":"voice note";
+    var p2=Object.assign({},p,{media:null,notes:(p.notes?p.notes+"\n":"")+"[⚠️ A "+kind+" was attached but couldn't be stored offline on the phone — ask "+(p.by||"the ambassador")+" for details]"});
+    q=capQueue();q.push(p2);
+    if(capQueueSet(q)){toast("⚠️ No room to keep the "+kind+" offline — the typed info is saved and will send");return;}
+  }
+  toast("⚠️ This phone's offline storage is full — keep the app open until you have signal");
+}
+var capFlushing=false;
+function capFlush(){
+  if(capFlushing||!LIVE)return;
+  var q=capQueue();if(!q.length)return;
+  capFlushing=true;
+  var p=q[0];
+  apiPost("captureAdd",p).then(function(){
+    var q2=capQueue();q2.shift();capQueueSet(q2);
+    capLogMark(p.id,"sent");STATE.captureCount=(STATE.captureCount||0)+1;updateBadges();renderCapMine();
+    capFlushing=false;
+    if(capQueue().length)capFlush();else toast("✅ Offline captures sent to leadership");
+  }).catch(function(){capFlushing=false;});
+}
+setInterval(capFlush,15000);
+/* ---- "captured from this phone" log (device-local, no PII beyond a label) ---- */
+function capLog(){try{return JSON.parse(localStorage.getItem("k2c_caplog")||"[]")||[];}catch(_){return [];}}
+function capLogSet(l){try{localStorage.setItem("k2c_caplog",JSON.stringify(l.slice(0,60)));}catch(_){}}
+function capLogAdd(rec,st){
+  var l=capLog();
+  l.unshift({id:rec.id,label:rec.name||(rec.lane==="photo"?"Card photo":rec.lane==="audio"?"Voice note":"Unnamed"),lane:rec.lane,t:rec.t,d:rec.d,st:st});
+  capLogSet(l);renderCapMine();
+}
+function capLogMark(id,st){var l=capLog(),hit=false;l.forEach(function(e){if(e.id===id){e.st=st;hit=true;}});if(hit)capLogSet(l);}
+var CAP_LANE_ICON={photo:"📷",audio:"🎙️",text:"⌨️"};
+function renderCapMine(){
+  var wrap=document.getElementById("capMineWrap"),mt=document.getElementById("capMineMount");
+  if(!wrap||!mt)return;
+  var l=capLog();
+  wrap.style.display=l.length?"block":"none";
+  mt.innerHTML=l.map(function(e){
+    var sent=e.st==="sent";
+    return '<div class="listrow"><span class="av">'+(CAP_LANE_ICON[e.lane]||"📇")+'</span><span class="nm">'+esc(e.label)+'<small>'+esc((e.d||"")+(e.t?(" · "+e.t):""))+'</small></span><span class="st '+(sent?"sent":"wait")+'">'+(sent?"SENT ✓":"WAITING…")+'</span></div>';
+  }).join("");
+}
+/* ---- leader view: full list, media viewer, CSV export ---- */
+var capAll=null;
+function renderCapLeader(){
+  var w=document.getElementById("capLeaderWrap");if(!w)return;
+  if(!LEADER){w.innerHTML='<div class="lockbar">🔒 Submitted captures (names & contact info) are visible to leaders only.<button onclick="askPin(function(){renderCapture();})">Unlock</button></div>';return;}
+  w.innerHTML='<div class="ttl" style="font-family:var(--serif);font-weight:600;font-size:16px;margin:0 0 8px">🔓 All captures — leaders <span style="color:var(--rust)">('+(STATE.captureCount||0)+')</span></div>'
+    +'<button class="btn ghost" style="margin-bottom:9px" onclick="capLoadAll()">'+(capAll?"↻ Refresh captures":"📇 Load all captures")+'</button>'
+    +'<div id="capAllMount"></div>';
+  if(capAll)renderCapAll();
+}
+function capLoadAll(){
+  if(!LIVE){toast("Demo mode — captures load on the deployed site");return;}
+  apiPost("capturesList",{}).then(function(r){capAll=(r&&r.captures)||[];renderCapLeader();}).catch(function(e){if(e!==403)toast("Couldn't load captures — check your signal");});
+}
+function renderCapAll(){
+  var mt=document.getElementById("capAllMount");if(!mt)return;
+  if(!capAll.length){mt.innerHTML='<div class="empty">No captures submitted yet. 📇</div>';return;}
+  var rows=capAll.slice().reverse().map(function(c){
+    var contact=[c.phone,c.email].filter(Boolean).join(" · ");
+    return '<div class="caprow"><div class="hd"><b>'+esc(c.name||"(no name typed)")+'</b><span class="ln">'+(CAP_LANE_ICON[c.lane]||"")+' '+esc((c.d||"")+(c.t?(" · "+c.t):""))+'</span></div>'
+      +(contact?'<div class="ct">'+esc(contact)+'</div>':'<div class="ct" style="color:var(--warn)">no typed contact — check the '+(c.mediaKind||"notes")+'</div>')
+      +(c.county?'<div class="by2">📍 '+esc(c.county)+'</div>':'')
+      +(c.notes?'<div class="nt">'+esc(c.notes)+'</div>':'')
+      +'<div class="by2">by '+esc(c.by||"Ambassador")+'</div>'
+      +'<div class="acts2">'+(c.hasMedia?'<button onclick="capViewMedia(\''+esc(c.id)+'\',\''+esc(c.mediaKind)+'\')">'+(c.mediaKind==="photo"?"🖼️ View card photo":"🔊 Play voice note")+'</button>':'')
+      +'<button class="del" onclick="capDelOne(\''+esc(c.id)+'\')">🗑 Delete</button></div></div>';
+  }).join("");
+  mt.innerHTML='<button class="btn ghost" style="margin-bottom:9px" onclick="capExportCsv()">📊 Export captures (CSV)</button>'+rows;
+}
+function capViewMedia(id,kind){
+  var body=document.getElementById("capMediaBody");
+  document.getElementById("capMediaTitle").textContent=kind==="photo"?"🖼️ Contact card photo":"🔊 Voice note";
+  body.innerHTML='<p class="hint">Loading…</p>';
+  document.getElementById("capMediaModal").classList.add("show");
+  apiPost("captureMedia",{id:id}).then(function(r){
+    if(!(r&&r.dataUrl)){body.innerHTML='<p class="hint">Media not found for this capture.</p>';return;}
+    body.innerHTML=kind==="photo"?'<img alt="Contact card" />':'<audio controls></audio>';
+    var el=body.firstElementChild;el.src=r.dataUrl;
+  }).catch(function(){body.innerHTML='<p class="hint">Couldn’t load the media — check your signal and try again.</p>';});
+}
+function capDelOne(id){
+  if(!confirm("Delete this capture for everyone? Only do this once it's been entered into Planning Center."))return;
+  apiPost("captureDelete",{id:id}).then(function(){
+    capAll=(capAll||[]).filter(function(c){return c.id!==id;});
+    STATE.captureCount=Math.max(0,(STATE.captureCount||0)-1);
+    updateBadges();renderCapLeader();toast("🗑 Capture deleted");
+  }).catch(function(e){if(e!==403)toast("Couldn't delete — try again");});
+}
+function capExportCsv(){
+  if(!capAll||!capAll.length){toast("Load the captures first");return;}
+  var rows=[["Date","Time","Captured by","Lane","Name","Phone","Email","County","Notes","Media"]];
+  capAll.forEach(function(c){rows.push([c.d||"",c.t||"",c.by||"",c.lane||"",c.name||"",c.phone||"",c.email||"",c.county||"",c.notes||"",c.hasMedia?c.mediaKind:""]);});
+  var csv=rows.map(function(r){return r.map(csvCell).join(",");}).join("\r\n");
+  var blob=new Blob(["\ufeff"+csv],{type:"text/csv"});
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download="k2c-quick-captures-"+new Date().toISOString().slice(0,10)+".csv";
+  document.body.appendChild(a);a.click();a.remove();
+}
+function renderCapture(){
+  capFillCounty();
+  capSetLane(capLaneCur);
+  renderCapMine();
+  renderCapLeader();
+}
+renderCapture();
+
 /* ================= Recording Studio (Teleprompter) =================
    Lives under Guides → everyone behind the Day PIN can view & record.
    Adding/editing scripts (title, event, due date, assignee, body) is
@@ -3029,17 +3446,80 @@ function tpSeed(){
   doAction("promptSeed",{scripts:TP_SEED},function(){if(!tpScripts().length)STATE.prompter={scripts:JSON.parse(JSON.stringify(TP_SEED))};});
 }
 
+/* ---- 10 script templates (v1.7.0) ----
+   Every script has 10 versions/angles to start from. Picking one fills the
+   title + body with the selected county's date & venue — then it's a normal,
+   fully editable script like any other. */
+var TP_TEMPLATES=[
+  {letter:"A",name:"Come As You Are",body:function(c){return "Hey — I want to tell you about something happening right here in "+c.county+". On "+c.dateLong+", from 2 to 5 in the afternoon, we're setting up at "+countyPlace(c)+". No dress code, no expectations, no church background needed — just come as you are. There's live music, real conversation, and a few hours to breathe. It's completely free. We're not asking you to come to us — we're coming to you. If you've got questions, doubts, or you're just curious, this is for you. "+c.dateShort+", "+c.vshort+", 2 to 5 PM. Hope. Healing. Salvation. Look up kingdomtothecounties.com for more.";}},
+  {letter:"B",name:"Logistics / Urgency",body:function(c){return "Mark your calendar — "+c.dateLong+", 2 to 5 PM, at "+countyPlace(c)+". This is a one-day gathering for "+c.county+". Bring your kids, your neighbors, whoever needs a reason to hope. It's outdoors, it's free, and it's built for anyone — whether you've never set foot in a church or you grew up in one and walked away. Live worship, real conversation, a chance to reset. We only get one shot at this in "+c.county+" this year — there isn't a second date. "+c.dateShort+". "+c.vshort+". 2 to 5 PM. Hope. Healing. Salvation. Everything you need is at kingdomtothecounties.com.";}},
+  {letter:"C",name:"Pain Point / Hope",body:function(c){return "If you're tired — really tired, the kind sleep doesn't fix — I want you to hear this. On "+c.dateLong+", from 2 to 5 PM at "+countyPlace(c)+", a group of us are gathering for one afternoon to remind "+c.county+" you are not forgotten and not too far gone. No judgment, no pressure — just an open field, real worship, and people who care whether you show up. You don't have to have it figured out. You don't have to carry it alone. Come as you are. "+c.dateShort+", "+c.vshort+", 2 to 5 PM. Hope. Healing. Salvation. Find out more at kingdomtothecounties.com.";}},
+  {letter:"D",name:"Personal Testimony",body:function(c){return "Can I get real with you for a second? There was a season of my life when I didn't think anything could change — and then Jesus met me right where I was. That's why I'm inviting you to this. On "+c.dateLong+", from 2 to 5 PM, we'll be at "+countyPlace(c)+" — live worship, real stories, real hope, and it's completely free. I'm not asking you to be religious. I'm asking you to come see what changed my life. "+c.dateShort+", "+c.vshort+", 2 to 5 PM. Hope. Healing. Salvation. Details at kingdomtothecounties.com.";}},
+  {letter:"E",name:"Family & Kids",body:function(c){return "Parents — this one's for the whole crew. On "+c.dateLong+", from 2 to 5 PM, "+c.county+" is getting a free outdoor afternoon at "+countyPlace(c)+". Bring the kids, bring the grandparents, bring the neighbors. Live music, open space to run around, real community, and a message of hope your family can actually use. No cost, no dress code, no pressure — just show up. "+c.dateShort+", "+c.vshort+", 2 to 5 PM. Hope. Healing. Salvation. It's all at kingdomtothecounties.com.";}},
+  {letter:"F",name:"For the Skeptic",body:function(c){return "Maybe church was never your thing. Maybe you've got more questions than answers — honestly, that's exactly who this is for. On "+c.dateLong+", from 2 to 5 PM at "+countyPlace(c)+", we're holding one open-air afternoon for "+c.county+". Nobody's going to corner you, and nobody's passing a plate. Come stand in the back with your arms crossed if you want — just come. Live music, real people, zero pressure, totally free. "+c.dateShort+", "+c.vshort+", 2 to 5 PM. Hope. Healing. Salvation. Look us up at kingdomtothecounties.com.";}},
+  {letter:"G",name:"Come Back Home",body:function(c){return "This one's for everybody who grew up in church and walked away — or got hurt by it. I'm sorry. And I want you to know: this isn't that. On "+c.dateLong+", from 2 to 5 PM at "+countyPlace(c)+", we're gathering in an open field — no building, no membership, no strings. Just worship, honesty, and a God who never stopped waiting for you. If a part of you has been thinking about coming back, let this be the day. "+c.dateShort+", "+c.vshort+", 2 to 5 PM. Hope. Healing. Salvation. More at kingdomtothecounties.com.";}},
+  {letter:"H",name:"Young Adults",body:function(c){return "Hey — if you're in your teens or twenties in "+c.county+" and it feels like nobody's talking about the stuff that actually matters — anxiety, purpose, where your life is going — this is for you. "+c.dateLong+", 2 to 5 PM, at "+countyPlace(c)+". Live music, real conversations, a free afternoon outside with people who actually care. Grab your friends and pull up. No church clothes, no weirdness — come as you are. "+c.dateShort+", "+c.vshort+", 2 to 5 PM. Hope. Healing. Salvation. kingdomtothecounties.com.";}},
+  {letter:"I",name:"Bring Someone",body:function(c){return "Quick challenge for you: think of ONE person — a neighbor, a coworker, that family member you've been praying for. Got them? Now bring them to this. On "+c.dateLong+", from 2 to 5 PM, we're at "+countyPlace(c)+" for one afternoon of worship, hope, and real community for "+c.county+". It's free, it's outdoors, and it might be the exact invitation they've been waiting for. Don't just share the flyer — pick them up on the way. "+c.dateShort+", "+c.vshort+", 2 to 5 PM. Hope. Healing. Salvation. kingdomtothecounties.com.";}},
+  {letter:"J",name:"Final Call / This Week",body:function(c){return "This is it, "+c.county+" — it's THIS Saturday. "+c.dateLong+", 2 to 5 PM, at "+countyPlace(c)+". One afternoon. Live worship, real hope, completely free, everybody welcome. Whatever your week has looked like, come breathe for a few hours. Rain or shine, we'll be looking for you — and bring somebody with you. There's no second date this year, so don't put it off. "+c.dateShort+". "+c.vshort+". 2 to 5 PM. Hope. Healing. Salvation. Last details at kingdomtothecounties.com.";}}
+];
+
 /* ---- Leader editor (add / edit / delete) ---- */
 var tpEdId=null;
+/* County & assignee are dropdowns (no typing venue strings or hunting for
+   names) with an "Other…" escape hatch that reveals a free-text input. */
+function tpFillEditorSelects(){
+  var ev=document.getElementById("tpEdEvent");
+  if(!ev.options.length)ev.innerHTML='<option value="">County / event…</option>'+COUNTIES.map(function(c){return '<option value="'+esc(c.event)+'">'+esc(c.event)+'</option>';}).join("")+'<option value="__other">Other / custom event…</option>';
+  var who=document.getElementById("tpEdWho");
+  if(!who.options.length)who.innerHTML='<option value="">Assignee — unassigned</option>'+LEADERS.map(function(l){return '<option value="'+esc(l.name)+'">'+esc(l.name)+'</option>';}).join("")+'<option value="__other">Other…</option>';
+  var tpl=document.getElementById("tpEdTpl");
+  if(!tpl.options.length)tpl.innerHTML='<option value="">📋 Fill from a template — '+TP_TEMPLATES.length+' versions, all editable…</option>'+TP_TEMPLATES.map(function(t,i){return '<option value="'+i+'">Script '+t.letter+' — '+esc(t.name)+'</option>';}).join("");
+}
+function tpEdEventChange(){document.getElementById("tpEdEventOther").style.display=document.getElementById("tpEdEvent").value==="__other"?"block":"none";}
+function tpEdWhoChange(){document.getElementById("tpEdWhoOther").style.display=document.getElementById("tpEdWho").value==="__other"?"block":"none";}
+function tpEdSetEvent(evStr){
+  var sel=document.getElementById("tpEdEvent"),oth=document.getElementById("tpEdEventOther");
+  oth.value="";
+  if(evStr&&COUNTIES.some(function(c){return c.event===evStr;}))sel.value=evStr;
+  else if(evStr){sel.value="__other";oth.value=evStr;}
+  else sel.value="";
+  tpEdEventChange();
+}
+function tpEdSetWho(who){
+  var sel=document.getElementById("tpEdWho"),oth=document.getElementById("tpEdWhoOther");
+  oth.value="";
+  if(!who)sel.value="";
+  else if(LEADERS.some(function(l){return l.name===who;}))sel.value=who;
+  else{sel.value="__other";oth.value=who;}
+  tpEdWhoChange();
+}
+function tpEdEventVal(){var v=document.getElementById("tpEdEvent").value;return v==="__other"?document.getElementById("tpEdEventOther").value.trim():v;}
+function tpEdWhoVal(){var v=document.getElementById("tpEdWho").value;return v==="__other"?document.getElementById("tpEdWhoOther").value.trim():v;}
+function tpEdCounty(){var v=document.getElementById("tpEdEvent").value;return COUNTIES.filter(function(c){return c.event===v;})[0]||null;}
+function tpApplyTpl(){
+  var sel=document.getElementById("tpEdTpl");
+  if(sel.value==="")return;
+  var t=TP_TEMPLATES[+sel.value];sel.value="";
+  if(!t)return;
+  var c=tpEdCounty();
+  if(!c){toast("📍 Pick the county first — the template fills in its date & venue");flash("tpEdEvent");return;}
+  var body=document.getElementById("tpEdBody");
+  if((body.textContent||"").trim()&&!confirm("Replace the current script text with the “"+t.name+"” template?"))return;
+  document.getElementById("tpEdName").value="Script "+t.letter+" — "+t.name;
+  body.innerHTML=esc(t.body(c));
+  toast("📋 Template loaded — tweak anything you like");
+}
 function tpOpenEditor(id){
   if(!LEADER){askPin(function(){tpOpenEditor(id);});return;}
   tpEdId=id;
   var s=id?tpById(id):null;
+  tpFillEditorSelects();
   document.getElementById("tpEdTitle").textContent=id?"Edit script ✏️":"New script ＋";
-  document.getElementById("tpEdEvent").value=s?s.event:(tpScripts().length?tpScripts()[tpScripts().length-1].event:"");
+  tpEdSetEvent(s?s.event:(tpScripts().length?tpScripts()[tpScripts().length-1].event:""));
   document.getElementById("tpEdName").value=s?s.title:"";
   document.getElementById("tpEdDue").value=s?s.due:"";
-  document.getElementById("tpEdWho").value=s?s.assignee:"";
+  tpEdSetWho(s?s.assignee:"");
+  document.getElementById("tpEdTpl").value="";
   document.getElementById("tpEdBody").innerHTML=s?s.body:"";
   document.getElementById("tpEdDel").style.display=id?"block":"none";
   document.getElementById("tpEditor").classList.add("show");
@@ -3047,9 +3527,9 @@ function tpOpenEditor(id){
 function tpFmt(cmd){document.getElementById("tpEdBody").focus();document.execCommand(cmd,false,null);}
 function tpSaveEditor(){
   if(!LEADER){askPin(function(){});return;}
-  var ev=document.getElementById("tpEdEvent").value.trim(),ti=document.getElementById("tpEdName").value.trim();
-  if(!ev||!ti){flash(ev?"tpEdName":"tpEdEvent");return;}
-  var patch={event:ev,title:ti,due:document.getElementById("tpEdDue").value,assignee:document.getElementById("tpEdWho").value.trim(),body:document.getElementById("tpEdBody").innerHTML.trim()};
+  var ev=tpEdEventVal(),ti=document.getElementById("tpEdName").value.trim();
+  if(!ev||!ti){flash(ev?"tpEdName":(document.getElementById("tpEdEvent").value==="__other"?"tpEdEventOther":"tpEdEvent"));return;}
+  var patch={event:ev,title:ti,due:document.getElementById("tpEdDue").value,assignee:tpEdWhoVal(),body:document.getElementById("tpEdBody").innerHTML.trim()};
   if(tpEdId){
     doAction("promptEdit",{id:tpEdId,patch:patch},function(){var s=tpById(tpEdId);if(s)Object.assign(s,patch);});
   }else{

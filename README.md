@@ -14,6 +14,33 @@ all stay in sync across phones within a few seconds.
 - **`netlify.toml`** — tells Netlify where the site and functions live.
 - **`package.json`** — lists the `@netlify/blobs` dependency.
 
+## Ambassador Quick Capture (v1.7.0)
+
+Under **Ambassador Resources → 📇 Quick Capture** (also one tap from the Event
+Day page): a frictionless way for ambassadors on the street to capture an
+encounter and move on, in one of **three lanes** — 📷 a photo of a filled-out
+physical contact card, 🎙️ a recorded voice note, or ⌨️ a typed entry. Pop-up
+reminders enforce the minimum the follow-up team needs: **name, contact info
+(phone or email), and notes on the encounter** — typed entries require all
+three; card-photo and voice-note submissions get a "does your photo/recording
+cover these?" confirmation instead, so nothing blocks a fast capture.
+
+Captures sync to the shared backend (destined for Planning Center Online — the
+CRM push is a later build). Privacy & resilience:
+
+- The polling payload only carries a **count** — the records themselves (names,
+  phones, emails, notes) are fetched with the **leader PIN** (`capturesList`),
+  and photo/audio blobs are stored per-capture and fetched on demand
+  (`captureMedia`). Leaders can review, listen/view, **export a CSV**, and
+  delete captures once they're entered into Planning Center.
+- No signal? Captures queue in the phone's local storage and **auto-send when
+  the app is back online** (server-side idempotency means a retry can't
+  double-submit). The "Captured from this phone" list shows sent/waiting state.
+- Photos are downscaled client-side (≤1400 px JPEG) and voice notes cap at 3
+  minutes so submissions stay field-signal friendly.
+- Captures **survive the end-of-day reset** — like issues, they're not
+  day-scoped data.
+
 ## Recording Studio (Teleprompter)
 
 Under **Ambassador Resources → 🎬 Recording Studio**: invite-video scripts for
@@ -27,6 +54,15 @@ video and send it to Laura, then mark the script ✅ done with their initials.
 An empty board shows leaders a **Load starter scripts** button that seeds A/B/C
 scripts for all counties (Sullivan ships with `[DATE]`/`[VENUE]` placeholders —
 edit once confirmed).
+
+The script editor (v1.7.0) is dropdown-driven — no typing county/venue strings:
+the **county/event** is a dropdown of all 8 counties (plus "Other / custom"),
+the **assignee** is a dropdown of the leader roster (plus "Other…" for anyone
+else), and a **template picker offers 10 versions of every script** (Come As
+You Are, Logistics/Urgency, Pain Point/Hope, Personal Testimony, Family & Kids,
+For the Skeptic, Come Back Home, Young Adults, Bring Someone, Final Call) that
+fill the title + body with the chosen county's date and venue — and every
+generated script stays fully editable.
 
 Every phone re-reads the shared state every 5 seconds (re-rendering only when
 something actually changed), so updates show up for everyone within a few
