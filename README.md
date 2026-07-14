@@ -40,6 +40,16 @@ CRM push is a later build). Privacy & resilience:
   minutes so submissions stay field-signal friendly.
 - Captures **survive the end-of-day reset** — like issues, they're not
   day-scoped data.
+- **Storage meter + purge (v1.7.1):** the Leader Dashboard shows a live
+  "Quick Capture storage" bar — the backend tracks exactly how many bytes
+  capture media is using against a budget (default **1 GB**, override with a
+  `CAPTURE_BUDGET_MB` environment variable on Netlify). At **80%** a warning
+  appears in the dashboard; at **95%** it goes mission-critical, and once the
+  budget is full new photo/voice attachments are refused server-side (typed
+  info still saves, with a note flagging the dropped media). A **🧹 Purge all
+  exported captures** button — behind the reset password *and* the leader PIN
+  — permanently deletes every capture record and media blob once leadership
+  confirms it has all been entered into Planning Center Online.
 
 ## Recording Studio (Teleprompter)
 

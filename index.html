@@ -659,7 +659,7 @@
 <body>
 <div class="topwrap">
 <header class="topbar">
-  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.7.0</span></span></div>
+  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.7.1</span></span></div>
   <div class="clock"><div class="t" id="clockTime">--:--</div><div class="d" id="clockDate">SATURDAY</div></div>
 </header>
 <div class="nowstrip" id="nowStrip" onclick="goSchedule()">
@@ -742,6 +742,11 @@
       <div class="dashrow"><div class="t"><span>Overdue setup items</span><span class="v" id="dOver">0</span></div></div>
       <div class="dashrow"><div class="t"><span>👥 Attendees by counter</span></div><div id="dTally" style="margin-top:6px"><p class="hint">No counts logged yet.</p></div></div>
       <div class="dashrow"><div class="t"><span>📻 Radios out</span><span class="v" id="dRadios">0</span></div><div id="dRadioList" style="margin-top:6px"></div></div>
+      <div class="dashrow"><div class="t"><span>📇 Quick Capture storage</span><span class="v" id="dCapStore">—</span></div><div class="pbar"><i id="dCapStoreBar"></i></div>
+        <div class="overdue" id="dCapStoreWarn" style="margin:10px 0 0"></div>
+        <p class="hint" style="margin-top:8px">Card photos &amp; voice notes live in Netlify Blobs against a set budget. When this bar fills up, new photo/voice attachments stop being stored (typed info still saves) — export to Planning Center, then purge below.</p></div>
+      <button class="btn ghost" id="capPurgeBtn" style="margin-top:6px">🧹 Purge all exported captures</button>
+      <p class="hint">Purge asks for the reset password. It permanently deletes <b>every</b> Quick Capture — names, contact info, notes, card photos &amp; voice notes — for everyone, and can't be undone. Only purge once you've confirmed it has ALL been properly entered into Planning Center Online.</p>
       <button class="btn ghost" id="csvBtn" style="margin-top:6px">📊 Export day report (CSV)</button>
       <button class="btn ink" id="resetBtn" style="margin-top:6px">♻️ Reset all data for next event</button>
       <p class="hint">Reset asks for the reset password. Clears checklists, check-ins, head count, radios, praise & announcements — <b>issues are kept</b>. Keeps event name, Day PIN & Tech I/O roster (patch checkmarks cleared). Leaders only.</p>
@@ -2169,7 +2174,7 @@ try{MY.name=(localStorage.getItem("k2c_name")||"").slice(0,40);}catch(_){}
 function nowLabel(){return fmt(nowMinutes());}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 function esc(s){return(s||"").replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
-function normalize(s){return{checklist:s.checklist||{},notes:s.notes||{},announcements:s.announcements||[],checkins:s.checkins||[],feedback:s.feedback||[],praises:s.praises||[],count:s.count||0,event:s.event||{name:"",date:""},ioList:s.ioList||[],dayPinSet:!!s.dayPinSet,funding:s.funding||{pct:64,needed:"$60,000"},tallyBy:s.tallyBy||{},radios:Array.isArray(s.radios)?s.radios:[],prompter:(s.prompter&&Array.isArray(s.prompter.scripts))?s.prompter:{scripts:[]},captureCount:s.captureCount||0};}
+function normalize(s){return{checklist:s.checklist||{},notes:s.notes||{},announcements:s.announcements||[],checkins:s.checkins||[],feedback:s.feedback||[],praises:s.praises||[],count:s.count||0,event:s.event||{name:"",date:""},ioList:s.ioList||[],dayPinSet:!!s.dayPinSet,funding:s.funding||{pct:64,needed:"$60,000"},tallyBy:s.tallyBy||{},radios:Array.isArray(s.radios)?s.radios:[],prompter:(s.prompter&&Array.isArray(s.prompter.scripts))?s.prompter:{scripts:[]},captureCount:s.captureCount||0,captureBytes:s.captureBytes||0,captureBudget:s.captureBudget||0};}
 function toast(msg){var el=document.getElementById("toastEl");if(!el){el=document.createElement("div");el.id="toastEl";el.className="toast";document.body.appendChild(el);}el.textContent=msg;el.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(function(){el.classList.remove("show");},2600);}
 function vibr(ms){try{if(navigator.vibrate)navigator.vibrate(ms);}catch(_){}}
 function hasFullState(s){return !!(s&&("checklist" in s||"announcements" in s||"count" in s));}
@@ -2516,7 +2521,26 @@ function renderDashboard(){
   var ev=STATE.event||{},en=document.getElementById("evName"),ed=document.getElementById("evDate");
   if(document.activeElement!==en)en.value=ev.name||"";
   if(document.activeElement!==ed)ed.value=ev.date||"";
+  renderCapStorage();
   renderTallyBreak();renderDashRadios();
+}
+/* v1.7.1 — Quick Capture storage meter. The backend reports exactly how many
+   bytes capture media is using (captureBytes) against the configured budget
+   (captureBudget, default 1 GB — CAPTURE_BUDGET_MB env var on Netlify).
+   Warn at 80%, go mission-critical at 95%. */
+function fmtMB(bytes){var mb=bytes/1048576;return mb>=100?Math.round(mb)+" MB":mb>=10?mb.toFixed(1)+" MB":mb>=1?mb.toFixed(2)+" MB":(bytes/1024).toFixed(0)+" KB";}
+function renderCapStorage(){
+  var el=document.getElementById("dCapStore");if(!el)return;
+  var used=STATE.captureBytes||0,bud=STATE.captureBudget||0;
+  var bar=document.getElementById("dCapStoreBar"),warn=document.getElementById("dCapStoreWarn");
+  if(!bud){el.textContent=LIVE?"—":"Demo mode";bar.style.width="0%";warn.className="overdue";return;}
+  var pct=Math.min(100,Math.round(used/bud*100));
+  el.textContent=fmtMB(used)+" / "+fmtMB(bud)+" · "+pct+"%";
+  bar.style.width=Math.max(pct,used>0?2:0)+"%";
+  warn.removeAttribute("style");warn.style.margin="10px 0 0";
+  if(pct>=95){warn.className="overdue show";warn.innerHTML="🚨 <b>Quick Capture storage is at "+pct+"% — mission critical.</b> New card photos &amp; voice notes are about to stop saving (typed info still will). Enter everything into Planning Center Online NOW, then purge below.";}
+  else if(pct>=80){warn.className="overdue show";warn.style.background="#f4e6dc";warn.style.color="var(--warn)";warn.innerHTML="⚠️ <b>Quick Capture storage is at "+pct+"%.</b> Getting close to capacity — plan to enter captures into Planning Center Online and purge soon.";}
+  else warn.className="overdue";
 }
 /* A comment form's open/draft state lives only in the DOM, so any wholesale
    innerHTML rebuild (a background sync, a head-count tick, someone else's edit)
@@ -2782,8 +2806,26 @@ document.getElementById("csvBtn").addEventListener("click",function(){
   var csv=rows.map(function(r){return r.map(csvCell).join(",");}).join("\r\n");
   var blob=new Blob(["\ufeff"+csv],{type:"text/csv"});
   var a=document.createElement("a");a.href=URL.createObjectURL(blob);
-  a.download="k2c-day-report-v1.7.0-"+new Date().toISOString().slice(0,10)+".csv";
+  a.download="k2c-day-report-v1.7.1-"+new Date().toISOString().slice(0,10)+".csv";
   document.body.appendChild(a);a.click();a.remove();
+});
+/* v1.7.1 — purge ALL Quick Captures (records + photo/voice blobs) once they've
+   been entered into Planning Center Online. Same reset-password speed bump as
+   the day reset, plus the leader PIN verified server-side on the action. */
+document.getElementById("capPurgeBtn").addEventListener("click",function(){
+  if(!LEADER){askPin(function(){});return;}
+  if(!LIVE){toast("Demo mode — captures live on the deployed site");return;}
+  var pw=prompt("🔐 Reset password? (required to purge all captures)");
+  if(pw==null)return;
+  if((pw||"").trim().toLowerCase()!=="kingdom"){alert("Wrong reset password.");return;}
+  if(!confirm("⚠️ BEFORE YOU PURGE — has EVERY capture been properly entered into Planning Center Online?\n\nThis permanently deletes ALL Quick Captures for everyone — names, contact info, notes, card photos AND voice notes. It cannot be undone.\n\nOnly continue if all of this data is safely in Planning Center."))return;
+  apiPost("capturePurge",{}).then(function(){
+    STATE.captureCount=0;STATE.captureBytes=0;
+    if(typeof capAll!=="undefined"&&capAll)capAll=[];
+    updateBadges();renderCapStorage();
+    if(typeof renderCapLeader==="function")renderCapLeader();
+    toast("🧹 All captures purged — storage cleared");
+  }).catch(function(e){if(e!==403)toast("Purge failed — check your signal and try again");});
 });
 document.getElementById("resetBtn").addEventListener("click",function(){
   var pw=prompt("🔐 Reset password?");
