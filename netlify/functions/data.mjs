@@ -118,6 +118,19 @@ function normAnn(x){
    `captures` list; media lives in its own capmedia-<id> blob (data URL). */
 const CAPTURE_LANES = new Set(["photo","audio","text"]);
 const CAPTURE_MEDIA_MAX = 5 * 1024 * 1024; // ~5 MB data URL (post-compression photos & <3 min voice notes fit easily)
+// Capture storage budget. Netlify Blobs has no small hard cap (5 GB per
+// object; usage bills through the plan's credits), so this is OUR ceiling for
+// how much media Quick Capture may hold before the dashboard warns and new
+// media stops being stored. Override with a CAPTURE_BUDGET_MB env var.
+const CAPTURE_BUDGET = () => Math.max(50, Number(process.env.CAPTURE_BUDGET_MB) || 1024) * 1024 * 1024;
+// Old records that predate byte accounting count as a generous flat estimate
+// so the meter can only over-warn, never silently under-report.
+const CAPTURE_BYTES_FALLBACK = 750 * 1024;
+function captureUsage(list){
+ let bytes = JSON.stringify(list || []).length;
+ for(const c of (list || [])) bytes += (c.bytes > 0 ? c.bytes : (c.hasMedia ? CAPTURE_BYTES_FALLBACK : 0));
+ return bytes;
+}
 function normCapture(x){
  x = x || {};
  return {
@@ -132,7 +145,8 @@ function normCapture(x){
   t: str(x.t, 12),
   d: str(x.d, 10),
   hasMedia: !!x.hasMedia,
-  mediaKind: x.mediaKind === "photo" || x.mediaKind === "audio" ? x.mediaKind : ""
+  mediaKind: x.mediaKind === "photo" || x.mediaKind === "audio" ? x.mediaKind : "",
+  bytes: Math.max(0, Math.min(CAPTURE_MEDIA_MAX, Number(x.bytes) || 0))
  };
 }
 const normCaptures = v => Array.isArray(v) ? v.map(normCapture).slice(-1000) : [];
@@ -256,7 +270,7 @@ const pinBlockedResp = () => json({ error:"too many wrong PIN attempts — wait 
 const LEADER_ACTIONS = new Set([
  "toggleCheck","setChecklistNote","addAnnouncement","ackCard","setEvent","setIOList","setDayPin",
  "setFunding","reset","promptSeed","promptAdd","promptEdit","promptDelete",
- "capturesList","captureMedia","captureDelete"
+ "capturesList","captureMedia","captureDelete","capturePurge"
 ]);
 
 function devKey(id){
@@ -422,6 +436,7 @@ async function assemble(s){
  parts = await migrateIfNeeded(s, parts);
  const core = normCore(parts.core);
  const [agg, tallyEpoch, capturesRaw] = await Promise.all([ readAgg(s), readEpoch(s), s.get("captures", { type:"json" }) ]);
+ const captures = normCaptures(capturesRaw);
  // Self-seeding script board: fill in any missing starter scripts (no-op
  // write when nothing is missing, so the usual GET stays read-only).
  const prompter = await compareAndSwap(s, "prompter", normPrompter,
@@ -443,8 +458,11 @@ async function assemble(s){
  funding: core.funding,
  prompter: prompter,
  // Quick Capture records hold seekers' contact info, so the shared payload
- // only carries the count; leaders pull the list with the capturesList action.
- captureCount: normCaptures(capturesRaw).length
+ // only carries the count + storage usage; leaders pull the actual list
+ // with the capturesList action.
+ captureCount: captures.length,
+ captureBytes: captureUsage(captures),
+ captureBudget: CAPTURE_BUDGET()
  };
 }
 
@@ -732,11 +750,21 @@ export default async (req, context) => {
  // frictionless on the street. Media lands in its own blob first so a
  // record never points at media that failed to store.
  const rec = normCapture(payload);
+ rec.bytes = 0;
  const media = payload.media || null;
  if(media && typeof media.dataUrl === "string" && media.dataUrl.startsWith("data:") && media.dataUrl.length <= CAPTURE_MEDIA_MAX){
+ // Enforce the storage budget: when it's full, keep the typed record (never
+ // lose the contact) but refuse the media and say so in the notes.
+ const existing = normCaptures(await s.get("captures", { type:"json" }));
+ if(captureUsage(existing) + media.dataUrl.length > CAPTURE_BUDGET()){
+ rec.hasMedia = false; rec.mediaKind = "";
+ rec.notes = str((rec.notes ? rec.notes + "\n" : "") + "[⚠️ A " + (media.kind === "photo" ? "card photo" : "voice note") + " was attached but NOT stored — Quick Capture storage is full. Export to Planning Center and purge, then ask " + (rec.by || "the ambassador") + " to resend.]", 4000);
+ } else {
  rec.hasMedia = true;
  rec.mediaKind = media.kind === "photo" ? "photo" : "audio";
+ rec.bytes = media.dataUrl.length;
  await s.set(capMediaKey(rec.id), media.dataUrl);
+ }
  } else { rec.hasMedia = false; rec.mediaKind = ""; }
  await compareAndSwap(s, "captures", normCaptures, list => {
  if(list.some(c => c.id === rec.id)) return undefined; // idempotent retry
@@ -759,6 +787,15 @@ export default async (req, context) => {
  }, () => []);
  await s.delete(capMediaKey(payload.id)).catch(() => {});
  break;
+ case "capturePurge": {
+ /* Wholesale cleanup once everything is in Planning Center Online: clears
+    the capture list AND every capmedia- blob (listing by prefix also sweeps
+    up any orphaned media whose record was already gone). */
+ const { blobs } = await s.list({ prefix: "capmedia-" });
+ await Promise.all((blobs || []).map(b => s.delete(b.key).catch(() => {})));
+ await s.setJSON("captures", []);
+ break;
+ }
  default: return json({ error:"unknown action" }, 400);
  }
  /* The browser already applied the change optimistically. Do not rebuild and
