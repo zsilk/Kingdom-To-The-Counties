@@ -81,10 +81,11 @@
   .checkinprompt{margin-top:14px;display:flex;gap:9px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow)}
   .checkinprompt span{flex:1;font-size:13.5px}
   .checkinprompt button{flex:none;background:var(--rust);color:#fff;border:none;border-radius:10px;padding:9px 13px;font-weight:700;font-size:13px;cursor:pointer}
-  .next{margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow)}
-  .next .lbl{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700}
-  .next h3{font-family:var(--serif);font-weight:600;font-size:18px;margin:5px 0 2px}
-  .next .when{color:var(--muted);font-size:12.5px;font-variant-numeric:tabular-nums}
+  /* v1.6.1 — Up Next sits right under the hero in its own powder-blue card */
+  .next{margin-top:12px;background:var(--powder);border:1px solid #A9C0D2;border-radius:16px;padding:14px 16px;box-shadow:var(--shadow)}
+  .next .lbl{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#3c5160;font-weight:800}
+  .next h3{font-family:var(--serif);font-weight:700;font-size:19px;margin:5px 0 2px;color:#1e2a30}
+  .next .when{color:#3c5160;font-size:12.5px;font-variant-numeric:tabular-nums}
   .preview{margin-top:16px;background:var(--card);border:1px dashed var(--slate);border-radius:14px;padding:12px 14px}
   .preview summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--wine);letter-spacing:.3px;list-style:none}
   .preview summary::-webkit-details-marker{display:none}
@@ -151,7 +152,7 @@
   .toast.show{opacity:1}
   /* department chips + Friday plan card (v1.5.0) */
   .deptchip{font-size:10.5px;font-weight:800;letter-spacing:.3px;padding:2px 7px;border-radius:8px;white-space:nowrap}
-  /* v1.6.0 — dept colors: Tech/Worship = gold, Logistics/GS/Amb = blue */
+  /* v1.6.1 — dept colors: Tech/Worship = gold, Logistics/GS/Amb = blue */
   .deptchip.dtech{background:#F1E0AC;color:#6E5311}
   .deptchip.dlog{background:#D5E4F0;color:#2b4a68}
   .deptchip.dboth{background:linear-gradient(105deg,#F1E0AC 0 46%,#D5E4F0 54% 100%);color:#4a4a33}
@@ -282,7 +283,7 @@
   .hidebar button{background:none;border:none;color:var(--rust);font-weight:700;font-size:12.5px;cursor:pointer;padding:0}
   .chk.hidden{display:none}
   .clsec{margin-bottom:22px}
-  /* v1.6.0 — sticky, dept-colored section headers with their own progress bar.
+  /* v1.6.1 — sticky, dept-colored section headers with their own progress bar.
      Tech/Worship = gold · Logistics/GS/Ambassadors = blue · All hands = both. */
   .clsec .head{position:sticky;top:var(--toph,0px);z-index:30;display:block;margin:0 0 9px;padding:9px 12px 9px;border-radius:12px;border:1px solid var(--line);background:var(--card);box-shadow:0 3px 12px rgba(43,42,40,.12)}
   .clsec .head .hrow{display:flex;align-items:center;gap:8px}
@@ -400,7 +401,7 @@
   #tpFmt button{flex:none;min-width:52px;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:9px 0;font-size:15px;cursor:pointer}
   #tpEdDel{background:none;border:none;color:var(--bad);font-size:12.5px;font-weight:700;text-decoration:underline;cursor:pointer;padding:6px 0;margin-bottom:4px}
 
-  /* v1.6.0 — Share-this-app QR card */
+  /* v1.6.1 — Share-this-app QR card */
   .qrcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px 18px 16px;box-shadow:var(--shadow);text-align:center;margin-bottom:14px}
   .qrcard svg{width:min(68vw,280px);height:auto;display:inline-block}
   .qrurl{margin-top:10px;font-size:13px;font-weight:700;color:var(--wine);word-break:break-all}
@@ -555,14 +556,69 @@
   .dgsheet h3{font-family:var(--serif);font-size:21px;margin:0 0 6px}
   .dgsheet p{font-size:13px;color:var(--muted);margin:0 0 16px;line-height:1.45}
   .dgsheet input{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px;font-size:18px;text-align:center;letter-spacing:3px;font-family:var(--sans);background:#fff;color:var(--ink);box-sizing:border-box}
+  .dgsheet select{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px;font-size:15px;font-family:var(--sans);background:#fff;color:var(--ink);box-sizing:border-box;margin-top:9px}
+  .dgsheet input+input,.dgsheet select+input{margin-top:9px}
   .dgsheet .err{color:var(--bad);font-size:12px;font-weight:700;min-height:16px;margin:8px 0 0}
   .dgsheet .ok{margin-top:12px;width:100%;border:none;border-radius:12px;padding:13px;font-weight:700;font-size:15px;cursor:pointer;background:var(--wine);color:#fff}
+  /* v1.6.1 — dynamic print / save-as-PDF for the Playbook & Counselor Booklet */
+  .printbtn{display:block;width:100%;border:none;border-radius:12px;background:var(--ink);color:var(--cream);font-weight:700;font-size:13.5px;padding:12px;cursor:pointer;margin:0 0 14px}
+  @media print{
+    @page{margin:11mm}
+    body{background:#fff !important;padding-bottom:0 !important}
+    /* only the doc being printed is visible */
+    body[data-print] .topwrap,body[data-print] .tabbar,body[data-print] .annbar,body[data-print] .toast,body[data-print] .daygate,body[data-print] .modal,body[data-print] #guideTip,body[data-print] #guideDim,body[data-print] #guideCatch{display:none !important}
+    body[data-print] main{max-width:none;padding:0}
+    body[data-print] .page{display:none !important}
+    body[data-print="playbook"] #page-playbook{display:block !important}
+    body[data-print="handbook"] #page-handbook{display:block !important}
+    body[data-print] .back,body[data-print] .printbtn,body[data-print] .draft{display:none !important}
+    body[data-print] *{box-shadow:none !important;animation:none !important;transition:none !important}
+    /* ---- compact playbook ---- */
+    body[data-print] #page-playbook nav.toc{display:none}
+    body[data-print] #page-playbook .pb{font-size:10pt;line-height:1.35;background:#fff}
+    body[data-print] #page-playbook .pb .topbar{position:static;background:#fff;color:#000;border-bottom:2px solid #000}
+    body[data-print] #page-playbook .pb .badge{background:#000;color:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body[data-print] #page-playbook .pb .mission{background:#fff;color:#000;border-bottom:1px solid #999;padding:4px 8px}
+    body[data-print] #page-playbook .pb .hero{padding:10px;border-bottom:1px solid #999;background:#fff}
+    body[data-print] #page-playbook .pb .logo-box{padding:8px 14px 10px}
+    body[data-print] #page-playbook .pb .logo .kingdom,body[data-print] #page-playbook .pb .logo .counties{font-size:26px}
+    body[data-print] #page-playbook .pb section.card{margin:2px 0 8px;border:none;border-top:1.5px solid #000;border-radius:0;background:#fff;overflow:visible;break-inside:auto}
+    body[data-print] #page-playbook .pb summary{padding:7px 0 3px}
+    body[data-print] #page-playbook .pb .chev{display:none}
+    body[data-print] #page-playbook .pb .s-tt h3{font-size:14pt}
+    body[data-print] #page-playbook .pb .body{padding:0 0 8px}
+    body[data-print] #page-playbook .pb .body p{margin:0 0 7px}
+    body[data-print] #page-playbook .pb .body h4{margin:10px 0 4px}
+    body[data-print] #page-playbook .pb blockquote.verse{margin:8px 0;padding:6px 10px;background:#fff}
+    body[data-print] #page-playbook .pb .callout{margin:8px 0;padding:7px 10px;background:#fff;border:1px solid #999;color:#000}
+    body[data-print] #page-playbook .pb .contact{padding:3px 0;break-inside:avoid}
+    body[data-print] #page-playbook .pb .row{padding:5px 0;break-inside:avoid}
+    /* one line per contact on paper: Name — role — number · email */
+    body[data-print] #page-playbook .pb .c-name{display:inline;font-size:11pt}
+    body[data-print] #page-playbook .pb .c-role{display:inline;margin-left:7px}
+    body[data-print] #page-playbook .pb .c-links{display:inline;margin-left:9px}
+    body[data-print] #page-playbook .pb .c-links a{border:none;padding:0;background:#fff;color:#000;font-weight:600;text-transform:none;letter-spacing:0;font-size:10pt;margin-right:10px}
+    body[data-print] #page-playbook .pb footer{padding:12px 0 0}
+    /* ---- compact counselor booklet ---- */
+    body[data-print] #page-handbook .card{border:none;border-top:1.5px solid #000;border-radius:0;padding:8px 0 6px;margin-bottom:4px;background:#fff;box-shadow:none}
+    body[data-print] #page-handbook .card p,body[data-print] #page-handbook .card li{font-size:10pt}
+    body[data-print] #page-handbook .card h3{font-size:13pt}
+    body[data-print] #page-handbook .card h3 .num{background:#000;color:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body[data-print] #page-handbook .hb-intro{border:1px solid #999;background:#fff}
+    body[data-print] #page-handbook .say{padding:6px 10px;margin:6px 0;background:#fff;border:1px solid #999;break-inside:avoid}
+    body[data-print] #page-handbook .say .line,body[data-print] #page-handbook .say li{font-size:10.5pt}
+    body[data-print] #page-handbook .warn,body[data-print] #page-handbook .ok{padding:6px 10px;margin:6px 0;background:#fff;border:1px solid #999;color:#000;font-size:10pt}
+    body[data-print] #page-handbook .verse{background:#fff;color:#000;border:1px solid #000;padding:8px 10px;margin:6px 0;break-inside:avoid}
+    body[data-print] #page-handbook .verse .ref{color:#444}
+    body[data-print] #page-handbook .eyebrow,body[data-print] #page-playbook .eyebrow{margin-top:0}
+    body[data-print] h1.title{font-size:22pt}
+  }
 </style>
 </head>
 <body>
 <div class="topwrap">
 <header class="topbar">
-  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.6.0</span></span></div>
+  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.6.1</span></span></div>
   <div class="clock"><div class="t" id="clockTime">--:--</div><div class="d" id="clockDate">SATURDAY</div></div>
 </header>
 <div class="nowstrip" id="nowStrip" onclick="goSchedule()">
@@ -583,10 +639,8 @@
       <div class="progress" id="nowProgWrap" style="display:none"><i id="nowProg"></i></div>
       <div class="countdown" id="nowCountdown"></div>
     </div>
-    <div class="checkinprompt" id="checkinPrompt"><span>👋 New on the field? Check yourself in.</span><button onclick="show('checkin')">Check in</button></div>
-    <div class="checkinprompt" id="tourPrompt" style="display:none"><span>🧭 First time in the app?</span><button onclick="guideStart()">Take the tour</button></div>
-    <div class="checkinprompt"><span>🎬 Record your county invite video.</span><button onclick="show('prompter')">Open studio</button></div>
     <div class="next" id="nextCard"><div class="lbl">Up Next</div><h3 id="nextName">—</h3><div class="when" id="nextWhen"></div></div>
+    <div class="checkinprompt" id="tourPrompt" style="display:none"><span>🧭 First time in the app?</span><button onclick="guideStart()">Take the tour</button></div>
     <details class="preview"><summary>🎚️ Leader preview — scrub the day to test it</summary>
       <div id="simLock"></div>
       <div class="body" id="simBody"><input type="range" id="simRange" min="480" max="1140" step="5" value="480" />
@@ -769,7 +823,7 @@
   </section>
   <section class="page" id="page-leaders">
     <button class="back" onclick="show('guides')">‹ Ambassador Resources</button>
-    <p class="eyebrow">Who to reach</p><h1 class="title">Leader Contacts</h1><span class="draft">Draft · Sample numbers</span>
+    <p class="eyebrow">Who to reach</p><h1 class="title">Leader Contacts</h1>
     <p class="sub">Tap the green phone to call, the orange bubble to text. 📞</p>
     <div id="leadersMount"></div>
   </section>
@@ -831,6 +885,11 @@
     <button class="btn rust" id="qrShareBtn" style="margin-bottom:9px">📲 Share the link</button>
     <button class="btn ghost" id="qrCopyBtn">📋 Copy link</button>
     <p class="hint">Heads-up: on event day they'll still need the <b>Day PIN</b> from morning huddle to get in — the QR only opens the app.</p>
+    <div class="card" style="margin-top:14px"><h3>📌 Make it a real app icon</h3>
+      <p>Add it to your home screen — it opens full-screen, loads faster, and the schedule keeps working even with weak field signal.</p>
+      <p><b>iPhone / iPad:</b> open in <b>Safari</b> → tap <b>Share</b> <span style="font-size:12px">(the □ with the ↑)</span> → <b>Add to Home Screen</b>.</p>
+      <p><b>Android:</b> open in <b>Chrome</b> → menu <b>⋮</b> → <b>Add to Home screen</b> (or <b>Install app</b>).</p>
+    </div>
   </section>
   <section class="page" id="page-tour">
     <button class="back" onclick="show('guides')">‹ Ambassador Resources</button>
@@ -847,6 +906,7 @@
   <section class="page" id="page-playbook">
     <button class="back" onclick="show('guides')">‹ Resources</button>
     <p class="eyebrow">Ambassador</p><h1 class="title">Playbook</h1><span class="draft">Your full field guide · V2</span>
+    <button class="printbtn" onclick="printDoc('playbook')">🖨️ Print / Save as PDF</button>
     <style>/* ===== Ambassador Playbook (scoped + app-themed) ===== */
 #page-playbook .pb{--ink-soft:var(--muted);--paper:var(--card);--canvas:var(--cream);--canvas-soft:var(--cream);--rust-deep:var(--rust);--rust-glow:var(--rust);--burgundy:var(--wine);--burgundy-deep:var(--wine);--display:var(--serif);--body:var(--sans);--scripture:var(--serif);background:transparent;color:var(--ink);font-family:var(--sans);}
 #page-playbook .pb .wrap{max-width:100%;padding:0 0 8px;margin:0}
@@ -1384,6 +1444,7 @@
   <section class="page" id="page-handbook">
     <button class="back" onclick="show('guides')">‹ Resources</button>
     <p class="eyebrow">Prayer Team</p><h1 class="title">Counselor Booklet</h1><span class="draft">Field Reference · v1</span>
+    <button class="printbtn" onclick="printDoc('handbook')">🖨️ Print / Save as PDF</button>
 <style>
   #page-handbook .hb-intro{background:var(--cream);border:1px solid var(--line);border-left:4px solid var(--wine);border-radius:12px;padding:13px 15px;font-size:14px;color:#403d38;margin-bottom:14px}
   #page-handbook .hb-intro b{color:var(--wine)}
@@ -1558,7 +1619,7 @@
         <li>Be ready to counsel more than one person at once if we're short on counselors.</li>
       </ul>
     </div>
-    <a class="dl" href="assets/counselor-booklet.pdf" download="K2C-Counselor-Booklet.pdf" style="display:block;text-align:center;background:var(--ink);color:var(--cream);text-decoration:none;font-weight:700;padding:13px;border-radius:12px;margin-top:2px">⬇ Download Counselor Booklet (PDF)</a>
+    <button class="printbtn" style="margin-top:2px" onclick="printDoc('handbook')">🖨️ Print / Save as PDF — always the latest version</button>
   </section>
   <section class="page" id="page-prompter">
     <button class="back" onclick="show('guides')">‹ Ambassador Resources</button>
@@ -1666,11 +1727,12 @@
   <div class="dgsheet">
     <div class="dgbrand">KINGDOM <small>TO THE</small> COUNTIES '26</div>
     <h3>🔒 Today's Day PIN</h3>
-    <p>Enter your name and today's Day PIN to use the Ambassador Companion. Ask your team leader if you don't have the PIN yet.</p>
+    <p>Enter your name, team and today's Day PIN — unlocking the app <b>checks you in</b> for the day. Ask your team leader if you don't have the PIN yet.</p>
     <input id="dayNameInput" maxlength="40" placeholder="Your name" />
+    <select id="dayTeamSel"><option value="">Pick your team…</option><option>Ambassadors</option><option>Logistics</option><option>Guest Services</option><option>Tech / Worship</option><option>Marketing</option><option>Prayer / Intercession</option><option>Leadership</option><option>Other</option></select>
     <input id="dayPinInput" inputmode="numeric" maxlength="10" placeholder="Day PIN" />
     <div class="err" id="dayPinErr"></div>
-    <button class="ok" id="dayPinOk">Unlock app</button>
+    <button class="ok" id="dayPinOk">Unlock app &amp; check in</button>
   </div>
 </div>
 <nav class="tabbar">
@@ -1953,15 +2015,17 @@ function renderIOEdit(mount){
   }).join("");
   mount.innerHTML=bar+body+'<button class="ioaddperf" onclick="ioAddPerf()">＋ Add performer</button>'+bar;
 }
+/* Real numbers & emails — keep in sync with the Playbook's Leadership Contacts */
 var LEADERS=[
-  {name:"Zach Silk",role:"Founder · The Fourth Ministries",tel:"6035550101"},
-  {name:"Kyle DeTrude",role:"COO · Safety / Crane",tel:"6035550102"},
-  {name:"Karielle Silk",role:"Co-Founder · Worship",tel:"6035550103"},
-  {name:"Pastor Jeff Caley",role:"Director of Ambassadors",tel:"6035550104"},
-  {name:"Kat Roedell",role:"Logistics / Intercession",tel:"6035550105"},
-  {name:"Laura McCollum",role:"Marketing / First Aid",tel:"6035550106"},
-  {name:"Michael Nelson",role:"Technology / FOH",tel:"6035550107"},
-  {name:"Liz DeTrude",role:"Guest Services",tel:"6035550108"},
+  {name:"Zach Silk",role:"Founder / President · The Fourth Ministries",tel:"6174669051",email:"zach.silk@thefourthministries.com"},
+  {name:"Kyle DeTrude",role:"COO / Event Coordinator · Safety / Crane",tel:"6034913498",email:"kyle.detrude@thefourthministries.com"},
+  {name:"Karielle Silk",role:"Co-Founder / Worship Director",tel:"6037931086",email:"karielle.silk@thefourthministries.com"},
+  {name:"Pastor Jeff Caley",role:"Director of Ambassadors",tel:"6032314512",email:"jeff.caley@thefourthministries.com"},
+  {name:"Pastor Rich McConnell",role:"Senior Ambassador / Board Member",tel:"6036864535",email:"rich.mcconnell@thefourthministries.com"},
+  {name:"Kat Roedell",role:"Director of Logistics / Intercession",tel:"6036570259",email:"kat.roedell@thefourthministries.com"},
+  {name:"Laura McCollum",role:"Director of Marketing / First-Aid Lead (R.N.)",tel:"6034938226",email:"laura.mccollum@thefourthministries.com"},
+  {name:"Michael Nelson",role:"Director of Technology / FOH",tel:"9738647534",email:"michael.nelson@thefourthministries.com"},
+  {name:"Liz DeTrude",role:"Guest Services & Merchandise Lead",tel:"4014400498",email:"elizabeth.detrude@thefourthministries.com"},
   {name:"John Huff",role:"Music Director",tel:"6036178654",email:"john.huff@thefourthministries.com"}
 ];
 var PHONE='<svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 7a2 2 0 0 1 2-3z"/></svg>';
@@ -2212,11 +2276,18 @@ function chkNote(id){
 }
 function renderAnnouncements(){
   var f=document.getElementById("annFeed");
-  var pin='<div class="item heads" onclick="show(\'checkin\')" style="cursor:pointer"><div class="top"><span class="pri">Check-in</span><span class="meta">Pinned</span></div><h4>👋 Did you check in?</h4><p>Tap here to check yourself in for today\'s event — please do this before you serve.</p><div class="by">— Kingdom to the Counties</div></div>';
+  var checkedIn=hasCheckedIn(MY.name); // day-gate unlock already checked them in
+  var pin=checkedIn?"":'<div class="item heads" onclick="show(\'checkin\')" style="cursor:pointer"><div class="top"><span class="pri">Check-in</span><span class="meta">Pinned</span></div><h4>👋 Did you check in?</h4><p>Tap here to check yourself in for today\'s event — please do this before you serve.</p><div class="by">— Kingdom to the Counties</div></div>';
   f.innerHTML=pin+STATE.announcements.map(function(a){var acls=({urgent:"urgent",heads:"heads",info:"info"}[a.pri]||"info");return '<div class="item '+acls+'"><div class="top"><span class="pri">'+({urgent:"Urgent",heads:"Heads-up",info:"Info"}[a.pri]||"Info")+'</span><span class="meta">'+esc(a.t)+'</span></div><h4>'+esc(a.title)+'</h4><p>'+esc(a.body)+'</p><div class="by">— '+esc(a.by)+'</div>'+cmtBlock("ann",a)+'</div>';}).join("");
   var bar=document.getElementById("annBar");
-  annBarMode="checkin";
-  document.getElementById("annBarText").innerHTML="👋 Did you check in? <b>Tap here to check in!</b>";
+  if(checkedIn){
+    var a=STATE.announcements[0];
+    if(a){annBarMode="ann";document.getElementById("annBarText").innerHTML="📣 <b>"+esc(a.title)+"</b>";}
+    else{bar.classList.remove("show");return;}
+  }else{
+    annBarMode="checkin";
+    document.getElementById("annBarText").innerHTML="👋 Did you check in? <b>Tap here to check in!</b>";
+  }
   if(!barDismissed)bar.classList.add("show");else bar.classList.remove("show");
 }
 function renderAnnGate(){
@@ -2430,11 +2501,25 @@ function tryDayPin(){
     if(res&&res.rateLimited){document.getElementById("dayPinErr").textContent="Too many wrong tries from this connection — wait 10 minutes and try again.";return;}
     if(!res){document.getElementById("dayPinErr").textContent="Wrong Day PIN — ask your team leader.";return;}
     document.getElementById("dayPinErr").textContent="";
-    var nmEl=document.getElementById("dayNameInput");if(nmEl&&nmEl.value.trim()){rememberName(nmEl.value);prefillNames();}
+    var nmEl=document.getElementById("dayNameInput"),teamEl=document.getElementById("dayTeamSel");
+    var nm=(nmEl&&nmEl.value.trim())||"";
+    if(nm){rememberName(nm);prefillNames();dayGateCheckin(nm,teamEl?teamEl.value:"");}
     setDayOK();
     if(res.leader){LEADER=true;LEADERPIN=v;sessionStorage.setItem("k2c_lpin",v);applyLeaderUI();renderDynamic();}
     maybeDayGate();
   }).catch(function(){document.getElementById("dayPinErr").textContent="No connection — check your signal and try again.";});
+}
+/* v1.6.1 — unlocking the Day PIN gate IS the check-in: the name (+ team) from
+   the gate goes straight onto the day's roster, once per name per day. */
+function hasCheckedIn(name){
+  name=(name||"").trim().toLowerCase();if(!name)return false;
+  return (STATE.checkins||[]).some(function(c){return (c.name||"").trim().toLowerCase()===name;});
+}
+function dayGateCheckin(name,team){
+  if(hasCheckedIn(name))return;
+  var rec={id:uid(),name:name,team:team||"",attested:false,t:nowLabel()};
+  doAction("addCheckin",rec,function(){STATE.checkins.push(rec);});
+  toast("✅ "+name+" checked in — welcome to the field!");
 }
 document.getElementById("dayPinOk").addEventListener("click",tryDayPin);
 document.getElementById("dayPinInput").addEventListener("keydown",function(e){if(e.key==="Enter")tryDayPin();});
@@ -2478,12 +2563,12 @@ function renderNameBars(){
 }
 /* v1.5.0 — the per-tool initials inputs are gone; identity is the saved name
    ("working as" bars, rendered by renderNameBars). */
-document.getElementById("ciBtn").addEventListener("click",function(){var name=document.getElementById("ciName").value.trim(),team=document.getElementById("ciTeam").value;if(!name){flash("ciName");return;}if(!document.getElementById("ciAttest").checked){document.getElementById("ciAttestMsg").classList.add("show");document.getElementById("ciAttestRow").classList.add("nudge");setTimeout(function(){document.getElementById("ciAttestRow").classList.remove("nudge");},600);return;}rememberName(name);var rec={id:uid(),name:name,team:team,attested:true,t:nowLabel()};doAction("addCheckin",rec,function(){STATE.checkins.push(rec);});document.getElementById("ciName").value="";document.getElementById("ciAttest").checked=false;document.getElementById("ciAttestMsg").classList.remove("show");document.getElementById("checkinPrompt").style.display="none";prefillNames();toast(tourDone()?"✅ Checked in!":"✅ Checked in! New to the app? Take the 2-min App Tour under Resources 🧭");});
+document.getElementById("ciBtn").addEventListener("click",function(){var name=document.getElementById("ciName").value.trim(),team=document.getElementById("ciTeam").value;if(!name){flash("ciName");return;}if(!document.getElementById("ciAttest").checked){document.getElementById("ciAttestMsg").classList.add("show");document.getElementById("ciAttestRow").classList.add("nudge");setTimeout(function(){document.getElementById("ciAttestRow").classList.remove("nudge");},600);return;}rememberName(name);var rec={id:uid(),name:name,team:team,attested:true,t:nowLabel()};doAction("addCheckin",rec,function(){STATE.checkins.push(rec);});document.getElementById("ciName").value="";document.getElementById("ciAttest").checked=false;document.getElementById("ciAttestMsg").classList.remove("show");prefillNames();toast(tourDone()?"✅ Checked in!":"✅ Checked in! New to the app? Take the 2-min App Tour under Resources 🧭");});
 document.getElementById("aBtn").addEventListener("click",function(){if(!LEADER){askPin(function(){});return;}var by=document.getElementById("aName").value.trim()||"Leadership",title=document.getElementById("aTitle").value.trim(),body=document.getElementById("aBody").value.trim(),pri=document.getElementById("aPri").value;if(!title||!body){flash(title?"aBody":"aTitle");return;}rememberName(by);var rec={id:uid(),pri:pri,title:title,body:body,by:by,t:nowLabel()};barDismissed=false;doAction("addAnnouncement",rec,function(){STATE.announcements.unshift(rec);});document.getElementById("aTitle").value="";document.getElementById("aBody").value="";prefillNames();});
 document.getElementById("pBtn").addEventListener("click",function(){var name=document.getElementById("pName").value.trim()||"Anonymous",body=document.getElementById("pBody").value.trim();if(!body){flash("pBody");return;}rememberName(name);var rec={id:uid(),name:name,body:body,t:nowLabel()};doAction("addPraise",rec,function(){STATE.praises.unshift(rec);});document.getElementById("pBody").value="";prefillNames();toast("🎉 Praise posted!");});
 document.getElementById("fBtn").addEventListener("click",function(){var by=document.getElementById("fName").value.trim()||"Volunteer",title=document.getElementById("fTitle").value.trim(),body=document.getElementById("fBody").value.trim(),priority=document.getElementById("fPri").value;if(!title){flash("fTitle");return;}rememberName(by);var rec={id:uid(),priority:priority,title:title,body:body,by:by,t:nowLabel()};doAction("addFeedback",rec,function(){STATE.feedback.unshift(rec);});document.getElementById("fTitle").value="";document.getElementById("fBody").value="";prefillNames();toast("✅ Sent to leadership");});
 function flash(id){var e=document.getElementById(id);if(e){e.style.borderColor="#B86239";e.focus();setTimeout(function(){e.style.borderColor="";},1200);}}
-/* Attendance counter (v1.6.0): every tap lands in a per-phone ABSOLUTE tally
+/* Attendance counter (v1.6.1): every tap lands in a per-phone ABSOLUTE tally
    that survives reloads (localStorage) and is pushed to the server whole —
    "this phone's total is N, split by name" — instead of as fragile +1 deltas.
    A retried request can't double-count and a dropped one can't lose taps: the
@@ -2595,7 +2680,7 @@ document.getElementById("csvBtn").addEventListener("click",function(){
   var csv=rows.map(function(r){return r.map(csvCell).join(",");}).join("\r\n");
   var blob=new Blob(["\ufeff"+csv],{type:"text/csv"});
   var a=document.createElement("a");a.href=URL.createObjectURL(blob);
-  a.download="k2c-day-report-v1.6.0-"+new Date().toISOString().slice(0,10)+".csv";
+  a.download="k2c-day-report-v1.6.1-"+new Date().toISOString().slice(0,10)+".csv";
   document.body.appendChild(a);a.click();a.remove();
 });
 document.getElementById("resetBtn").addEventListener("click",function(){
@@ -2624,7 +2709,7 @@ function show(id){
   if(id==="inventory")renderInventory();
   if(id==="shareapp")renderShareQR();
 }
-/* v1.6.0 — Share-this-app QR (drawn locally from the current URL, works offline) */
+/* v1.6.1 — Share-this-app QR (drawn locally from the current URL, works offline) */
 function appShareUrl(){return location.origin+location.pathname.replace(/index\.html$/,"");}
 function renderShareQR(){
   var box=document.getElementById("qrBox");if(!box)return;
@@ -2648,6 +2733,42 @@ function copyShareUrl(){
   else{prompt("Copy the app link:",url);}
 }
 document.getElementById("qrCopyBtn").addEventListener("click",copyShareUrl);
+/* v1.6.1 — print / save-as-PDF straight from the live app content, so a
+   printed Playbook or Counselor Booklet is always the current version (the
+   old bundled PDF went stale the moment the text was edited in the app).
+   Opens every collapsed section, swaps tap-to-call buttons for the real
+   number/address on paper, prints, then puts everything back. */
+function printDoc(kind){
+  var page=document.getElementById("page-"+kind);
+  if(!page||document.body.getAttribute("data-print"))return;
+  document.body.setAttribute("data-print",kind);
+  var opened=[],dets=page.querySelectorAll("details");
+  for(var i=0;i<dets.length;i++){if(!dets[i].open){dets[i].open=true;opened.push(dets[i]);}}
+  var stash=[],links=page.querySelectorAll('a[href^="tel:"],a[href^="mailto:"]');
+  for(var j=0;j<links.length;j++){
+    var a=links[j],href=a.getAttribute("href")||"";
+    stash.push([a,a.innerHTML]);
+    if(href.indexOf("tel:")===0){
+      var d=href.slice(4).replace(/\D/g,"");
+      if(d.length===11&&d.charAt(0)==="1")d=d.slice(1);
+      a.textContent=d.length===10?fmtTel(d):href.slice(4);
+    }else a.textContent=href.slice(7);
+  }
+  var done=false;
+  function cleanup(){
+    if(done)return;done=true;
+    window.removeEventListener("afterprint",cleanup);
+    window.removeEventListener("focus",cleanup);
+    document.body.removeAttribute("data-print");
+    for(var k=0;k<opened.length;k++)opened[k].open=false;
+    for(var n=0;n<stash.length;n++)stash[n][0].innerHTML=stash[n][1];
+  }
+  window.addEventListener("afterprint",cleanup);
+  window.addEventListener("focus",cleanup); // Safari fallback when afterprint doesn't fire
+  setTimeout(function(){
+    try{window.print();}catch(e){cleanup();toast("Printing isn't available here — open the app in your browser and try again.");}
+  },60);
+}
 function goSchedule(){show("now");setTimeout(function(){var a=document.getElementById("scheduleAnchor");if(a)a.scrollIntoView({behavior:"smooth"});},80);}
 /* ---- Trailer Load List (demo) ----
    Sample color-coded bin system + loading order. Static demo data for now; a
