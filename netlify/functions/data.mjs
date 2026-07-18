@@ -24,7 +24,9 @@ const LEADER_PIN = () => process.env.LEADER_PIN || "2026";
  prompter  — Recording Studio scripts
  radios    — 10-radio checkout board (initials + times)
  captures  — Ambassador Quick Capture contact records (text fields only)
- churches  — Pre-Crusade Mobilization church CRM: {rev, removed, list, log}.
+ churches  — Pre-Crusade Mobilization church CRM: {rev, removed, list, log, tpl}.
+             tpl = leader-edited master outreach templates {subject, email, sms};
+             empty strings mean "use the client's built-in default".
              rev bumps on every write so phones only re-download the roster
              when it actually changed; the roster itself is NOT in the main
              GET payload (fetched separately via GET ?part=churches with its
@@ -223,11 +225,15 @@ function normChLog(x){
 }
 export function normChurches(c){
  c = c || {};
+ const tpl = c.tpl || {};
  return {
   rev: Math.max(0, Math.round(Number(c.rev) || 0)),
   removed: Array.isArray(c.removed) ? c.removed.map(x => str(x, 40)).filter(Boolean).slice(0, 500) : [],
   list: Array.isArray(c.list) ? c.list.map(normChurch).slice(0, 800) : [],
-  log: Array.isArray(c.log) ? c.log.map(normChLog).slice(-1200) : []
+  log: Array.isArray(c.log) ? c.log.map(normChLog).slice(-1200) : [],
+  // Master outreach templates — one email & one text for EVERY church, so the
+  // whole team sends the same message. Leader-editable (churchTemplate).
+  tpl: { subject: str(tpl.subject, 200), email: str(tpl.email, 4000), sms: str(tpl.sms, 600) }
  };
 }
 const emptyChurches = () => ({ rev: 0, removed: [], list: [], log: [] });
@@ -386,7 +392,7 @@ const LEADER_ACTIONS = new Set([
  "toggleCheck","setChecklistNote","addAnnouncement","ackCard","setEvent","setIOList","setDayPin",
  "setFunding","reset","promptSeed","promptAdd","promptEdit","promptDelete",
  "capturesList","captureMedia","captureDelete","capturePurge",
- "churchEdit","churchDelete","churchFlagClear"
+ "churchEdit","churchDelete","churchFlagClear","churchTemplate"
 ]);
 
 function devKey(id){
@@ -1045,6 +1051,17 @@ export default async (req, context) => {
  for(const k of CH_EDIT_FIELDS) if(k in patch) merged[k] = patch[k];
  c.list[i] = normChurch({ ...merged, id: cur.id, connections: cur.connections, flag: cur.flag, addedBy: cur.addedBy });
  chLogPush(c, { id: payload.id, ch: cur.id, type:"edit", by: payload.by, note: "Details updated", t: payload.t, d: payload.d });
+ c.rev++; return c;
+ });
+ break;
+ }
+ case "churchTemplate": {
+ /* Leader-only: replace the master outreach templates. Empty fields fall
+    back to the client's built-in defaults, so "reset" = save empties. */
+ await casChurches(s, c => {
+ if(chLogged(c, payload.id)) return undefined;
+ c.tpl = { subject: str(payload.subject, 200), email: str(payload.email, 4000), sms: str(payload.sms, 600) };
+ chLogPush(c, { id: payload.id, ch: "", type:"edit", by: payload.by, note: "Updated the master email & text templates", t: payload.t, d: payload.d });
  c.rev++; return c;
  });
  break;

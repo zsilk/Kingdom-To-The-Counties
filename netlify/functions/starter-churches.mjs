@@ -8,8 +8,10 @@
    `align`  — fit with the K2C Statement of Faith:
               "strong" = Bible-believing / evangelical / Spirit-filled
               "partial" = community or mainline-Baptist tradition — verify
-   `intro`  — personalized first paragraph for the outreach email
-   `ask`    — that church's specific referral ask (slots into the core email)
+   `intro` / `ask` — per-church research wording kept for reference. As of
+   v1.10.0 the app sends ONE master email & text template for every church
+   (leader-editable on the Mobilization tab); these fields are no longer
+   merged into outgoing messages.
 
    The statewide roster (all 10 NH counties, from the Notion "K2C Statewide
    Church Outreach" master tracker) lives in starter-churches-statewide.mjs

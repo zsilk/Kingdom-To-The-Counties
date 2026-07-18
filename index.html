@@ -712,7 +712,7 @@
 <body>
 <div class="topwrap">
 <header class="topbar">
-  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.9.0</span></span></div>
+  <div class="brand"><span class="k">KINGDOM <small style="font-weight:600;font-size:11px;letter-spacing:1px">TO THE</small> COUNTIES '26</span><span class="s">Ambassador Companion <span class="ver">v1.10.0</span></span></div>
   <div class="clock"><div class="t" id="clockTime">--:--</div><div class="d" id="clockDate">SATURDAY</div></div>
 </header>
 <div class="nowstrip" id="nowStrip" onclick="goSchedule()">
@@ -1036,6 +1036,7 @@
     </details>
     <div id="chList"></div>
     <button class="btn ghost" style="margin-top:12px" onclick="chExportCSV()">📊 Export master list (CSV)</button>
+    <div id="chTplWrap" style="margin-top:10px"></div>
     <details class="preview" style="margin-top:10px"><summary>📜 Change log — every touch &amp; edit, newest first</summary><div class="body" id="chGlobalLog"></div></details>
     <p class="hint" style="margin:12px 2px 26px">✅ / 🟡 Alignment = fit with our <a onclick="event.preventDefault();show('faith')" style="color:var(--wine);font-weight:700;cursor:pointer;text-decoration:underline">Statement of Faith</a>. When in doubt, read it before you reach out.</p>
   </section>
@@ -1098,7 +1099,7 @@
     <div class="tourstop"><span class="tn">4</span><div><h3>📣 Post</h3><p>Three boards: <b>Praise Wall</b> (celebrate God moments), <b>Report an Issue</b> (flag problems to leadership fast), and <b>Announcements</b> from leaders. You can comment on any post.</p><button onclick="show('board')">Open Post ›</button></div></div>
     <div class="tourstop"><span class="tn">5</span><div><h3>🧰 Specialists</h3><p>Work tools: the live <b>Attendance Counter</b> (every tap is logged to your name), the <b>Setup Checklist</b>, <b>Radio Checkout</b>, and the Tech I/O list.</p><button onclick="show('crew')">Open Specialists ›</button></div></div>
     <div class="tourstop"><span class="tn">6</span><div><h3>🎬 Recording Studio</h3><p>Pick your county's script and record an invite video with the built-in teleprompter. Then send it to Laura (Marketing).</p><button onclick="show('prompter')">Open the studio ›</button></div></div>
-    <div class="tourstop"><span class="tn">7</span><div><h3>⛪ Pre-Crusade Mobilization</h3><p>The master church list for the season. Tap a church to call, text, or email them (every touch is logged for the team), say who you know there, score their interest, and send a ready-made invite email.</p><button onclick="show('mobilize')">Open Mobilization ›</button></div></div>
+    <div class="tourstop"><span class="tn">7</span><div><h3>⛪ Pre-Crusade Mobilization</h3><p>The master church list for the season. Tap a church to call, text, or email them (every touch is logged for the team) — the invite text and email come pre-written, so it takes seconds. Say who you know there and score their interest.</p><button onclick="show('mobilize')">Open Mobilization ›</button></div></div>
     <div class="tourstop"><span class="tn">8</span><div><h3>📘 Resources</h3><p>The Ambassador Playbook, Counselor Booklet, leader contacts, shareable graphics, and ways to give — all under Ambassador Resources.</p><button onclick="show('guides')">Open Resources ›</button></div></div>
     <div class="tourstop"><span class="tn">9</span><div><h3>📶 Good to know</h3><p>The app syncs live across everyone's phones — and if the field signal drops, it keeps working and catches up when you're back. Set your name once and every checkmark, count and radio is credited to you automatically.</p><button onclick="show('now')">🎉 Done — go to Event Day</button></div></div>
   </section>
@@ -3162,7 +3163,7 @@ var GUIDE_STEPS=[
  {page:"crew",sel:"#page-crew .hub",title:"🧰 Specialists",text:"Work tools live here: the Attendance Counter, Setup Checklist, Radio Checkout, Trailer Load List and the Tech I/O list."},
  {page:"count",sel:"#countPlus",title:"👥 Counting attendance",text:"Tap +1 for every non-volunteer attendee. Every tap is logged to your name, so several people can count at once and nothing is lost."},
  {page:"prompter",sel:"#tpBoard",title:"🎬 Recording Studio",text:"Pick your county's script and record an invite video with the built-in teleprompter — then send it to Laura (Marketing) and mark it done."},
- {page:"mobilize",sel:"#chViews",title:"⛪ Pre-Crusade Mobilization",text:"The master church list. Tap a church to call, text or email them (it's logged automatically), say who you know there, score their interest, and grab a ready-to-send invite email."},
+ {page:"mobilize",sel:"#chViews",title:"⛪ Pre-Crusade Mobilization",text:"The master church list. Tap a church to call, text or email them (it's logged automatically) — the text and email open pre-written from the master template. Say who you know there and score their interest."},
  {page:"guides",sel:"#page-guides .hub",title:"📘 Resources",text:"The Ambassador Playbook, Counselor Booklet, leader contacts, shareable graphics and ways to give all live here."},
  {page:"now",sel:".tabbar",title:"🎉 You're ready!",text:"That's the whole app. Set your name once and everything you do is credited to you. Have an amazing event day!"}
 ];
@@ -3908,7 +3909,7 @@ renderPrompt();
    history AND the global change log — that's the collaboration layer. */
 var NHC=["Belknap","Carroll","Cheshire","Coös","Grafton","Hillsborough","Merrimack","Rockingham","Strafford","Sullivan"];
 var CH={rev:-1,list:[],log:[]};
-function chFix(o){if(o){if(!Array.isArray(o.list))o.list=[];if(!Array.isArray(o.log))o.log=[];o.list.forEach(function(c){if(!Array.isArray(c.connections))c.connections=[];});}return o;}
+function chFix(o){if(o){if(!Array.isArray(o.list))o.list=[];if(!Array.isArray(o.log))o.log=[];if(!o.tpl||typeof o.tpl!=="object")o.tpl={};o.list.forEach(function(c){if(!Array.isArray(c.connections))c.connections=[];});}return o;}
 try{var _chc=JSON.parse(localStorage.getItem("k2c_churches")||"null");if(_chc&&Array.isArray(_chc.list))CH=chFix(_chc);}catch(_){}
 var chEtag="",chFetching=false,chView="all",chQ="",chCounty="",chCurId=null,chEditOpen=false,chFlagOpen=false;
 var CH_ICON={call:"📞",text:"💬",email:"✉️",convo:"🗣️",visit:"🤝",script:"📣",share:"📲",note:"📝",connect:"🙋",flag:"🚩",unflag:"✅",edit:"✏️",add:"➕",interest:"⭐","delete":"🗑"};
@@ -4018,13 +4019,15 @@ function renderMobilize(){
   var asel=document.getElementById("chaCounty");
   if(asel&&!asel.options.length)asel.innerHTML='<option value="">County…</option>'+NHC.map(function(x){return '<option>'+x+'</option>';}).join("")+'<option>Out of state</option>';
   chRenderList();
+  renderChTpl();
   // global change log
   var gl=document.getElementById("chGlobalLog");
   if(gl){
     var entries=CH.log.slice(-45).reverse();
     gl.innerHTML=entries.length?entries.map(function(e){
       var c=chById(e.ch);
-      return '<div class="chlogrow"><span class="ic2">'+(CH_ICON[e.type]||"📝")+'</span><div><b>'+esc(c?c.name:"(removed)")+'</b> — '+esc(e.by)+(e.note?': '+esc(e.note):' · '+e.type)+'<div class="m">'+esc(chWhen(e))+'</div></div></div>';
+      var nm=c?c.name:(e.ch?"(removed)":"✉️ Master templates");
+      return '<div class="chlogrow"><span class="ic2">'+(CH_ICON[e.type]||"📝")+'</span><div><b>'+esc(nm)+'</b> — '+esc(e.by)+(e.note?': '+esc(e.note):' · '+e.type)+'<div class="m">'+esc(chWhen(e))+'</div></div></div>';
     }).join(""):'<p class="hint">Nothing logged yet — every add, edit, call, text, email &amp; share will show up here.</p>';
   }
 }
@@ -4083,24 +4086,39 @@ function chQuick(id,type,note){
 function chScriptText(c){
   return "Hi, I'm "+(myTag()||"[your name]")+" with Kingdom to the Counties. We're not a church or a denomination — we're everyday believers obeying the Great Commission: Jesus said GO and make disciples. In 2026 we're bringing free, open-air days of worship, Gospel preaching, prayer, and altar calls to all 10 New Hampshire counties — and God is moving: salvations, rededications, and physical healings at every stop. But new believers need a church home, and that's where "+(c?c.name:"your church")+" comes in. We'd love your help discipling the new and returning believers from your own neighborhood — and we'd love your leaders to join pastors from across the state in praying for New Hampshire. Can I share how to get involved?";
 }
-/* ---- auto-personalized outreach email ---- */
-function chEmailSubject(c){return "Kingdom to the Counties — partnering with "+c.name;}
-function chEmailBody(c){
-  var ev=STATE.event||{};
-  var opener=(ev.name&&ev.date)
-    ?("On "+ev.date+", Kingdom to the Counties is coming to "+ev.name+" — a free, open-air afternoon of full-band worship, Gospel preaching, and altar calls (kingdomtothecounties.com).")
-    :"Kingdom to the Counties is bringing free, open-air afternoons of full-band worship, Gospel preaching, and altar calls to all 10 New Hampshire counties (kingdomtothecounties.com).";
-  var intro=c.intro||("Dear "+(c.contact||c.leader||("friends at "+c.name))+", we would love to partner with you as Kingdom to the Counties comes to your area.");
-  var ask=c.ask||("Do you know other pastors or ministry leaders near "+(c.town||"you")+" who should hear about this?");
-  return intro
-    +"\n\n"+opener+" We are not a church nor a denomination. We are simply professionals daring to believe that God also wants to use us to administer His Kingdom here on earth as it is in heaven."
-    +"\n\nGod has been moving on open fields in NH: across our first 3 stops we've documented and witnessed 9 salvations, 10 rededications, and 8 physical healings; we've prayed with almost 100 people and welcomed over 500 in attendance. 7 stops remain."
-    +"\n\nOur deepest desire is to make disciples — which means we NEED the local church to help us disciple new and returning converts. Will you help us? We'd also love to invite leaders from your church to stand with leaders from across the state to pray for our state, our counties, and our cities."
-    +"\n\nOne more ask: "+ask+" We would LOVE to speak with them. Please share this message with them, or simply reply with their name, email, and phone number."
-    +"\n\nOur promo video: https://youtu.be/QejmMM2O_8w"
-    +"\nReply to this message, book a call with us (https://oncehub.com/zachsilk), or call/text our ministry number: 617-466-9051."
-    +"\n\nFor His Kingdom —\n"+(myTag()||"The K2C Team")+"\nKingdom to the Counties · brought to you by The Fourth Ministries, a NH 501(c)(3)";
+/* ---- master outreach templates (v1.10.0) ----
+   ONE email and ONE text for EVERY church — no per-church wording, so any
+   go-getter can tap and send in seconds and the whole team sounds the same.
+   Leaders can rewrite both on the Mobilization tab (PIN-gated); the edited
+   copy lives in the churches blob (CH.tpl) and syncs to every phone. Empty
+   server fields mean "use the built-in default below". Placeholders fill
+   per church + per ambassador at send time. */
+var CH_TPL_DEFAULT={
+  subject:"Kingdom to the Counties — partnering with [CHURCH]",
+  email:"Dear [CONTACT],\n\nWe would love to partner with [CHURCH] as Kingdom to the Counties comes to [TOWN]. [EVENT] It's a free, open-air afternoon of full-band worship, Gospel preaching, prayer, and altar calls (kingdomtothecounties.com). We are not a church nor a denomination. We are simply professionals daring to believe that God also wants to use us to administer His Kingdom here on earth as it is in heaven.\n\nGod has been moving on open fields in NH: across our first 3 stops we've documented and witnessed 9 salvations, 10 rededications, and 8 physical healings; we've prayed with almost 100 people and welcomed over 500 in attendance. 7 stops remain.\n\nOur deepest desire is to make disciples — which means we NEED the local church to help us disciple new and returning converts. Will you help us? We'd also love to invite leaders from [CHURCH] to stand with leaders from across the state to pray for our state, our counties, and our cities.\n\nOne more ask: do you know other pastors or ministry leaders near [TOWN] who should hear about this? We would LOVE to speak with them. Please share this message with them, or simply reply with their name, email, and phone number.\n\nOur promo video: https://youtu.be/QejmMM2O_8w\nReply to this message, book a call with us (https://oncehub.com/zachsilk), or call/text our ministry number: 617-466-9051.\n\nFor His Kingdom —\n[MY NAME]\nKingdom to the Counties · brought to you by The Fourth Ministries, a NH 501(c)(3)",
+  sms:"Hi [CONTACT] — this is [MY NAME] with Kingdom to the Counties (kingdomtothecounties.com). Free open-air worship, Gospel preaching & altar calls are coming to [COUNTY] [DATE]. We'd love [CHURCH]'s help discipling new believers from your own neighborhood. Can I share more?"
+};
+function chTpl(){
+  var t=CH.tpl||{};
+  return{subject:t.subject||CH_TPL_DEFAULT.subject,email:t.email||CH_TPL_DEFAULT.email,sms:t.sms||CH_TPL_DEFAULT.sms};
 }
+function chTplFill(t,c){
+  var ev=STATE.event||{};
+  var map={
+    "[CHURCH]":(c&&c.name)||"your church",
+    "[CONTACT]":(c&&(c.contact||c.leader))||("friends at "+((c&&c.name)||"your church")),
+    "[TOWN]":(c&&c.town)||"your town",
+    "[COUNTY]":(c&&c.county&&c.county!=="Out of state")?(c.county+" County"):"your county",
+    "[EVENT]":(ev.name&&ev.date)?("On "+ev.date+", we're coming to "+ev.name+".")
+      :"In 2026 we're bringing it to all 10 New Hampshire counties.",
+    "[DATE]":ev.date?("on "+ev.date):"this season",
+    "[MY NAME]":myTag()||"The K2C Team"
+  };
+  return (t||"").replace(/\[(CHURCH|CONTACT|TOWN|COUNTY|EVENT|DATE|MY NAME)\]/g,function(m){return map[m];});
+}
+function chEmailSubject(c){return chTplFill(chTpl().subject,c);}
+function chEmailBody(c){return chTplFill(chTpl().email,c);}
+function chSmsBody(c){return chTplFill(chTpl().sms,c);}
 function chCopy(txt,ok){
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(function(){toast(ok);}).catch(function(){prompt("Copy this:",txt);});
   else prompt("Copy this:",txt);
@@ -4109,6 +4127,7 @@ function chCopy(txt,ok){
    yet we ask for it first, THEN build the text. */
 function chCopyScript(id){chMe(function(){var c=chById(id);chCopy(chScriptText(c),"📣 Script copied — logged to "+(c?c.name:"the church"));chQuick(id,"script","Used the K2C intro script");});}
 function chCopyEmail(id){chMe(function(){var c=chById(id);if(!c)return;chCopy("Subject: "+chEmailSubject(c)+"\n\n"+chEmailBody(c),"✉️ Email copied — logged");chQuick(id,"email","Copied the outreach email");});}
+function chCopyText(id){chMe(function(){var c=chById(id);if(!c)return;chCopy(chSmsBody(c),"💬 Text copied — logged");chQuick(id,"text","Copied the invite text");});}
 function chShareVideo(id){chCopy("https://youtu.be/QejmMM2O_8w","📹 Promo video link copied — logged");chQuick(id,"share","Shared the promo video link");}
 /* Email button: make sure the name is set, log once, then open the mail app
    with the freshly personalized draft (so the sign-off is never "[your name]"). */
@@ -4120,6 +4139,68 @@ function chEmailGo(ev,id){
     location.href="mailto:"+encodeURIComponent(c.email)+"?subject="+encodeURIComponent(chEmailSubject(c))+"&body="+encodeURIComponent(chEmailBody(c));
   });
   return false;
+}
+/* Text button: same flow — log once, then open Messages with the short invite
+   pre-typed. The "?&body=" form works on both iOS and Android. */
+function chTextGo(ev,id){
+  if(ev)ev.preventDefault();
+  var c=chById(id);if(!c)return false;
+  var tel=chDigits(c.phone);if(!tel)return false;
+  chMe(function(){
+    chQuick(id,"text","Opened the invite text");
+    location.href="sms:+1"+tel+"?&body="+encodeURIComponent(chSmsBody(c));
+  });
+  return false;
+}
+/* ---- leader-editable master templates (PIN-gated like every leader zone) ---- */
+var chTplOpen=false;
+function renderChTpl(){
+  var w=document.getElementById("chTplWrap");if(!w)return;
+  if(!LEADER){
+    w.innerHTML='<div class="lockbar">🔒 Every church gets the same master email &amp; text — leaders can edit them.<button onclick="askPin(function(){renderMobilize();})">Unlock</button></div>';
+    return;
+  }
+  if(!chTplOpen){
+    w.innerHTML='<div class="lockbar">✉️ Master email &amp; text templates — one message for every church.<button onclick="chTplOpen=true;renderMobilize()">✏️ Edit</button></div>';
+    return;
+  }
+  var t=chTpl();
+  var lbl=function(x){return '<p class="lbl" style="font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--wine);font-weight:800;margin:10px 2px 5px">'+x+'</p>';};
+  w.innerHTML='<div class="card"><h3>✉️ Master outreach templates (leaders)</h3>'
+    +'<p class="hint" style="margin:0 0 4px">One template for <b>every</b> church — ambassadors just tap and send. These placeholders fill in automatically per church &amp; sender:</p>'
+    +'<p class="hint" style="margin:0"><b>[CHURCH]</b> name · <b>[CONTACT]</b> pastor/contact · <b>[TOWN]</b> · <b>[COUNTY]</b> · <b>[EVENT]</b> "On &lt;date&gt;, we\'re coming to &lt;event&gt;." · <b>[DATE]</b> "on &lt;date&gt;" · <b>[MY NAME]</b> the sender</p>'
+    +'<div class="form" style="margin:0;box-shadow:none;border:none;padding:0">'
+    +lbl("Email subject")
+    +'<input id="chTplSubject" maxlength="200" value="'+esc(t.subject)+'" />'
+    +lbl("Email body")
+    +'<textarea id="chTplEmail" rows="14" maxlength="4000" style="font-size:13px;line-height:1.5">'+esc(t.email)+'</textarea>'
+    +lbl("Text message (short — for the 💬 Text button)")
+    +'<textarea id="chTplSms" rows="5" maxlength="600" style="font-size:13px;line-height:1.5">'+esc(t.sms)+'</textarea>'
+    +'<button class="btn wine" onclick="chTplSave()">💾 Save for the whole team</button>'
+    +'<button class="btn ghost" style="margin-top:8px" onclick="chTplResetFields()">↩️ Fill with the built-in default</button>'
+    +'<button class="btn ghost" style="margin-top:8px" onclick="chTplOpen=false;renderMobilize()">Cancel</button>'
+    +'<p class="hint" style="margin-top:8px">Saving goes live for every ambassador immediately. Clearing a box and saving returns that piece to the built-in default.</p>'
+    +'</div></div>';
+}
+function chTplResetFields(){
+  var s=document.getElementById("chTplSubject"),e=document.getElementById("chTplEmail"),m=document.getElementById("chTplSms");
+  if(s)s.value=CH_TPL_DEFAULT.subject;if(e)e.value=CH_TPL_DEFAULT.email;if(m)m.value=CH_TPL_DEFAULT.sms;
+  toast("↩️ Defaults loaded — tap Save to make them live");
+}
+function chTplSave(){
+  var g=function(i){var e=document.getElementById(i);return e?e.value:"";};
+  var subject=g("chTplSubject").trim(),email=g("chTplEmail").trim(),sms=g("chTplSms").trim();
+  // Saving text identical to the default stores "" so future default upgrades flow through.
+  if(subject===CH_TPL_DEFAULT.subject)subject="";
+  if(email===CH_TPL_DEFAULT.email)email="";
+  if(sms===CH_TPL_DEFAULT.sms)sms="";
+  var st=chStamp(),by=myTag()||"Leadership";
+  chTplOpen=false;
+  chAction("churchTemplate",{id:uid(),subject:subject,email:email,sms:sms,by:by,t:st.t,d:st.d},function(){
+    CH.tpl={subject:subject,email:email,sms:sms};
+    CH.log.push({id:uid(),ch:"",type:"edit",by:by,note:"Updated the master email & text templates",t:st.t,d:st.d});
+  });
+  toast("✉️ Master templates saved — live for the whole team");
 }
 /* ---- interest, connections, notes ---- */
 function chSetInterest(id,n){
@@ -4265,11 +4346,11 @@ function renderChurchPage(){
   // tap-to-reach — logged once per tap-burst; Email personalizes with YOUR name
   h+='<div class="chacts">'
     +'<a class="call'+(tel?"":" dis")+'" href="tel:+1'+tel+'" onclick="chQuick(\''+id+'\',\'call\',\'Tapped Call\')"><span>📞</span>Call</a>'
-    +'<a class="sms'+(tel?"":" dis")+'" href="sms:+1'+tel+'" onclick="chQuick(\''+id+'\',\'text\',\'Tapped Text\')"><span>💬</span>Text</a>'
+    +'<a class="sms'+(tel?"":" dis")+'" href="#" onclick="return chTextGo(event,\''+id+'\')"><span>💬</span>Text</a>'
     +'<a class="mailb'+(c.email?"":" dis")+'" href="#" onclick="return chEmailGo(event,\''+id+'\')"><span>✉️</span>Email</a>'
     +'<a class="web'+(c.website?"":" dis")+'" href="'+esc(c.website||"#")+'" target="_blank" rel="noopener"><span>🌐</span>Site</a>'
     +'</div>';
-  h+='<p class="hint" style="margin:-6px 2px 12px">Taps are noted in the history so the team sees who reached out. The email opens <b>pre-written &amp; personalized</b>, signed with your name. Actually talked with someone? Log it under 🗣️ below — that’s what marks them “We’ve talked.”</p>';
+  h+='<p class="hint" style="margin:-6px 2px 12px">Taps are noted in the history so the team sees who reached out. 💬 Text and ✉️ Email both open <b>pre-written</b> from the master template — filled in for '+esc(c.name)+' and signed with your name. Actually talked with someone? Log it under 🗣️ below — that’s what marks them “We’ve talked.”</p>';
   // contact info — up top, and EXPLICIT about what we don't have yet
   var miss='<b style="font-family:var(--sans);font-size:12px;color:var(--bad);opacity:.75">✗ none on file</b>';
   var infoRows=[
@@ -4314,8 +4395,12 @@ function renderChurchPage(){
     +'<div class="verse" style="font-size:13.5px;font-style:normal;font-family:var(--sans)">'+esc(chScriptText(c))+'</div>'
     +'<button class="btn ghost" style="margin-top:8px" onclick="chCopyScript(\''+id+'\')">📋 Copy script (with your name) — logs it</button></details>'
     +'<div class="seclabel" style="margin-top:14px">✉️ Ready-to-send email</div>'
-    +'<p class="hint" style="margin:0 0 8px">Personalized for '+esc(c.name)+', signed with your name. The ✉️ Email button up top opens it in your mail app; or copy it for Facebook / a website form:</p>'
+    +'<p class="hint" style="margin:0 0 8px">The master email, filled in for '+esc(c.name)+' and signed with your name. The ✉️ Email button up top opens it in your mail app; or copy it for Facebook / a website form:</p>'
     +'<button class="btn ghost" onclick="chCopyEmail(\''+id+'\')">📋 Copy the full email text</button>'
+    +'<div class="seclabel" style="margin-top:14px">💬 Ready-to-send text</div>'
+    +'<div class="verse" style="font-size:13.5px;font-style:normal;font-family:var(--sans)">'+esc(chSmsBody(c))+'</div>'
+    +'<p class="hint" style="margin:6px 0 8px">'+(tel?'The 💬 Text button up top opens it in Messages, pre-typed.':'No phone on file — copy it and send through Facebook or their website form.')+'</p>'
+    +'<button class="btn ghost" onclick="chCopyText(\''+id+'\')">📋 Copy the text message</button>'
     +'<div class="seclabel" style="margin-top:14px">📲 Tools from Ambassador Resources</div>'
     +'<div class="dashjump" style="margin:0">'
     +'<button onclick="chShareVideo(\''+id+'\')">📹 Promo video</button>'

@@ -5,7 +5,7 @@
  When the field signal drops, the last good copy of the shell, fonts,
  images and starter scripts keeps loading. API calls (/.netlify/*) are
  never intercepted: live sync simply fails over to demo/offline handling. */
-var CACHE = "k2c-v32";
+var CACHE = "k2c-v33";
 var PRECACHE = [
  "./",
  "index.html",
